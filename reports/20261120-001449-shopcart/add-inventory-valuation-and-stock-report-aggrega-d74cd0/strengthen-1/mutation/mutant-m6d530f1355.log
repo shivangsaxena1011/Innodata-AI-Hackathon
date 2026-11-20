@@ -1,0 +1,32 @@
+.F
+=================================== FAILURES ===================================
+________________________ test_report_aggregated_totals _________________________
+
+    def test_report_aggregated_totals():
+        """AC1: generate_inventory_report returns correct global sums for on-hand, reserved, and available stock."""
+        inventory = Inventory()
+        catalog = Catalog()
+    
+        # Product 1: 10 on hand, 3 reserved, 7 available
+        catalog.add(Product("P1", "Item 1", Decimal("10.00"), "cat"))
+        inventory.restock("P1", 10)
+        inventory.reserve("P1", 3)
+    
+        # Product 2: 5 on hand, 0 reserved, 5 available
+        catalog.add(Product("P2", "Item 2", Decimal("20.00"), "cat"))
+        inventory.restock("P2", 5)
+    
+        report = generate_inventory_report(inventory, catalog)
+    
+        assert report.total_on_hand == 15
+        assert report.total_reserved == 3
+>       assert report.total_available == 12
+E       AssertionError: assert -12 == 12
+E        +  where -12 = InventoryReport(total_on_hand=15, total_reserved=3, total_available=-12, total_valuation=Decimal('200.00'), sku_breakd... 'valuation': Decimal('100.00')}, 'P2': {'on_hand': 5, 'reserved': 0, 'available': 5, 'valuation': Decimal('100.00')}}).total_available
+
+tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py:37: AssertionError
+-------------- generated xml file: /cf/out/mutant-m6d530f1355.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py::test_report_aggregated_totals
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 1 passed in 0.03s

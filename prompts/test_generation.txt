@@ -1,0 +1,44 @@
+Write hidden acceptance tests for the feature specification below. You have NOT seen any
+implementation: derive every expected value from the specification and the existing code.
+
+## Repository
+$repo_name ($language). Test framework: $test_framework.
+$style_hint
+
+## Specification
+$spec
+
+## Ranked repository map (signatures of the existing API)
+$repo_map
+
+## Current source of the relevant files and their dependencies (the EXISTING public API)
+$sources
+
+## Example of an existing test file (follow its style and imports)
+$example_test
+
+## Rules
+- Put all tests in ONE file at exactly this path: $test_path
+- Cover EVERY acceptance criterion with at least one test; add boundary tests for every
+  threshold (just below, at, just above) and tests for every error case in the spec.
+- Import only names from the interface contract and the existing public API. Never import
+  private names (leading underscore) or helpers the spec does not define.
+- Tests must be deterministic and self-contained: no network, clock, randomness, sleeps,
+  files outside a temporary directory, skips or xfails. Build every object inside the test.
+- Construct EXISTING objects exactly as the current source requires: check every
+  constructor and method signature above (required arguments, registration steps such as
+  adding products to a catalog before using them). Follow how the fixtures build objects.
+- Before writing an expected value, compute it step by step from the specification's rules
+  (including rounding) so that a correct implementation passes.
+- Assert on behaviour (return values, state, raised exception TYPES). Only assert on an error
+  message when the spec states the exact message.
+- Avoid mocks unless the spec requires them.
+- 6 to 16 focused test functions with descriptive names.
+$repair_note
+
+## Output
+Reply with ONE JSON object:
+{
+  "files": [{"path": "$test_path", "content": "full file content"}],
+  "traceability": [{"test_name": "test_function_name", "criteria": ["AC1"]}]
+}

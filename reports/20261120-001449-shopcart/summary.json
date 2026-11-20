@@ -1,0 +1,314 @@
+{
+  "codeforge_version": "0.1.0",
+  "started_at": "2026-11-20T00:14:49.423543+00:00",
+  "status": "completed",
+  "tasks": [
+    {
+      "task_id": "support-promotional-discount-codes-in-cart-prici-f04964",
+      "title": "Support promotional discount codes in cart pricing",
+      "archetype": "business_rule",
+      "status": "valid",
+      "score": 98.5,
+      "gates": [
+        {
+          "gate": "baseline",
+          "status": "passed",
+          "summary": "27 original tests pass consistently across 3 runs"
+        },
+        {
+          "gate": "positive_control",
+          "status": "passed",
+          "summary": "10/10 feature tests pass with the reference"
+        },
+        {
+          "gate": "negative_control",
+          "status": "passed",
+          "summary": "10/10 feature tests fail on the original code (module import fails: the contract does not exist yet)"
+        },
+        {
+          "gate": "regression",
+          "status": "passed",
+          "summary": "27/27 original tests still pass with the reference"
+        },
+        {
+          "gate": "stability",
+          "status": "passed",
+          "summary": "3/3 reference runs identical"
+        },
+        {
+          "gate": "independence",
+          "status": "passed",
+          "summary": "5/5 acceptance criteria traced to tests; 0 error(s), 0 warning(s)"
+        },
+        {
+          "gate": "mutation",
+          "status": "passed",
+          "summary": "mutation score 80% (12/15 killed, threshold 60%)"
+        },
+        {
+          "gate": "semantic_mutants",
+          "status": "passed",
+          "summary": "4/4 plausible wrong implementations caught"
+        },
+        {
+          "gate": "leakage",
+          "status": "passed",
+          "summary": "no leakage or shortcut found"
+        },
+        {
+          "gate": "harbor_lint",
+          "status": "passed",
+          "summary": "harbor lint: no findings"
+        },
+        {
+          "gate": "harbor_oracle",
+          "status": "passed",
+          "summary": "oracle reward 1.0"
+        },
+        {
+          "gate": "harbor_nop",
+          "status": "passed",
+          "summary": "nop (no changes) reward 0.0"
+        }
+      ],
+      "reasons": [],
+      "task_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\generated_tasks\\shopcart\\support-promotional-discount-codes-in-cart-prici-f04964",
+      "error": null
+    },
+    {
+      "task_id": "add-order-refund-and-return-lifecycle-states-059169",
+      "title": "Add order refund and return lifecycle states",
+      "archetype": "state_machine",
+      "status": "valid",
+      "score": 99.2,
+      "gates": [
+        {
+          "gate": "baseline",
+          "status": "passed",
+          "summary": "27 original tests pass consistently across 3 runs"
+        },
+        {
+          "gate": "positive_control",
+          "status": "passed",
+          "summary": "7/7 feature tests pass with the reference"
+        },
+        {
+          "gate": "negative_control",
+          "status": "passed",
+          "summary": "7/7 feature tests fail on the original code"
+        },
+        {
+          "gate": "regression",
+          "status": "passed",
+          "summary": "27/27 original tests still pass with the reference"
+        },
+        {
+          "gate": "stability",
+          "status": "passed",
+          "summary": "3/3 reference runs identical"
+        },
+        {
+          "gate": "independence",
+          "status": "passed",
+          "summary": "6/6 acceptance criteria traced to tests; 0 error(s), 0 warning(s)"
+        },
+        {
+          "gate": "mutation",
+          "status": "passed",
+          "summary": "mutation score 90% (17/19 killed, threshold 60%)"
+        },
+        {
+          "gate": "semantic_mutants",
+          "status": "passed",
+          "summary": "4/4 plausible wrong implementations caught"
+        },
+        {
+          "gate": "leakage",
+          "status": "passed",
+          "summary": "no leakage or shortcut found"
+        },
+        {
+          "gate": "harbor_lint",
+          "status": "passed",
+          "summary": "harbor lint: no findings"
+        },
+        {
+          "gate": "harbor_oracle",
+          "status": "passed",
+          "summary": "oracle reward 1.0"
+        },
+        {
+          "gate": "harbor_nop",
+          "status": "passed",
+          "summary": "nop (no changes) reward 0.0"
+        }
+      ],
+      "reasons": [],
+      "task_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\generated_tasks\\shopcart\\add-order-refund-and-return-lifecycle-states-059169",
+      "error": null
+    },
+    {
+      "task_id": "add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+      "title": "Add inventory valuation and stock report aggregation",
+      "archetype": "query_aggregation",
+      "status": "valid",
+      "score": 95.7,
+      "gates": [
+        {
+          "gate": "baseline",
+          "status": "passed",
+          "summary": "27 original tests pass consistently across 3 runs"
+        },
+        {
+          "gate": "positive_control",
+          "status": "passed",
+          "summary": "7/7 feature tests pass with the reference"
+        },
+        {
+          "gate": "negative_control",
+          "status": "passed",
+          "summary": "7/7 feature tests fail on the original code (module import fails: the contract does not exist yet)"
+        },
+        {
+          "gate": "regression",
+          "status": "passed",
+          "summary": "27/27 original tests still pass with the reference"
+        },
+        {
+          "gate": "stability",
+          "status": "passed",
+          "summary": "3/3 reference runs identical"
+        },
+        {
+          "gate": "independence",
+          "status": "passed",
+          "summary": "5/5 acceptance criteria traced to tests; 0 error(s), 0 warning(s)"
+        },
+        {
+          "gate": "mutation",
+          "status": "passed",
+          "summary": "mutation score 92% (23/25 killed, threshold 60%)"
+        },
+        {
+          "gate": "semantic_mutants",
+          "status": "warning",
+          "summary": "2/4 plausible wrong implementations caught"
+        },
+        {
+          "gate": "leakage",
+          "status": "passed",
+          "summary": "no leakage or shortcut found"
+        },
+        {
+          "gate": "harbor_lint",
+          "status": "passed",
+          "summary": "harbor lint: no findings"
+        },
+        {
+          "gate": "harbor_oracle",
+          "status": "passed",
+          "summary": "oracle reward 1.0"
+        },
+        {
+          "gate": "harbor_nop",
+          "status": "passed",
+          "summary": "nop (no changes) reward 0.0"
+        }
+      ],
+      "reasons": [],
+      "task_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\generated_tasks\\shopcart\\add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+      "error": null
+    }
+  ],
+  "accepted": 3,
+  "rejected": 0,
+  "run_id": "20261120-001449-shopcart",
+  "repository": {
+    "name": "shopcart",
+    "url": "file:///C:/Users/Project/Innodata%20AI%20Hackathon/workspace/samples/shopcart",
+    "commit": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+    "language": "python",
+    "framework": null,
+    "test_framework": "pytest"
+  },
+  "variation": {
+    "tasks": 3,
+    "distinct_archetypes": 3,
+    "archetypes": [
+      "business_rule",
+      "query_aggregation",
+      "state_machine"
+    ],
+    "mean_pairwise_similarity": 0.0446,
+    "max_pairwise_similarity": 0.0551,
+    "diversity_score": 0.9554,
+    "pairs": [
+      {
+        "a": "Support promotional discount codes in cart pricing",
+        "b": "Add order refund and return lifecycle states",
+        "similarity": 0.0415
+      },
+      {
+        "a": "Support promotional discount codes in cart pricing",
+        "b": "Add inventory valuation and stock report aggregation",
+        "similarity": 0.0551
+      },
+      {
+        "a": "Add order refund and return lifecycle states",
+        "b": "Add inventory valuation and stock report aggregation",
+        "similarity": 0.0372
+      }
+    ]
+  },
+  "discrimination_matrix": {
+    "tasks": [
+      "support-promotional-discount-codes-in-cart-prici-f04964",
+      "add-order-refund-and-return-lifecycle-states-059169",
+      "add-inventory-valuation-and-stock-report-aggrega-d74cd0"
+    ],
+    "cells": [
+      [
+        "pass",
+        "fail",
+        "fail"
+      ],
+      [
+        "fail",
+        "pass",
+        "fail"
+      ],
+      [
+        "fail",
+        "fail",
+        "pass"
+      ]
+    ],
+    "diagonal_all_pass": true,
+    "off_diagonal_fail": 6,
+    "off_diagonal_total": 6,
+    "discrimination_rate": 1.0
+  },
+  "finished_at": "2026-11-20T00:23:35.024841+00:00",
+  "llm_usage": {
+    "calls": 18,
+    "cached_calls": 9,
+    "prompt_tokens": 110613,
+    "completion_tokens": 31171,
+    "by_purpose": {
+      "feature_discovery": 1,
+      "task_spec": 3,
+      "feature_tests": 3,
+      "reference": 3,
+      "semantic_mutants": 3,
+      "feature_tests_repair": 3,
+      "task_spec#retry1": 1,
+      "reference_repair": 1
+    },
+    "models": [
+      "gemini/gemini-3-flash-preview",
+      "gemini/gemini-3.5-flash",
+      "gemini/gemini-3.6-flash",
+      "gemini/gemini-flash-latest"
+    ]
+  }
+}

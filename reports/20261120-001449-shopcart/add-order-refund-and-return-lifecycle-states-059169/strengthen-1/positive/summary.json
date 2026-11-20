@@ -1,0 +1,142 @@
+{
+  "feature_reference_1": {
+    "label": "feature_reference_1",
+    "command": [
+      "tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py"
+    ],
+    "passed": [
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac1_order_status_enum_members",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac2_return_items_shipped_to_returned",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac3_refund_from_paid",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac4_refund_from_returned",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac5_invalid_refund_transitions",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac6_invalid_return_transitions",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_allowed_transition_paid_to_cancelled",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_allowed_transition_paid_to_shipped"
+    ],
+    "failed": [],
+    "errors": [],
+    "skipped": [],
+    "exit_code": 0,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\add-order-refund-and-return-lifecycle-states-059169\\strengthen-1\\positive\\feature_reference_1.log",
+    "timed_out": false,
+    "failure_text": {}
+  },
+  "regression_reference": {
+    "label": "regression_reference",
+    "command": [
+      "tests"
+    ],
+    "passed": [
+      "tests.test_cart::test_add_and_subtotal",
+      "tests.test_cart::test_adding_same_sku_merges_lines",
+      "tests.test_cart::test_quantity_must_be_positive",
+      "tests.test_cart::test_quantity_limit",
+      "tests.test_cart::test_update_and_remove",
+      "tests.test_cart::test_lines_sorted_by_sku",
+      "tests.test_catalog::test_product_price_is_rounded",
+      "tests.test_catalog::test_negative_price_rejected",
+      "tests.test_catalog::test_duplicate_sku_rejected",
+      "tests.test_catalog::test_lookup_and_category",
+      "tests.test_catalog::test_unknown_sku",
+      "tests.test_catalog::test_search_is_case_insensitive",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac1_order_status_enum_members",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac2_return_items_shipped_to_returned",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac3_refund_from_paid",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac4_refund_from_returned",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac5_invalid_refund_transitions",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac6_invalid_return_transitions",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_allowed_transition_paid_to_cancelled",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_allowed_transition_paid_to_shipped",
+      "tests.test_inventory::test_restock_and_reserve",
+      "tests.test_inventory::test_over_reserve_fails",
+      "tests.test_inventory::test_release_more_than_held_fails",
+      "tests.test_inventory::test_commit_reduces_on_hand",
+      "tests.test_inventory::test_restock_requires_positive_quantity",
+      "tests.test_orders::test_place_reserves_stock",
+      "tests.test_orders::test_place_empty_cart_fails",
+      "tests.test_orders::test_failed_reservation_rolls_back",
+      "tests.test_orders::test_pay_ship_flow",
+      "tests.test_orders::test_wrong_payment_amount",
+      "tests.test_orders::test_cancel_releases_stock",
+      "tests.test_pricing::test_default_tax_and_flat_shipping",
+      "tests.test_pricing::test_free_shipping_at_threshold",
+      "tests.test_pricing::test_category_tax_rates",
+      "tests.test_pricing::test_empty_cart_totals"
+    ],
+    "failed": [],
+    "errors": [],
+    "skipped": [],
+    "exit_code": 0,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\add-order-refund-and-return-lifecycle-states-059169\\strengthen-1\\positive\\regression_reference.log",
+    "timed_out": false,
+    "failure_text": {}
+  },
+  "feature_reference_2": {
+    "label": "feature_reference_2",
+    "command": [
+      "tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py"
+    ],
+    "passed": [
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac1_order_status_enum_members",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac2_return_items_shipped_to_returned",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac3_refund_from_paid",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac4_refund_from_returned",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac5_invalid_refund_transitions",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac6_invalid_return_transitions",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_allowed_transition_paid_to_cancelled",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_allowed_transition_paid_to_shipped"
+    ],
+    "failed": [],
+    "errors": [],
+    "skipped": [],
+    "exit_code": 0,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\add-order-refund-and-return-lifecycle-states-059169\\strengthen-1\\positive\\feature_reference_2.log",
+    "timed_out": false,
+    "failure_text": {}
+  },
+  "feature_reference_3": {
+    "label": "feature_reference_3",
+    "command": [
+      "tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py"
+    ],
+    "passed": [
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac1_order_status_enum_members",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac2_return_items_shipped_to_returned",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac3_refund_from_paid",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac4_refund_from_returned",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac5_invalid_refund_transitions",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_ac6_invalid_return_transitions",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_allowed_transition_paid_to_cancelled",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_allowed_transition_paid_to_shipped"
+    ],
+    "failed": [],
+    "errors": [],
+    "skipped": [],
+    "exit_code": 0,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\add-order-refund-and-return-lifecycle-states-059169\\strengthen-1\\positive\\feature_reference_3.log",
+    "timed_out": false,
+    "failure_text": {}
+  },
+  "coverage": {
+    "label": "coverage",
+    "command": [
+      "tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py"
+    ],
+    "passed": [],
+    "failed": [],
+    "errors": [
+      "<missing junit report>"
+    ],
+    "skipped": [],
+    "exit_code": 0,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\add-order-refund-and-return-lifecycle-states-059169\\strengthen-1\\positive\\coverage.log",
+    "timed_out": false,
+    "failure_text": {}
+  }
+}

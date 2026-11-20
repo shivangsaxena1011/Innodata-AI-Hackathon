@@ -1,0 +1,285 @@
+{
+  "candidates": [
+    {
+      "candidate": {
+        "feature_id": "add-volume-based-discount-configuration-policy-91c6c0",
+        "title": "Add volume-based discount configuration policy",
+        "archetype": "configuration_policy",
+        "problem_statement": "Wholesale customers need a way to apply bulk discounts based on the quantity of items purchased. The current pricing system is static and does not support quantity-based price breaks.",
+        "requirements": [
+          "Create a VolumeDiscountPolicy that allows setting a threshold quantity and a discount percentage.",
+          "The policy must apply the discount percentage to the total price of any LineItem where the quantity meets or exceeds the threshold.",
+          "Multiple tiers should be supported by providing a list of (threshold, percentage) tuples, where the highest applicable threshold wins.",
+          "Discounted amounts must be rounded to the nearest CENT using the existing to_money utility."
+        ],
+        "acceptance_criteria": [
+          "A cart with 10 units of a $10 item and a policy (10 units, 10% discount) results in a subtotal of $90.00.",
+          "If multiple tiers exist (5 units: 5%, 10 units: 10%), a quantity of 12 gets the 10% discount.",
+          "If no thresholds are met, the standard price applies."
+        ],
+        "complexity": "medium",
+        "affected_modules": [
+          "shopcart/pricing.py"
+        ],
+        "existing_behaviour": "PricingPolicy only handles tax rates and flat shipping fees; LineItem totals are always quantity times unit price.",
+        "edge_cases": [
+          "Quantity exactly equal to threshold applies the discount.",
+          "Zero percent discount tier.",
+          "Policy with empty threshold list behaves as a default policy."
+        ],
+        "contract": [
+          {
+            "kind": "class",
+            "module": "shopcart.pricing",
+            "name": "VolumeDiscountPolicy",
+            "signature": "class VolumeDiscountPolicy(PricingPolicy)",
+            "behaviour": "A pricing policy that reduces line item totals based on quantity thresholds."
+          },
+          {
+            "kind": "method",
+            "module": "shopcart.pricing",
+            "name": "add_tier",
+            "signature": "def add_tier(self, min_quantity: int, discount_percent: Decimal | int | str) -> None",
+            "behaviour": "Registers a new discount tier for the policy."
+          }
+        ],
+        "novelty_score": 0.825,
+        "rejection_reason": null
+      },
+      "score": 5.225,
+      "accepted": true,
+      "reason": null
+    },
+    {
+      "candidate": {
+        "feature_id": "validate-inventory-availability-during-cart-addi-93cd55",
+        "title": "Validate inventory availability during cart additions",
+        "archetype": "component_interaction",
+        "problem_statement": "Currently, users can add any quantity of an item to their cart even if the warehouse is empty, leading to failures only at the final 'place order' step. We want to check availability earlier to improve user experience.",
+        "requirements": [
+          "Modify Cart to optionally accept an Inventory instance in its constructor.",
+          "When an Inventory is linked to the Cart, any call to add_item or update_quantity must check if 'available()' quantity is sufficient.",
+          "The check must account for the total quantity already in the cart for that SKU.",
+          "If the requested quantity (new + existing) exceeds available stock, raise an InsufficientStockError."
+        ],
+        "acceptance_criteria": [
+          "Adding 5 units when only 3 are in inventory raises InsufficientStockError.",
+          "Updating quantity from 2 to 10 when only 5 are in inventory raises InsufficientStockError.",
+          "If no Inventory is provided to the Cart, it behaves as it does currently (no validation)."
+        ],
+        "complexity": "medium",
+        "affected_modules": [
+          "shopcart/cart.py"
+        ],
+        "existing_behaviour": "Cart.add_item only checks the MAX_QUANTITY_PER_LINE limit and does not interact with the Inventory class.",
+        "edge_cases": [
+          "Checking availability when the SKU does not exist in inventory (should be treated as 0).",
+          "Updating a cart item to a smaller quantity should always succeed."
+        ],
+        "contract": [
+          {
+            "kind": "exception",
+            "module": "shopcart.cart",
+            "name": "InsufficientStockError",
+            "signature": "class InsufficientStockError(CartError)",
+            "behaviour": "Raised when an item cannot be added to the cart due to lack of warehouse stock."
+          }
+        ],
+        "novelty_score": 0.9421,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 5.342,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    },
+    {
+      "candidate": {
+        "feature_id": "enforce-strict-price-and-quantity-bounds-9921d4",
+        "title": "Enforce strict price and quantity bounds",
+        "archetype": "error_handling",
+        "problem_statement": "The system allows some invalid inputs that can lead to corrupted financial data or illogical cart states. We need stricter domain-level validation.",
+        "requirements": [
+          "Product price must be greater than zero; raise InvalidPriceError if zero or negative.",
+          "Product SKU must be a non-empty string; raise InvalidSKUError otherwise.",
+          "LineItem quantity must be between 1 and MAX_QUANTITY_PER_LINE inclusive; raise InvalidQuantityError for out-of-bounds values.",
+          "All new errors must inherit from a common DomainValidationError."
+        ],
+        "acceptance_criteria": [
+          "Attempting to create a Product with price 0.00 raises InvalidPriceError.",
+          "Attempting to create a Product with an empty string SKU raises InvalidSKUError.",
+          "Calling cart.update_quantity with 0 or 100 raises InvalidQuantityError."
+        ],
+        "complexity": "easy",
+        "affected_modules": [
+          "shopcart/catalog.py",
+          "shopcart/cart.py"
+        ],
+        "existing_behaviour": "Product validates negative prices but allows zero. Cart validates positive quantity but does not use specific typed exceptions for all bounds.",
+        "edge_cases": [
+          "Whitespace-only SKU strings should be treated as invalid.",
+          "Price of exactly 0.01 should be accepted."
+        ],
+        "contract": [
+          {
+            "kind": "exception",
+            "module": "shopcart.catalog",
+            "name": "InvalidPriceError",
+            "signature": "class InvalidPriceError(ValueError)",
+            "behaviour": "Raised when a product price is zero or negative."
+          },
+          {
+            "kind": "exception",
+            "module": "shopcart.catalog",
+            "name": "InvalidSKUError",
+            "signature": "class InvalidSKUError(ValueError)",
+            "behaviour": "Raised when a product SKU is empty or invalid."
+          },
+          {
+            "kind": "exception",
+            "module": "shopcart.cart",
+            "name": "InvalidQuantityError",
+            "signature": "class InvalidQuantityError(CartError)",
+            "behaviour": "Raised when a quantity exceeds MAX_QUANTITY_PER_LINE or is less than 1."
+          }
+        ],
+        "novelty_score": 0.9647,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 4.965,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    },
+    {
+      "candidate": {
+        "feature_id": "add-bulk-catalog-import-and-update-3f76f3",
+        "title": "Add bulk catalog import and update",
+        "archetype": "interface_extension",
+        "problem_statement": "Managing a catalog one product at a time is inefficient for large inventories. Administrators need a way to batch-load or update products from a list.",
+        "requirements": [
+          "Add a 'load_batch' method to the Catalog class.",
+          "The method should accept a list of Product objects.",
+          "If a SKU in the batch already exists, it should update the existing product details (name, price, category) instead of raising an error.",
+          "The method should return a count of how many products were created and how many were updated."
+        ],
+        "acceptance_criteria": [
+          "Loading 3 new products returns (3, 0) for (created, updated).",
+          "Loading 2 products where 1 SKU already exists returns (1, 1).",
+          "The catalog length correctly reflects unique SKUs after a batch load."
+        ],
+        "complexity": "easy",
+        "affected_modules": [
+          "shopcart/catalog.py"
+        ],
+        "existing_behaviour": "Catalog.add(product) raises a ValueError if the SKU already exists.",
+        "edge_cases": [
+          "Empty list passed to load_batch.",
+          "Batch containing the same SKU multiple times (last one wins)."
+        ],
+        "contract": [
+          {
+            "kind": "method",
+            "module": "shopcart.catalog",
+            "name": "load_batch",
+            "signature": "def load_batch(self, products: list[Product]) -> tuple[int, int]",
+            "behaviour": "Adds or updates multiple products in the catalog, returning counts of (created, updated)."
+          }
+        ],
+        "novelty_score": 0.9625,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 4.963,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    },
+    {
+      "candidate": {
+        "feature_id": "implement-order-fulfillment-and-backorder-state-9413e2",
+        "title": "Implement order fulfillment and backorder state",
+        "archetype": "state_machine",
+        "problem_statement": "Orders currently go straight from PAID to SHIPPED. We need a way to handle items that are out of stock at fulfillment time by placing them in a BACKORDERED state.",
+        "requirements": [
+          "Add OrderStatus.BACKORDERED to the lifecycle.",
+          "Update ALLOWED_TRANSITIONS: PENDING -> BACKORDERED, PAID -> BACKORDERED, BACKORDERED -> SHIPPED, BACKORDERED -> CANCELLED.",
+          "Add an 'await_stock' method to the Order class to transition to BACKORDERED.",
+          "The 'ship' method should be valid from both PAID and BACKORDERED states."
+        ],
+        "acceptance_criteria": [
+          "Calling order.await_stock() on a PAID order changes status to BACKORDERED.",
+          "Calling order.ship() on a BACKORDERED order changes status to SHIPPED.",
+          "Calling order.await_stock() on a SHIPPED order raises OrderError."
+        ],
+        "complexity": "medium",
+        "affected_modules": [
+          "shopcart/orders.py"
+        ],
+        "existing_behaviour": "The status flow is fixed to PENDING -> PAID -> SHIPPED or CANCELLED.",
+        "edge_cases": [
+          "Cancelling a backordered order must release inventory holds.",
+          "Payment is still required before or during backorder (cannot transition PENDING -> SHIPPED directly)."
+        ],
+        "contract": [
+          {
+            "kind": "method",
+            "module": "shopcart.orders",
+            "name": "await_stock",
+            "signature": "def await_stock(self) -> None",
+            "behaviour": "Transitions an order to the BACKORDERED status if currently PENDING or PAID."
+          }
+        ],
+        "novelty_score": 0.5804,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 3.98,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    },
+    {
+      "candidate": {
+        "feature_id": "generate-category-based-sales-distribution-repor-a68379",
+        "title": "Generate category-based sales distribution report",
+        "archetype": "query_aggregation",
+        "problem_statement": "Store managers need to understand which product categories are driving revenue. They need a breakdown of subtotal amounts grouped by category.",
+        "requirements": [
+          "Add a method to the Cart to calculate revenue per category.",
+          "The method should return a dictionary mapping category names (str) to the sum of line totals (Decimal) for all items in that category.",
+          "The results must include all categories present in the cart.",
+          "Amounts must be correctly rounded to CENT."
+        ],
+        "acceptance_criteria": [
+          "A cart with $50 of 'Electronics' and $20 of 'Books' returns {'Electronics': 50.00, 'Books': 20.00}.",
+          "If multiple products belong to the same category, their line totals are summed.",
+          "An empty cart returns an empty dictionary."
+        ],
+        "complexity": "easy",
+        "affected_modules": [
+          "shopcart/cart.py"
+        ],
+        "existing_behaviour": "The Cart only provides a global subtotal and total item count.",
+        "edge_cases": [
+          "Products with the same category name but different case (should be treated as distinct if the Catalog treats them as distinct).",
+          "Categories with zero-dollar line items (e.g., free samples)."
+        ],
+        "contract": [
+          {
+            "kind": "method",
+            "module": "shopcart.cart",
+            "name": "category_distribution",
+            "signature": "def category_distribution(self) -> dict[str, Decimal]",
+            "behaviour": "Returns a mapping of product categories to their total subtotal in the cart."
+          }
+        ],
+        "novelty_score": 0.7294,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 3.729,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    }
+  ],
+  "llm": [
+    {
+      "model": "gemini/gemini-3-flash-preview",
+      "cached": false
+    }
+  ]
+}

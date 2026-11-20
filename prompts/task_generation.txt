@@ -1,0 +1,42 @@
+Turn the feature candidate below into a complete, unambiguous task specification for an AI
+coding agent working in this repository.
+
+## Repository
+$repo_name ($language, tests: $test_framework). Starting commit: $commit
+
+## Feature candidate
+$candidate
+
+## Current source of the relevant files
+$sources
+
+## Requirements for the specification
+- Requirements must be complete and exact: inputs, outputs, rounding, ordering, error types
+  and messages that tests may rely on. Do not leave anything for the implementer to guess.
+- Acceptance criteria get ids AC1, AC2, ... (3 to 8 criteria). Each must be observable
+  through the interface contract or the existing public API.
+- The interface contract lists every new or changed public name with an exact signature,
+  using names that do not exist in the repository yet (new methods on existing classes are
+  allowed). Keep existing behaviour backwards compatible unless a requirement says otherwise.
+- `constraints` must include: no new third-party dependencies; do not modify existing tests.
+- `relevant_files` lists the repository files the implementer will most likely edit.
+
+## Output
+Reply with ONE JSON object:
+{
+  "title": "...",
+  "archetype": "$archetype",
+  "summary": "one paragraph",
+  "background": "why the product needs it, in user terms",
+  "requirements": ["..."],
+  "acceptance_criteria": [{"id": "AC1", "text": "..."}],
+  "contract": [{"kind": "...", "module": "...", "name": "...", "signature": "...", "behaviour": "..."}],
+  "edge_cases": ["..."],
+  "error_handling": ["..."],
+  "constraints": ["..."],
+  "interactions": ["how it interacts with existing behaviour"],
+  "out_of_scope": ["..."],
+  "difficulty": "easy | medium | hard",
+  "estimated_minutes": 30,
+  "relevant_files": ["..."]
+}

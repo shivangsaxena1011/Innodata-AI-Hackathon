@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="6" time="0.027" timestamp="2026-11-20T00:18:08.240039+00:00" hostname="e03f2eead8b5"><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_order_status_enum_members" time="0.000" /><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_return_items_flow" time="0.000" /><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_refund_from_paid" time="0.000" /><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_refund_from_returned" time="0.000" /><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_invalid_refund_transitions" time="0.000" /><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_invalid_return_transitions" time="0.000"><failure message="AssertionError: assert 10 == 9&#10; +  where 10 = available('SKU-1')&#10; +    where available = &lt;shopcart.inventory.Inventory object at 0x77675a3636f0&gt;.available">def test_invalid_return_transitions():
+        """AC6: return_items() should fail from PENDING, PAID, CANCELLED, RETURNED, REFUNDED."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 1)
+    
+        # PENDING
+        order = Order.place(cart, inventory)
+        initial_stock = inventory.available("SKU-1")
+        with pytest.raises(OrderError):
+            order.return_items(inventory)
+&gt;       assert inventory.available("SKU-1") == initial_stock
+E       AssertionError: assert 10 == 9
+E        +  where 10 = available('SKU-1')
+E        +    where available = &lt;shopcart.inventory.Inventory object at 0x77675a3636f0&gt;.available
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:111: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="0.029" timestamp="2026-11-20T00:21:09.699348+00:00" hostname="730bc3bfb1ff"><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_generate_report_empty_inventory" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_generate_report_correct_sums" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_sku_breakdown_details" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_missing_catalog_sku_valuation" time="0.000"><failure message="KeyError: 'unknown sku: MISSING-SKU'">def test_missing_catalog_sku_valuation():
+        """AC3: SKUs in inventory but missing in catalog result in 0.00 valuation."""
+        inventory = Inventory()
+        catalog = Catalog()
+    
+        inventory.restock("MISSING-SKU", 100)
+    
+&gt;       report = generate_inventory_report(inventory, catalog)
+
+tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+shopcart/inventory.py:78: in generate_inventory_report
+    product = catalog.get(sku)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;shopcart.catalog.Catalog object at 0x73d73debe190&gt;, sku = 'MISSING-SKU'
+
+    def get(self, sku: str) -&gt; Product:
+        try:
+            return self._products[sku]
+        except KeyError:
+&gt;           raise KeyError(f"unknown sku: {sku}") from None
+E           KeyError: 'unknown sku: MISSING-SKU'
+
+shopcart/catalog.py:43: KeyError</failure></testcase></testsuite></testsuites>

@@ -1,9 +1,9 @@
-"""Tree-sitter parser registry (py-tree-sitter >= 0.25 API: Language, Parser, Query, QueryCursor)."""
+"""Tree-sitter parser registry (py-tree-sitter >= 0.25: Language, Parser, Query, QueryCursor)."""
 
 from __future__ import annotations
 
 import logging
-from functools import lru_cache
+from functools import cache
 from importlib import resources
 
 import tree_sitter as ts
@@ -24,18 +24,18 @@ def _load_language(lang: str) -> ts.Language | None:
     return ts.Language(mod.language())
 
 
-@lru_cache(maxsize=None)
+@cache
 def get_language(lang: str) -> ts.Language | None:
     return _load_language(lang)
 
 
-@lru_cache(maxsize=None)
+@cache
 def get_parser(lang: str) -> ts.Parser | None:
     language = get_language(lang)
     return ts.Parser(language) if language else None
 
 
-@lru_cache(maxsize=None)
+@cache
 def get_tags_query(lang: str) -> ts.Query | None:
     """Load the vendored `<lang>-tags.scm` query (see THIRD_PARTY_NOTICES.md)."""
     language = get_language(lang)

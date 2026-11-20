@@ -1,0 +1,1059 @@
+{
+  "task_id": "add-volume-based-discount-configuration-policy-91c6c0",
+  "baseline_result": null,
+  "feature_negative_control": {
+    "label": "feature_original",
+    "command": [
+      "tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py"
+    ],
+    "passed": [],
+    "failed": [],
+    "errors": [
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0"
+    ],
+    "skipped": [],
+    "exit_code": 1,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-002426-web-2acafa\\add-volume-based-discount-configuration-policy-91c6c0\\strengthen-1\\negative\\feature_original.log",
+    "timed_out": false,
+    "failure_text": {
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0": "collection failure\nImportError while importing test module '/app/tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/local/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\ntests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py:5: in <module>\n    from shopcart.pricing import VolumeDiscountPolicy, compute_totals, compute_tax\nE   ImportError: cannot import name 'VolumeDiscountPolicy' from 'shopcart.pricing' (/app/shopcart/pricing.py)"
+    }
+  },
+  "reference_positive_control": {
+    "label": "feature_reference_1",
+    "command": [
+      "tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py"
+    ],
+    "passed": [
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac2_highest_applicable_tier",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac3_below_tier_no_discount",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac4_tax_calculated_on_discounted_price",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac5_shipping_on_discounted_subtotal",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_shipping_at_threshold_boundary",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_discount_rounding_half_up",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_empty_subtotal_with_volume_policy",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_edge_case_duplicate_threshold_last_wins",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_edge_case_non_sequential_tiers",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_min_quantity",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_discount_percent",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_exact_100_percent_discount_allowed"
+    ],
+    "failed": [],
+    "errors": [],
+    "skipped": [],
+    "exit_code": 0,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-002426-web-2acafa\\add-volume-based-discount-configuration-policy-91c6c0\\strengthen-1\\positive\\feature_reference_1.log",
+    "timed_out": false,
+    "failure_text": {}
+  },
+  "regression_result": {
+    "label": "regression_reference",
+    "command": [
+      "tests"
+    ],
+    "passed": [
+      "tests.test_cart::test_add_and_subtotal",
+      "tests.test_cart::test_adding_same_sku_merges_lines",
+      "tests.test_cart::test_quantity_must_be_positive",
+      "tests.test_cart::test_quantity_limit",
+      "tests.test_cart::test_update_and_remove",
+      "tests.test_cart::test_lines_sorted_by_sku",
+      "tests.test_catalog::test_product_price_is_rounded",
+      "tests.test_catalog::test_negative_price_rejected",
+      "tests.test_catalog::test_duplicate_sku_rejected",
+      "tests.test_catalog::test_lookup_and_category",
+      "tests.test_catalog::test_unknown_sku",
+      "tests.test_catalog::test_search_is_case_insensitive",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac2_highest_applicable_tier",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac3_below_tier_no_discount",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac4_tax_calculated_on_discounted_price",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac5_shipping_on_discounted_subtotal",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_shipping_at_threshold_boundary",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_discount_rounding_half_up",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_empty_subtotal_with_volume_policy",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_edge_case_duplicate_threshold_last_wins",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_edge_case_non_sequential_tiers",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_min_quantity",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_discount_percent",
+      "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_exact_100_percent_discount_allowed",
+      "tests.test_inventory::test_restock_and_reserve",
+      "tests.test_inventory::test_over_reserve_fails",
+      "tests.test_inventory::test_release_more_than_held_fails",
+      "tests.test_inventory::test_commit_reduces_on_hand",
+      "tests.test_inventory::test_restock_requires_positive_quantity",
+      "tests.test_orders::test_place_reserves_stock",
+      "tests.test_orders::test_place_empty_cart_fails",
+      "tests.test_orders::test_failed_reservation_rolls_back",
+      "tests.test_orders::test_pay_ship_flow",
+      "tests.test_orders::test_wrong_payment_amount",
+      "tests.test_orders::test_cancel_releases_stock",
+      "tests.test_pricing::test_default_tax_and_flat_shipping",
+      "tests.test_pricing::test_free_shipping_at_threshold",
+      "tests.test_pricing::test_category_tax_rates",
+      "tests.test_pricing::test_empty_cart_totals"
+    ],
+    "failed": [],
+    "errors": [],
+    "skipped": [],
+    "exit_code": 0,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-002426-web-2acafa\\add-volume-based-discount-configuration-policy-91c6c0\\strengthen-1\\positive\\regression_reference.log",
+    "timed_out": false,
+    "failure_text": {}
+  },
+  "mutation_result": {
+    "engine": "codeforge-ast (diff-scoped, mutmut-style operators)",
+    "total": 30,
+    "killed": 27,
+    "survived": 3,
+    "errors": 0,
+    "score": 0.9,
+    "outcomes": [
+      {
+        "mutant_id": "m1ab9ead631",
+        "operator": "statement",
+        "file": "shopcart/pricing.py",
+        "line": 28,
+        "description": "delete call super().__init__(...)",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -27,3 +27,3 @@\n     def __init__(self, *args: Any, **kwargs: Any) -> None:\n-        super().__init__(*args, **kwargs)\n+        pass\n         self._tiers: dict[int, Decimal] = {}\n"
+      },
+      {
+        "mutant_id": "m7ab384b372",
+        "operator": "condition",
+        "file": "shopcart/pricing.py",
+        "line": 32,
+        "description": "negate condition",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -31,3 +31,3 @@\n     def add_tier(self, min_quantity: int, discount_percent: Decimal | int | str) -> None:\n-        if min_quantity < 1:\n+        if not (min_quantity < 1):\n             raise ValueError(\"min_quantity must be at least 1\")\n"
+      },
+      {
+        "mutant_id": "mc356813159",
+        "operator": "constant",
+        "file": "shopcart/pricing.py",
+        "line": 32,
+        "description": "1 -> 2",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac4_tax_calculated_on_discounted_price"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -31,3 +31,3 @@\n     def add_tier(self, min_quantity: int, discount_percent: Decimal | int | str) -> None:\n-        if min_quantity < 1:\n+        if min_quantity < 2:\n             raise ValueError(\"min_quantity must be at least 1\")\n"
+      },
+      {
+        "mutant_id": "mefc0bbe865",
+        "operator": "compare",
+        "file": "shopcart/pricing.py",
+        "line": 32,
+        "description": "Lt -> LtE",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac4_tax_calculated_on_discounted_price"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -31,3 +31,3 @@\n     def add_tier(self, min_quantity: int, discount_percent: Decimal | int | str) -> None:\n-        if min_quantity < 1:\n+        if (min_quantity <= 1):\n             raise ValueError(\"min_quantity must be at least 1\")\n"
+      },
+      {
+        "mutant_id": "mbac116d233",
+        "operator": "raise",
+        "file": "shopcart/pricing.py",
+        "line": 33,
+        "description": "remove raise",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_min_quantity"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -32,3 +32,3 @@\n         if min_quantity < 1:\n-            raise ValueError(\"min_quantity must be at least 1\")\n+            pass\n         percent = Decimal(discount_percent)\n"
+      },
+      {
+        "mutant_id": "m7199b6049b",
+        "operator": "compare",
+        "file": "shopcart/pricing.py",
+        "line": 35,
+        "description": "Gt -> GtE",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_exact_100_percent_discount_allowed"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -34,3 +34,3 @@\n         percent = Decimal(discount_percent)\n-        if percent < 0 or percent > 100:\n+        if percent < 0 or (percent >= 100):\n             raise ValueError(\"discount_percent must be between 0 and 100\")\n"
+      },
+      {
+        "mutant_id": "m7e67ca5267",
+        "operator": "boolean",
+        "file": "shopcart/pricing.py",
+        "line": 35,
+        "description": "Or -> And",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_discount_percent"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -34,3 +34,3 @@\n         percent = Decimal(discount_percent)\n-        if percent < 0 or percent > 100:\n+        if (percent < 0 and percent > 100):\n             raise ValueError(\"discount_percent must be between 0 and 100\")\n"
+      },
+      {
+        "mutant_id": "mc31e071247",
+        "operator": "compare",
+        "file": "shopcart/pricing.py",
+        "line": 35,
+        "description": "Lt -> LtE",
+        "killed": false,
+        "killed_by": [],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -34,3 +34,3 @@\n         percent = Decimal(discount_percent)\n-        if percent < 0 or percent > 100:\n+        if (percent <= 0) or percent > 100:\n             raise ValueError(\"discount_percent must be between 0 and 100\")\n"
+      },
+      {
+        "mutant_id": "mddfc34f899",
+        "operator": "constant",
+        "file": "shopcart/pricing.py",
+        "line": 35,
+        "description": "100 -> 101",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_discount_percent"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -34,3 +34,3 @@\n         percent = Decimal(discount_percent)\n-        if percent < 0 or percent > 100:\n+        if percent < 0 or percent > 101:\n             raise ValueError(\"discount_percent must be between 0 and 100\")\n"
+      },
+      {
+        "mutant_id": "mec765f879d",
+        "operator": "condition",
+        "file": "shopcart/pricing.py",
+        "line": 35,
+        "description": "negate condition",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -34,3 +34,3 @@\n         percent = Decimal(discount_percent)\n-        if percent < 0 or percent > 100:\n+        if not (percent < 0 or percent > 100):\n             raise ValueError(\"discount_percent must be between 0 and 100\")\n"
+      },
+      {
+        "mutant_id": "mc69c476716",
+        "operator": "raise",
+        "file": "shopcart/pricing.py",
+        "line": 36,
+        "description": "remove raise",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_discount_percent"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -35,3 +35,3 @@\n         if percent < 0 or percent > 100:\n-            raise ValueError(\"discount_percent must be between 0 and 100\")\n+            pass\n         self._tiers[min_quantity] = percent\n"
+      },
+      {
+        "mutant_id": "m5c2d351935",
+        "operator": "constant",
+        "file": "shopcart/pricing.py",
+        "line": 40,
+        "description": "'0' -> '1'",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac3_below_tier_no_discount"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -39,3 +39,3 @@\n     def calculate_discounted_line_total(self, line: LineItem) -> Decimal:\n-        applicable_discount = Decimal(\"0\")\n+        applicable_discount = Decimal('1')\n         # Sort tiers to find the highest threshold met by the quantity\n"
+      },
+      {
+        "mutant_id": "ma94ab6d056",
+        "operator": "condition",
+        "file": "shopcart/pricing.py",
+        "line": 43,
+        "description": "negate condition",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -42,3 +42,3 @@\n         for min_qty in sorted(self._tiers.keys()):\n-            if line.quantity >= min_qty:\n+            if not (line.quantity >= min_qty):\n                 applicable_discount = self._tiers[min_qty]\n"
+      },
+      {
+        "mutant_id": "mdcde64e50d",
+        "operator": "compare",
+        "file": "shopcart/pricing.py",
+        "line": 43,
+        "description": "GtE -> Gt",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -42,3 +42,3 @@\n         for min_qty in sorted(self._tiers.keys()):\n-            if line.quantity >= min_qty:\n+            if (line.quantity > min_qty):\n                 applicable_discount = self._tiers[min_qty]\n"
+      },
+      {
+        "mutant_id": "m1fed65b028",
+        "operator": "condition",
+        "file": "shopcart/pricing.py",
+        "line": 47,
+        "description": "negate condition",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -46,3 +46,3 @@\n         original_total = line.line_total\n-        if applicable_discount == 0:\n+        if not (applicable_discount == 0):\n             return original_total\n"
+      },
+      {
+        "mutant_id": "m4496c3d993",
+        "operator": "constant",
+        "file": "shopcart/pricing.py",
+        "line": 47,
+        "description": "0 -> 1",
+        "killed": false,
+        "killed_by": [],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -46,3 +46,3 @@\n         original_total = line.line_total\n-        if applicable_discount == 0:\n+        if applicable_discount == 1:\n             return original_total\n"
+      },
+      {
+        "mutant_id": "m6f2e3f73ec",
+        "operator": "compare",
+        "file": "shopcart/pricing.py",
+        "line": 47,
+        "description": "Eq -> NotEq",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -46,3 +46,3 @@\n         original_total = line.line_total\n-        if applicable_discount == 0:\n+        if (applicable_discount != 0):\n             return original_total\n"
+      },
+      {
+        "mutant_id": "m392a68f171",
+        "operator": "return",
+        "file": "shopcart/pricing.py",
+        "line": 48,
+        "description": "return value -> None",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac3_below_tier_no_discount"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -47,3 +47,3 @@\n         if applicable_discount == 0:\n-            return original_total\n+            return None\n             \n"
+      },
+      {
+        "mutant_id": "m21161596af",
+        "operator": "arithmetic",
+        "file": "shopcart/pricing.py",
+        "line": 50,
+        "description": "Div -> Mult",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -49,3 +49,3 @@\n             \n-        multiplier = (Decimal(\"100\") - applicable_discount) / Decimal(\"100\")\n+        multiplier = ((Decimal('100') - applicable_discount) * Decimal('100'))\n         return to_money(original_total * multiplier)\n"
+      },
+      {
+        "mutant_id": "m257f6dd06e",
+        "operator": "arithmetic",
+        "file": "shopcart/pricing.py",
+        "line": 50,
+        "description": "Sub -> Add",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -49,3 +49,3 @@\n             \n-        multiplier = (Decimal(\"100\") - applicable_discount) / Decimal(\"100\")\n+        multiplier = ((Decimal('100') + applicable_discount)) / Decimal(\"100\")\n         return to_money(original_total * multiplier)\n"
+      },
+      {
+        "mutant_id": "m3f8a74fa4d",
+        "operator": "constant",
+        "file": "shopcart/pricing.py",
+        "line": 50,
+        "description": "'100' -> '101'",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -49,3 +49,3 @@\n             \n-        multiplier = (Decimal(\"100\") - applicable_discount) / Decimal(\"100\")\n+        multiplier = (Decimal(\"100\") - applicable_discount) / Decimal('101')\n         return to_money(original_total * multiplier)\n"
+      },
+      {
+        "mutant_id": "m0c62de482b",
+        "operator": "return",
+        "file": "shopcart/pricing.py",
+        "line": 51,
+        "description": "return value -> None",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -50,3 +50,3 @@\n         multiplier = (Decimal(\"100\") - applicable_discount) / Decimal(\"100\")\n-        return to_money(original_total * multiplier)\n+        return None\n \n"
+      },
+      {
+        "mutant_id": "mf3120fef31",
+        "operator": "arithmetic",
+        "file": "shopcart/pricing.py",
+        "line": 51,
+        "description": "Mult -> Div",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -50,3 +50,3 @@\n         multiplier = (Decimal(\"100\") - applicable_discount) / Decimal(\"100\")\n-        return to_money(original_total * multiplier)\n+        return to_money((original_total / multiplier))\n \n"
+      },
+      {
+        "mutant_id": "m94673fd513",
+        "operator": "arithmetic",
+        "file": "shopcart/pricing.py",
+        "line": 68,
+        "description": "Add= -> Sub=",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac4_tax_calculated_on_discounted_price"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -67,3 +67,3 @@\n             line_total = policy.calculate_discounted_line_total(line)\n-        tax += percent_of(line_total, policy.tax_rate_for(line.product.category))\n+        tax -= percent_of(line_total, policy.tax_rate_for(line.product.category))\n     return to_money(tax)\n"
+      },
+      {
+        "mutant_id": "mfba92d5bad",
+        "operator": "condition",
+        "file": "shopcart/pricing.py",
+        "line": 77,
+        "description": "negate condition",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac5_shipping_on_discounted_subtotal"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -76,3 +76,3 @@\n     subtotal = cart.subtotal\n-    if isinstance(policy, VolumeDiscountPolicy):\n+    if not (isinstance(policy, VolumeDiscountPolicy)):\n         subtotal = sum(\n"
+      },
+      {
+        "mutant_id": "me83c2a18a9",
+        "operator": "constant",
+        "file": "shopcart/pricing.py",
+        "line": 80,
+        "description": "'0' -> '1'",
+        "killed": false,
+        "killed_by": [],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -79,3 +79,3 @@\n             (policy.calculate_discounted_line_total(line) for line in cart.lines),\n-            Decimal(\"0\"),\n+            Decimal('1'),\n         )\n"
+      },
+      {
+        "mutant_id": "m12e872c928",
+        "operator": "compare",
+        "file": "shopcart/pricing.py",
+        "line": 83,
+        "description": "GtE -> Gt",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_shipping_at_threshold_boundary"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -82,3 +82,3 @@\n \n-    if subtotal >= policy.free_shipping_threshold:\n+    if (subtotal > policy.free_shipping_threshold):\n         return Decimal(\"0.00\")\n"
+      },
+      {
+        "mutant_id": "medcac97a41",
+        "operator": "condition",
+        "file": "shopcart/pricing.py",
+        "line": 83,
+        "description": "negate condition",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac5_shipping_on_discounted_subtotal"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -82,3 +82,3 @@\n \n-    if subtotal >= policy.free_shipping_threshold:\n+    if not (subtotal >= policy.free_shipping_threshold):\n         return Decimal(\"0.00\")\n"
+      },
+      {
+        "mutant_id": "m7a972d20f0",
+        "operator": "condition",
+        "file": "shopcart/pricing.py",
+        "line": 90,
+        "description": "negate condition",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -89,3 +89,3 @@\n     policy = policy or PricingPolicy()\n-    if isinstance(policy, VolumeDiscountPolicy):\n+    if not (isinstance(policy, VolumeDiscountPolicy)):\n         subtotal = to_money(\n"
+      },
+      {
+        "mutant_id": "m9a4b5aa458",
+        "operator": "constant",
+        "file": "shopcart/pricing.py",
+        "line": 94,
+        "description": "'0' -> '1'",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match"
+        ],
+        "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -93,3 +93,3 @@\n                 (policy.calculate_discounted_line_total(line) for line in cart.lines),\n-                Decimal(\"0\"),\n+                Decimal('1'),\n             )\n"
+      }
+    ],
+    "supported": true,
+    "note": ""
+  },
+  "semantic_mutation_result": {
+    "engine": "llm-semantic-mutants",
+    "total": 4,
+    "killed": 4,
+    "survived": 0,
+    "errors": 0,
+    "score": 1.0,
+    "outcomes": [
+      {
+        "mutant_id": "s1",
+        "operator": "semantic",
+        "file": "shopcart/pricing.py",
+        "line": 0,
+        "description": "The policy incorrectly uses the first applicable tier instead of the highest applicable tier because it iterates over a sorted list without reversing or breaking at the correct point, violating AC2.",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac2_highest_applicable_tier"
+        ],
+        "diff": "--- reference/shopcart/pricing.py\n+++ mutant/shopcart/pricing.py\n@@ -44,2 +44,3 @@\n                 applicable_discount = self._tiers[min_qty]\n+                break\n         \n"
+      },
+      {
+        "mutant_id": "s2",
+        "operator": "semantic",
+        "file": "shopcart/pricing.py",
+        "line": 0,
+        "description": "The implementation fails to update compute_shipping to use the discounted subtotal when evaluating the free shipping threshold, violating AC5.",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac5_shipping_on_discounted_subtotal"
+        ],
+        "diff": "--- reference/shopcart/pricing.py\n+++ mutant/shopcart/pricing.py\n@@ -76,7 +76,2 @@\n     subtotal = cart.subtotal\n-    if isinstance(policy, VolumeDiscountPolicy):\n-        subtotal = sum(\n-            (policy.calculate_discounted_line_total(line) for line in cart.lines),\n-            Decimal(\"0\"),\n-        )\n \n"
+      },
+      {
+        "mutant_id": "s3",
+        "operator": "semantic",
+        "file": "shopcart/pricing.py",
+        "line": 0,
+        "description": "The add_tier method uses an off-by-one boundary for the minimum quantity validation, allowing 0 as a valid input, violating the requirement that min_quantity must be at least 1 and the specific error handling instructions.",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_min_quantity"
+        ],
+        "diff": "--- reference/shopcart/pricing.py\n+++ mutant/shopcart/pricing.py\n@@ -31,3 +31,3 @@\n     def add_tier(self, min_quantity: int, discount_percent: Decimal | int | str) -> None:\n-        if min_quantity < 1:\n+        if min_quantity < 0:\n             raise ValueError(\"min_quantity must be at least 1\")\n"
+      },
+      {
+        "mutant_id": "s4",
+        "operator": "semantic",
+        "file": "shopcart/pricing.py",
+        "line": 0,
+        "description": "The compute_tax function incorrectly calculates tax based on the original line_total instead of the discounted_total when a VolumeDiscountPolicy is used, violating AC4.",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac4_tax_calculated_on_discounted_price"
+        ],
+        "diff": "--- reference/shopcart/pricing.py\n+++ mutant/shopcart/pricing.py\n@@ -65,4 +65,2 @@\n         line_total = line.line_total\n-        if isinstance(policy, VolumeDiscountPolicy):\n-            line_total = policy.calculate_discounted_line_total(line)\n         tax += percent_of(line_total, policy.tax_rate_for(line.product.category))\n"
+      }
+    ],
+    "supported": true,
+    "note": ""
+  },
+  "coverage_result": {
+    "changed_statements": 34,
+    "covered": 33,
+    "percent": 97.1,
+    "files": {
+      "shopcart/pricing.py": {
+        "statements": 34,
+        "covered": 33,
+        "missing_lines": [
+          98
+        ],
+        "percent": 97.1
+      }
+    },
+    "tool": "coverage==7.17.3"
+  },
+  "harbor_validation": {
+    "lint": {
+      "ok": true,
+      "findings": [],
+      "output": "[]\n"
+    },
+    "oracle": {
+      "agent": "oracle",
+      "ok": true,
+      "reward": 1.0,
+      "rewards": {
+        "reward": 1.0,
+        "feature_pass_rate": 1.0,
+        "regression_pass_rate": 1.0
+      },
+      "exception": null,
+      "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-002426-web-2acafa\\harbor_jobs\\add-volume-based-discount-configuration--oracle-002652",
+      "duration_sec": 48.0,
+      "output_tail": "erifier...\n⠦ 0/1 Running trials...                                         0:00:43 -:--:--\n⠧ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠇ 0/1 Running trials...                                         0:00:43 -:--:--\n⠇ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠏ 0/1 Running trials...                                         0:00:44 -:--:--\n⠏ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠋ 0/1 Running trials...                                         0:00:44 -:--:--\n⠙ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠹ 0/1 Running trials...                                         0:00:44 -:--:--\n⠹ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠸ 0/1 Running trials...                                         0:00:44 -:--:--\n⠸ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠼ 0/1 Running trials...                                         0:00:44 -:--:--\n⠴ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠦ 0/1 Running trials...                                         0:00:44 -:--:--\n⠦ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠧ 0/1 Running trials...                                         0:00:44 -:--:--\n⠇ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠏ 0/1 Running trials...                                         0:00:44 -:--:--\n⠏ 0:00:44 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠋ 0/1 Running trials...                                         0:00:44 -:--:--\n⠋ 0:00:44 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠙ 0/1 Running trials...                                         0:00:45 -:--:--\n⠹ 0:00:44 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n  1/1 Feature_Pass_Rate: 1.000 -------------------------------- 0:00:45 0:00:00\n\nadhoc • oracle\n┌────────┬────────────┬───────────────────┬──────────────────────┬────────┐\n│ Trials │ Exceptions │ Feature_Pass_Rate │ Regression_Pass_Rate │ Reward │\n├────────┼────────────┼───────────────────┼──────────────────────┼────────┤\n│      1 │          0 │             1.000 │                1.000 │  1.000 │\n└────────┴────────────┴───────────────────┴──────────────────────┴────────┘\n\n┌────────┬───────┐\n│ Reward │ Count │\n├────────┼───────┤\n│ 1.0    │     1 │\n│ 1.0    │     1 │\n│ 1.0    │     1 │\n└────────┴───────┘\n\nJob Info\nTotal runtime: 45s\nResults written to C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-002426-web-2acafa\\harbor_jobs\\add-volume-based-disco\nunt-configuration--oracle-002652\\result.json\nInspect results by running `harbor view C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-002426-web-2acafa\\harbor_jobs`\nShare results by running `harbor upload C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-002426-web-2acafa\\harbor_jobs\\add-volume-based-disco\nunt-configuration--oracle-002652`\n\nfatal: bad revision 'HEAD'\n"
+    },
+    "nop": {
+      "agent": "nop",
+      "ok": true,
+      "reward": 0.0,
+      "rewards": {
+        "reward": 0.0,
+        "feature_pass_rate": 0.0,
+        "regression_pass_rate": 1.0
+      },
+      "exception": null,
+      "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-002426-web-2acafa\\harbor_jobs\\add-volume-based-discount-configuration--nop-002652",
+      "duration_sec": 44.3,
+      "output_tail": "running verifier...\n⠙ 0/1 Running trials...                                         0:00:40 -:--:--\n⠴ 0:00:39 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠹ 0/1 Running trials...                                         0:00:40 -:--:--\n⠧ 0:00:39 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠸ 0/1 Running trials...                                         0:00:40 -:--:--\n⠇ 0:00:39 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠴ 0/1 Running trials...                                         0:00:40 -:--:--\n⠏ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠦ 0/1 Running trials...                                         0:00:40 -:--:--\n⠙ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠇ 0/1 Running trials...                                         0:00:40 -:--:--\n⠹ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠏ 0/1 Running trials...                                         0:00:40 -:--:--\n⠼ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠙ 0/1 Running trials...                                         0:00:40 -:--:--\n⠴ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠹ 0/1 Running trials...                                         0:00:41 -:--:--\n⠧ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠸ 0/1 Running trials...                                         0:00:41 -:--:--\n⠇ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠴ 0/1 Running trials...                                         0:00:41 -:--:--\n⠏ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠦ 0/1 Running trials...                                         0:00:41 -:--:--\n⠙ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n  1/1 Feature_Pass_Rate: 0.000 -------------------------------- 0:00:41 0:00:00\n\nadhoc • nop\n┌────────┬────────────┬───────────────────┬──────────────────────┬────────┐\n│ Trials │ Exceptions │ Feature_Pass_Rate │ Regression_Pass_Rate │ Reward │\n├────────┼────────────┼───────────────────┼──────────────────────┼────────┤\n│      1 │          0 │             0.000 │                1.000 │  0.000 │\n└────────┴────────────┴───────────────────┴──────────────────────┴────────┘\n\n┌────────┬───────┐\n│ Reward │ Count │\n├────────┼───────┤\n│ 0.0    │     1 │\n│ 0.0    │     1 │\n│ 1.0    │     1 │\n└────────┴───────┘\n\nJob Info\nTotal runtime: 41s\nResults written to C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-002426-web-2acafa\\harbor_jobs\\add-volume-based-disco\nunt-configuration--nop-002652\\result.json\nInspect results by running `harbor view C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-002426-web-2acafa\\harbor_jobs`\nShare results by running `harbor upload C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-002426-web-2acafa\\harbor_jobs\\add-volume-based-disco\nunt-configuration--nop-002652`\n\nfatal: bad revision 'HEAD'\n"
+    },
+    "harbor_version": "0.26.0"
+  },
+  "gates": [
+    {
+      "gate": "baseline",
+      "status": "passed",
+      "summary": "27 original tests pass consistently across 3 runs",
+      "details": {
+        "runs": 3,
+        "command": [
+          "tests"
+        ],
+        "passed": [
+          "tests.test_cart::test_add_and_subtotal",
+          "tests.test_cart::test_adding_same_sku_merges_lines",
+          "tests.test_cart::test_lines_sorted_by_sku",
+          "tests.test_cart::test_quantity_limit",
+          "tests.test_cart::test_quantity_must_be_positive",
+          "tests.test_cart::test_update_and_remove",
+          "tests.test_catalog::test_duplicate_sku_rejected",
+          "tests.test_catalog::test_lookup_and_category",
+          "tests.test_catalog::test_negative_price_rejected",
+          "tests.test_catalog::test_product_price_is_rounded",
+          "tests.test_catalog::test_search_is_case_insensitive",
+          "tests.test_catalog::test_unknown_sku",
+          "tests.test_inventory::test_commit_reduces_on_hand",
+          "tests.test_inventory::test_over_reserve_fails",
+          "tests.test_inventory::test_release_more_than_held_fails",
+          "tests.test_inventory::test_restock_and_reserve",
+          "tests.test_inventory::test_restock_requires_positive_quantity",
+          "tests.test_orders::test_cancel_releases_stock",
+          "tests.test_orders::test_failed_reservation_rolls_back",
+          "tests.test_orders::test_pay_ship_flow",
+          "tests.test_orders::test_place_empty_cart_fails",
+          "tests.test_orders::test_place_reserves_stock",
+          "tests.test_orders::test_wrong_payment_amount",
+          "tests.test_pricing::test_category_tax_rates",
+          "tests.test_pricing::test_default_tax_and_flat_shipping",
+          "tests.test_pricing::test_empty_cart_totals",
+          "tests.test_pricing::test_free_shipping_at_threshold"
+        ],
+        "failed": [],
+        "flaky": [],
+        "duration_sec": 0.0,
+        "healthy": true,
+        "notes": []
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "positive_control",
+      "status": "passed",
+      "summary": "13/13 feature tests pass with the reference",
+      "details": {
+        "passed": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match",
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac2_highest_applicable_tier",
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac3_below_tier_no_discount",
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac4_tax_calculated_on_discounted_price",
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac5_shipping_on_discounted_subtotal",
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_shipping_at_threshold_boundary",
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_discount_rounding_half_up",
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_empty_subtotal_with_volume_policy",
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_edge_case_duplicate_threshold_last_wins",
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_edge_case_non_sequential_tiers",
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_min_quantity",
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_discount_percent",
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_exact_100_percent_discount_allowed"
+        ],
+        "failed": [],
+        "errors": [],
+        "skipped": []
+      },
+      "log_paths": [
+        "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-002426-web-2acafa\\add-volume-based-discount-configuration-policy-91c6c0\\strengthen-1\\positive\\feature_reference_1.log"
+      ]
+    },
+    {
+      "gate": "negative_control",
+      "status": "passed",
+      "summary": "13/13 feature tests fail on the original code (module import fails: the contract does not exist yet)",
+      "details": {
+        "passing_on_original": [],
+        "failed": [],
+        "errors": [
+          "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0"
+        ],
+        "collection_error": true
+      },
+      "log_paths": [
+        "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-002426-web-2acafa\\add-volume-based-discount-configuration-policy-91c6c0\\strengthen-1\\negative\\feature_original.log"
+      ]
+    },
+    {
+      "gate": "regression",
+      "status": "passed",
+      "summary": "27/27 original tests still pass with the reference",
+      "details": {
+        "broken": [],
+        "broken_by_adding_tests": [],
+        "pass_to_pass": [
+          "tests.test_cart::test_add_and_subtotal",
+          "tests.test_cart::test_adding_same_sku_merges_lines",
+          "tests.test_cart::test_lines_sorted_by_sku",
+          "tests.test_cart::test_quantity_limit",
+          "tests.test_cart::test_quantity_must_be_positive",
+          "tests.test_cart::test_update_and_remove",
+          "tests.test_catalog::test_duplicate_sku_rejected",
+          "tests.test_catalog::test_lookup_and_category",
+          "tests.test_catalog::test_negative_price_rejected",
+          "tests.test_catalog::test_product_price_is_rounded",
+          "tests.test_catalog::test_search_is_case_insensitive",
+          "tests.test_catalog::test_unknown_sku",
+          "tests.test_inventory::test_commit_reduces_on_hand",
+          "tests.test_inventory::test_over_reserve_fails",
+          "tests.test_inventory::test_release_more_than_held_fails",
+          "tests.test_inventory::test_restock_and_reserve",
+          "tests.test_inventory::test_restock_requires_positive_quantity",
+          "tests.test_orders::test_cancel_releases_stock",
+          "tests.test_orders::test_failed_reservation_rolls_back",
+          "tests.test_orders::test_pay_ship_flow",
+          "tests.test_orders::test_place_empty_cart_fails",
+          "tests.test_orders::test_place_reserves_stock",
+          "tests.test_orders::test_wrong_payment_amount",
+          "tests.test_pricing::test_category_tax_rates",
+          "tests.test_pricing::test_default_tax_and_flat_shipping",
+          "tests.test_pricing::test_empty_cart_totals",
+          "tests.test_pricing::test_free_shipping_at_threshold"
+        ]
+      },
+      "log_paths": [
+        "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-002426-web-2acafa\\add-volume-based-discount-configuration-policy-91c6c0\\strengthen-1\\positive\\regression_reference.log"
+      ]
+    },
+    {
+      "gate": "stability",
+      "status": "passed",
+      "summary": "3/3 reference runs identical",
+      "details": {
+        "runs": [
+          [
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac2_highest_applicable_tier",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac3_below_tier_no_discount",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac4_tax_calculated_on_discounted_price",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac5_shipping_on_discounted_subtotal",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_discount_rounding_half_up",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_edge_case_duplicate_threshold_last_wins",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_edge_case_non_sequential_tiers",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_empty_subtotal_with_volume_policy",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_discount_percent",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_min_quantity",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_exact_100_percent_discount_allowed",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_shipping_at_threshold_boundary"
+          ],
+          [
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac2_highest_applicable_tier",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac3_below_tier_no_discount",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac4_tax_calculated_on_discounted_price",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac5_shipping_on_discounted_subtotal",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_discount_rounding_half_up",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_edge_case_duplicate_threshold_last_wins",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_edge_case_non_sequential_tiers",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_empty_subtotal_with_volume_policy",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_discount_percent",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_min_quantity",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_exact_100_percent_discount_allowed",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_shipping_at_threshold_boundary"
+          ],
+          [
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac2_highest_applicable_tier",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac3_below_tier_no_discount",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac4_tax_calculated_on_discounted_price",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac5_shipping_on_discounted_subtotal",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_discount_rounding_half_up",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_edge_case_duplicate_threshold_last_wins",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_edge_case_non_sequential_tiers",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_empty_subtotal_with_volume_policy",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_discount_percent",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_min_quantity",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_exact_100_percent_discount_allowed",
+            "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_shipping_at_threshold_boundary"
+          ]
+        ]
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "independence",
+      "status": "passed",
+      "summary": "5/5 acceptance criteria traced to tests; 0 error(s), 0 warning(s)",
+      "details": {
+        "errors": [],
+        "warnings": [],
+        "ac_coverage": {
+          "AC1": [
+            "test_ac1_exact_tier_match"
+          ],
+          "AC2": [
+            "test_ac2_highest_applicable_tier"
+          ],
+          "AC3": [
+            "test_ac3_below_tier_no_discount",
+            "test_edge_case_duplicate_threshold_last_wins",
+            "test_edge_case_non_sequential_tiers"
+          ],
+          "AC4": [
+            "test_ac4_tax_calculated_on_discounted_price"
+          ],
+          "AC5": [
+            "test_ac5_shipping_on_discounted_subtotal",
+            "test_shipping_at_threshold_boundary"
+          ]
+        },
+        "tests": [
+          "test_ac1_exact_tier_match",
+          "test_ac2_highest_applicable_tier",
+          "test_ac3_below_tier_no_discount",
+          "test_ac4_tax_calculated_on_discounted_price",
+          "test_ac5_shipping_on_discounted_subtotal",
+          "test_shipping_at_threshold_boundary",
+          "test_discount_rounding_half_up",
+          "test_empty_subtotal_with_volume_policy",
+          "test_edge_case_duplicate_threshold_last_wins",
+          "test_edge_case_non_sequential_tiers",
+          "test_error_invalid_min_quantity",
+          "test_error_invalid_discount_percent",
+          "test_exact_100_percent_discount_allowed"
+        ]
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "mutation",
+      "status": "passed",
+      "summary": "mutation score 90% (27/30 killed, threshold 60%)",
+      "details": {
+        "survivors": [
+          {
+            "mutant_id": "mc31e071247",
+            "operator": "compare",
+            "file": "shopcart/pricing.py",
+            "line": 35,
+            "description": "Lt -> LtE",
+            "killed": false,
+            "killed_by": [],
+            "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -34,3 +34,3 @@\n         percent = Decimal(discount_percent)\n-        if percent < 0 or percent > 100:\n+        if (percent <= 0) or percent > 100:\n             raise ValueError(\"discount_percent must be between 0 and 100\")\n"
+          },
+          {
+            "mutant_id": "m4496c3d993",
+            "operator": "constant",
+            "file": "shopcart/pricing.py",
+            "line": 47,
+            "description": "0 -> 1",
+            "killed": false,
+            "killed_by": [],
+            "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -46,3 +46,3 @@\n         original_total = line.line_total\n-        if applicable_discount == 0:\n+        if applicable_discount == 1:\n             return original_total\n"
+          },
+          {
+            "mutant_id": "me83c2a18a9",
+            "operator": "constant",
+            "file": "shopcart/pricing.py",
+            "line": 80,
+            "description": "'0' -> '1'",
+            "killed": false,
+            "killed_by": [],
+            "diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -79,3 +79,3 @@\n             (policy.calculate_discounted_line_total(line) for line in cart.lines),\n-            Decimal(\"0\"),\n+            Decimal('1'),\n         )\n"
+          }
+        ]
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "semantic_mutants",
+      "status": "passed",
+      "summary": "4/4 plausible wrong implementations caught",
+      "details": {
+        "outcomes": [
+          {
+            "mutant_id": "s1",
+            "operator": "semantic",
+            "file": "shopcart/pricing.py",
+            "line": 0,
+            "description": "The policy incorrectly uses the first applicable tier instead of the highest applicable tier because it iterates over a sorted list without reversing or breaking at the correct point, violating AC2.",
+            "killed": true,
+            "killed_by": [
+              "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac2_highest_applicable_tier"
+            ],
+            "diff": "--- reference/shopcart/pricing.py\n+++ mutant/shopcart/pricing.py\n@@ -44,2 +44,3 @@\n                 applicable_discount = self._tiers[min_qty]\n+                break\n         \n"
+          },
+          {
+            "mutant_id": "s2",
+            "operator": "semantic",
+            "file": "shopcart/pricing.py",
+            "line": 0,
+            "description": "The implementation fails to update compute_shipping to use the discounted subtotal when evaluating the free shipping threshold, violating AC5.",
+            "killed": true,
+            "killed_by": [
+              "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac5_shipping_on_discounted_subtotal"
+            ],
+            "diff": "--- reference/shopcart/pricing.py\n+++ mutant/shopcart/pricing.py\n@@ -76,7 +76,2 @@\n     subtotal = cart.subtotal\n-    if isinstance(policy, VolumeDiscountPolicy):\n-        subtotal = sum(\n-            (policy.calculate_discounted_line_total(line) for line in cart.lines),\n-            Decimal(\"0\"),\n-        )\n \n"
+          },
+          {
+            "mutant_id": "s3",
+            "operator": "semantic",
+            "file": "shopcart/pricing.py",
+            "line": 0,
+            "description": "The add_tier method uses an off-by-one boundary for the minimum quantity validation, allowing 0 as a valid input, violating the requirement that min_quantity must be at least 1 and the specific error handling instructions.",
+            "killed": true,
+            "killed_by": [
+              "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_min_quantity"
+            ],
+            "diff": "--- reference/shopcart/pricing.py\n+++ mutant/shopcart/pricing.py\n@@ -31,3 +31,3 @@\n     def add_tier(self, min_quantity: int, discount_percent: Decimal | int | str) -> None:\n-        if min_quantity < 1:\n+        if min_quantity < 0:\n             raise ValueError(\"min_quantity must be at least 1\")\n"
+          },
+          {
+            "mutant_id": "s4",
+            "operator": "semantic",
+            "file": "shopcart/pricing.py",
+            "line": 0,
+            "description": "The compute_tax function incorrectly calculates tax based on the original line_total instead of the discounted_total when a VolumeDiscountPolicy is used, violating AC4.",
+            "killed": true,
+            "killed_by": [
+              "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac4_tax_calculated_on_discounted_price"
+            ],
+            "diff": "--- reference/shopcart/pricing.py\n+++ mutant/shopcart/pricing.py\n@@ -65,4 +65,2 @@\n         line_total = line.line_total\n-        if isinstance(policy, VolumeDiscountPolicy):\n-            line_total = policy.calculate_discounted_line_total(line)\n         tax += percent_of(line_total, policy.tax_rate_for(line.product.category))\n"
+          }
+        ]
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "leakage",
+      "status": "passed",
+      "summary": "no leakage or shortcut found",
+      "details": {
+        "problems": []
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "harbor_lint",
+      "status": "passed",
+      "summary": "harbor lint: no findings",
+      "details": {
+        "findings": [],
+        "output": "[]\n"
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "harbor_oracle",
+      "status": "passed",
+      "summary": "oracle reward 1.0",
+      "details": {
+        "agent": "oracle",
+        "ok": true,
+        "reward": 1.0,
+        "rewards": {
+          "reward": 1.0,
+          "feature_pass_rate": 1.0,
+          "regression_pass_rate": 1.0
+        },
+        "exception": null,
+        "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-002426-web-2acafa\\harbor_jobs\\add-volume-based-discount-configuration--oracle-002652",
+        "duration_sec": 48.0,
+        "output_tail": "erifier...\n⠦ 0/1 Running trials...                                         0:00:43 -:--:--\n⠧ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠇ 0/1 Running trials...                                         0:00:43 -:--:--\n⠇ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠏ 0/1 Running trials...                                         0:00:44 -:--:--\n⠏ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠋ 0/1 Running trials...                                         0:00:44 -:--:--\n⠙ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠹ 0/1 Running trials...                                         0:00:44 -:--:--\n⠹ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠸ 0/1 Running trials...                                         0:00:44 -:--:--\n⠸ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠼ 0/1 Running trials...                                         0:00:44 -:--:--\n⠴ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠦ 0/1 Running trials...                                         0:00:44 -:--:--\n⠦ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠧ 0/1 Running trials...                                         0:00:44 -:--:--\n⠇ 0:00:43 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠏ 0/1 Running trials...                                         0:00:44 -:--:--\n⠏ 0:00:44 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠋ 0/1 Running trials...                                         0:00:44 -:--:--\n⠋ 0:00:44 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n⠙ 0/1 Running trials...                                         0:00:45 -:--:--\n⠹ 0:00:44 add-volume-based-discount-config__Vf3Yp8X: running verifier...\n  1/1 Feature_Pass_Rate: 1.000 -------------------------------- 0:00:45 0:00:00\n\nadhoc • oracle\n┌────────┬────────────┬───────────────────┬──────────────────────┬────────┐\n│ Trials │ Exceptions │ Feature_Pass_Rate │ Regression_Pass_Rate │ Reward │\n├────────┼────────────┼───────────────────┼──────────────────────┼────────┤\n│      1 │          0 │             1.000 │                1.000 │  1.000 │\n└────────┴────────────┴───────────────────┴──────────────────────┴────────┘\n\n┌────────┬───────┐\n│ Reward │ Count │\n├────────┼───────┤\n│ 1.0    │     1 │\n│ 1.0    │     1 │\n│ 1.0    │     1 │\n└────────┴───────┘\n\nJob Info\nTotal runtime: 45s\nResults written to C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-002426-web-2acafa\\harbor_jobs\\add-volume-based-disco\nunt-configuration--oracle-002652\\result.json\nInspect results by running `harbor view C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-002426-web-2acafa\\harbor_jobs`\nShare results by running `harbor upload C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-002426-web-2acafa\\harbor_jobs\\add-volume-based-disco\nunt-configuration--oracle-002652`\n\nfatal: bad revision 'HEAD'\n"
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "harbor_nop",
+      "status": "passed",
+      "summary": "nop (no changes) reward 0.0",
+      "details": {
+        "agent": "nop",
+        "ok": true,
+        "reward": 0.0,
+        "rewards": {
+          "reward": 0.0,
+          "feature_pass_rate": 0.0,
+          "regression_pass_rate": 1.0
+        },
+        "exception": null,
+        "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-002426-web-2acafa\\harbor_jobs\\add-volume-based-discount-configuration--nop-002652",
+        "duration_sec": 44.3,
+        "output_tail": "running verifier...\n⠙ 0/1 Running trials...                                         0:00:40 -:--:--\n⠴ 0:00:39 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠹ 0/1 Running trials...                                         0:00:40 -:--:--\n⠧ 0:00:39 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠸ 0/1 Running trials...                                         0:00:40 -:--:--\n⠇ 0:00:39 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠴ 0/1 Running trials...                                         0:00:40 -:--:--\n⠏ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠦ 0/1 Running trials...                                         0:00:40 -:--:--\n⠙ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠇ 0/1 Running trials...                                         0:00:40 -:--:--\n⠹ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠏ 0/1 Running trials...                                         0:00:40 -:--:--\n⠼ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠙ 0/1 Running trials...                                         0:00:40 -:--:--\n⠴ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠹ 0/1 Running trials...                                         0:00:41 -:--:--\n⠧ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠸ 0/1 Running trials...                                         0:00:41 -:--:--\n⠇ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠴ 0/1 Running trials...                                         0:00:41 -:--:--\n⠏ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n⠦ 0/1 Running trials...                                         0:00:41 -:--:--\n⠙ 0:00:40 add-volume-based-discount-config__PnRH6fe: running verifier...\n  1/1 Feature_Pass_Rate: 0.000 -------------------------------- 0:00:41 0:00:00\n\nadhoc • nop\n┌────────┬────────────┬───────────────────┬──────────────────────┬────────┐\n│ Trials │ Exceptions │ Feature_Pass_Rate │ Regression_Pass_Rate │ Reward │\n├────────┼────────────┼───────────────────┼──────────────────────┼────────┤\n│      1 │          0 │             0.000 │                1.000 │  0.000 │\n└────────┴────────────┴───────────────────┴──────────────────────┴────────┘\n\n┌────────┬───────┐\n│ Reward │ Count │\n├────────┼───────┤\n│ 0.0    │     1 │\n│ 0.0    │     1 │\n│ 1.0    │     1 │\n└────────┴───────┘\n\nJob Info\nTotal runtime: 41s\nResults written to C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-002426-web-2acafa\\harbor_jobs\\add-volume-based-disco\nunt-configuration--nop-002652\\result.json\nInspect results by running `harbor view C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-002426-web-2acafa\\harbor_jobs`\nShare results by running `harbor upload C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-002426-web-2acafa\\harbor_jobs\\add-volume-based-disco\nunt-configuration--nop-002652`\n\nfatal: bad revision 'HEAD'\n"
+      },
+      "log_paths": []
+    }
+  ],
+  "score": {
+    "total": 99.2,
+    "components": [
+      {
+        "name": "Requirement clarity",
+        "weight": 0.1,
+        "score": 1.0,
+        "rule": "min(1, #criteria/4) x share of criteria traced to >=1 test"
+      },
+      {
+        "name": "Requirement test coverage",
+        "weight": 0.1,
+        "score": 1.0,
+        "rule": "share of acceptance criteria with at least one hidden test"
+      },
+      {
+        "name": "Repository compatibility",
+        "weight": 0.1,
+        "score": 1.0,
+        "rule": "baseline suite healthy and stable in the task environment"
+      },
+      {
+        "name": "Negative control",
+        "weight": 0.15,
+        "score": 1.0,
+        "rule": "every hidden feature test fails on the original code"
+      },
+      {
+        "name": "Reference success",
+        "weight": 0.15,
+        "score": 1.0,
+        "rule": "every hidden feature test passes with the reference"
+      },
+      {
+        "name": "Regression safety",
+        "weight": 0.15,
+        "score": 1.0,
+        "rule": "all baseline-passing original tests still pass with the reference"
+      },
+      {
+        "name": "Mutation evidence",
+        "weight": 0.15,
+        "score": 0.95,
+        "rule": "mean kill rate of diff-scoped AST mutants and semantic mutants"
+      },
+      {
+        "name": "Reproducibility",
+        "weight": 0.1,
+        "score": 1.0,
+        "rule": "identical results across repeated reference runs"
+      }
+    ],
+    "disclaimer": "Heuristic quality score. Proof of validity comes from the executed gates, not this number."
+  },
+  "final_validity_status": "valid",
+  "rejection_reasons": [],
+  "attempts": [
+    {
+      "attempt": 1,
+      "gates": {
+        "positive_control": "passed",
+        "negative_control": "passed",
+        "regression": "passed",
+        "stability": "passed"
+      },
+      "independence_errors": []
+    },
+    {
+      "strengthen_round": 1,
+      "survivors": 4,
+      "adopted": true,
+      "gates": {
+        "positive_control": "passed",
+        "negative_control": "passed",
+        "regression": "passed",
+        "stability": "passed"
+      },
+      "killed_before": 30,
+      "killed_after": 31
+    }
+  ],
+  "validation_logs": [],
+  "timestamp": "2026-11-20T00:25:19.770534+00:00"
+}

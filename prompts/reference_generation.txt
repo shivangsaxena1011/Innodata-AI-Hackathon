@@ -1,0 +1,33 @@
+Implement the feature specification below in this repository. This is the reference
+solution that proves the task is solvable.
+
+## Repository
+$repo_name ($language). Starting commit: $commit
+
+## Specification
+$spec
+
+## Ranked repository map
+$repo_map
+
+## Current source of the files you may edit (exact content)
+$sources
+
+## Rules
+- Implement every requirement and acceptance criterion exactly as specified, including the
+  exact names and signatures in the interface contract.
+- Follow the repository's existing style, naming and structure. Keep existing behaviour
+  backwards compatible. Do not edit test files. Do not add dependencies.
+- Express changes as SEARCH/REPLACE edits:
+  * "search" must be an exact, contiguous copy of lines from the CURRENT file content above
+    (include enough lines to be unique). "replace" is the new text for that block.
+  * To create a new file, use an empty "search" and the full file in "replace".
+  * Prefer several small edits over rewriting a whole file.
+$repair_note
+
+## Output
+Reply with ONE JSON object:
+{
+  "explanation": "short description of the implementation",
+  "edits": [{"path": "relative/path.py", "search": "exact existing text", "replace": "new text"}]
+}

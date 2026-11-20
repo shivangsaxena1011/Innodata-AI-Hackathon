@@ -1,0 +1,6 @@
+Agent 'nop' does not declare an options_model; leftover kwargs are ignored
+Skipping image OS validation for hb__57379154ec51c6404fadfde63c22acdd: docker inspect returned 1
+Collecting main service artifacts
+Skipping image OS validation for hb__fdd2e9b16aec184bb25d49fd9d1ef0c1: docker inspect returned 1
+Trial add-inventory-valuation-and-stoc__aoEXnko failed: [Errno 2] No such file or directory: 'C:\\Users\\Project\\Innodata AI Hackathon\\reports\\benchmark-20261120-030244-nop\\jobs\\add-inventory-valuation-and-stock-report-nop-20261120030244-0\\add-inventory-valuation-and-stoc__aoEXnko\\.verifier-artifacts-hbcsjs6e\\1\\app\\.\\shopcart.egg-info\\dependency_links.txt'
+Not retrying trial because the maximum number of retries has been reached

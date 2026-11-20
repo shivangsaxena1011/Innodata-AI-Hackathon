@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="0.042" timestamp="2026-11-20T00:18:07.769328+00:00" hostname="e03f2eead8b5"><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_order_status_enum_members" time="0.000" /><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_return_items_flow" time="0.001"><failure message="shopcart.orders.OrderError: cannot move order from shipped to shipped">def test_return_items_flow():
+        """AC2: Verify return_items transitions state and restocks inventory."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 2)
+        cart.add_item("SKU-2", 1)
+    
+        order = Order.place(cart, inventory)
+        order.pay(order.totals.total)
+        order.ship(inventory)  # Transitions to SHIPPED
+    
+        # Before return check inventory (20 starting total on-hand in fixture-like setup)
+        # Logic: start with 10. Order reserves 2 and 1. Ship commits (on-hand becomes 8 and 9).
+        assert inventory.available("SKU-1") == 8
+        assert inventory.available("SKU-2") == 9
+    
+&gt;       order.return_items(inventory)
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+shopcart/orders.py:93: in return_items
+    self._transition(OrderStatus.SHIPPED)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Order(order_id=1, items={'SKU-1': 2, 'SKU-2': 1}, totals=Totals(subtotal=Decimal('40.00'), tax=Decimal('3.20'), shippi...tatus.PENDING: 'pending'&gt;, &lt;OrderStatus.PAID: 'paid'&gt;, &lt;OrderStatus.SHIPPED: 'shipped'&gt;], amount_paid=Decimal('49.19'))
+new_status = &lt;OrderStatus.SHIPPED: 'shipped'&gt;
+
+    def _transition(self, new_status: OrderStatus) -&gt; None:
+        if new_status not in ALLOWED_TRANSITIONS[self.status]:
+&gt;           raise OrderError(f"cannot move order from {self.status.value} to {new_status.value}")
+E           shopcart.orders.OrderError: cannot move order from shipped to shipped
+
+shopcart/orders.py:69: OrderError</failure></testcase></testsuite></testsuites>

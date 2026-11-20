@@ -1,0 +1,17 @@
+{
+  "rewards": {
+    "reward": 0.0,
+    "feature_pass_rate": 0.0,
+    "regression_pass_rate": 1.0
+  },
+  "feature_not_passed": [
+    "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_refund_transitions",
+    "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_return_transitions",
+    "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_order_status_enum_members",
+    "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_paid",
+    "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_returned",
+    "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_empty_order_restocks_nothing",
+    "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+  ],
+  "regression_not_passed": []
+}

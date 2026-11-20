@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="0.029" timestamp="2026-11-20T00:26:40.360843+00:00" hostname="5f2cb0704dd5"><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac1_exact_tier_match" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac2_highest_applicable_tier" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac3_below_tier_no_discount" time="0.000"><failure message="TypeError: unsupported operand type(s) for +: 'decimal.Decimal' and 'NoneType'">def test_ac3_below_tier_no_discount():
+        """Given a VolumeDiscountPolicy with a tier (10 units, 10%), a cart with 9 units of a $10.00 item results in a subtotal of $90.00 (no discount applied)."""
+        cart, policy, _ = setup_cart_and_policy()
+        policy.add_tier(10, 10)
+        cart.add_item("SKU-1", 9)
+    
+&gt;       totals = compute_totals(cart, policy)
+
+tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cart = &lt;shopcart.cart.Cart object at 0x73a0352f8550&gt;
+policy = VolumeDiscountPolicy(default_tax_rate=Decimal('8'), category_tax_rates={}, flat_shipping=Decimal('5.99'), free_shipping_threshold=Decimal('50.00'))
+
+    def compute_totals(cart: Cart, policy: PricingPolicy | None = None) -&gt; Totals:
+        policy = policy or PricingPolicy()
+        if isinstance(policy, VolumeDiscountPolicy):
+            subtotal = to_money(
+&gt;               sum(
+                    (policy.calculate_discounted_line_total(line) for line in cart.lines),
+                    Decimal("0"),
+                )
+            )
+E           TypeError: unsupported operand type(s) for +: 'decimal.Decimal' and 'NoneType'
+
+shopcart/pricing.py:92: TypeError</failure></testcase></testsuite></testsuites>

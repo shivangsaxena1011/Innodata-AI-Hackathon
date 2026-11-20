@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 from enum import StrEnum
+from typing import ClassVar
 
 from pydantic import BaseModel, Field
 
@@ -32,6 +33,8 @@ class GateStatus(StrEnum):
 
 
 class TestRun(BaseModel):
+    __test__: ClassVar[bool] = False  # not a pytest test class
+
     label: str
     command: list[str] = Field(default_factory=list)
     passed: list[str] = Field(default_factory=list)
@@ -42,6 +45,7 @@ class TestRun(BaseModel):
     duration_sec: float = 0.0
     log_path: str | None = None
     timed_out: bool = False
+    failure_text: dict[str, str] = Field(default_factory=dict)
 
     @property
     def total(self) -> int:

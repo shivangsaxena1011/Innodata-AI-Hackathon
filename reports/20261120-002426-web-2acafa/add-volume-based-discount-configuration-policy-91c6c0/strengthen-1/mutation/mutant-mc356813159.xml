@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="0.030" timestamp="2026-11-20T00:26:33.648619+00:00" hostname="5f2cb0704dd5"><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac1_exact_tier_match" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac2_highest_applicable_tier" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac3_below_tier_no_discount" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac4_tax_calculated_on_discounted_price" time="0.000"><failure message="ValueError: min_quantity must be at least 1">def test_ac4_tax_calculated_on_discounted_price():
+        """Tax is calculated based on the discounted price. If a $100.00 line item is discounted to $90.00 and the tax rate is 10%, the tax is $9.00."""
+        catalog = Catalog()
+        product = Product("SKU-100", "Big Item", Decimal("100.00"), "misc")
+        catalog.add(product)
+        cart = Cart(catalog)
+        cart.add_item("SKU-100", 1)
+    
+        policy = VolumeDiscountPolicy(default_tax_rate=Decimal("10"))
+&gt;       policy.add_tier(1, 10)
+
+tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = VolumeDiscountPolicy(default_tax_rate=Decimal('10'), category_tax_rates={}, flat_shipping=Decimal('5.99'), free_shipping_threshold=Decimal('50.00'))
+min_quantity = 1, discount_percent = 10
+
+    def add_tier(self, min_quantity: int, discount_percent: Decimal | int | str) -&gt; None:
+        if min_quantity &lt; 2:
+&gt;           raise ValueError("min_quantity must be at least 1")
+E           ValueError: min_quantity must be at least 1
+
+shopcart/pricing.py:33: ValueError</failure></testcase></testsuite></testsuites>

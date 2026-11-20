@@ -1,0 +1,150 @@
+{
+  "feature_reference_1": {
+    "label": "feature_reference_1",
+    "command": [
+      "tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py"
+    ],
+    "passed": [
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_generate_report_empty_inventory",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_generate_report_correct_sums",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_sku_breakdown_details",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_missing_catalog_sku_valuation",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_total_valuation_quantization",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_negative_available_edge_case"
+    ],
+    "failed": [
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_report_includes_only_reserved_skus"
+    ],
+    "errors": [],
+    "skipped": [],
+    "exit_code": 1,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\add-inventory-valuation-and-stock-report-aggrega-d74cd0\\attempt-1\\positive\\feature_reference_1.log",
+    "timed_out": false,
+    "failure_text": {
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_report_includes_only_reserved_skus": "AssertionError: assert 'SKU-1' not in {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}}\n +  where {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}} = InventoryReport(total_on_hand=5, total_reserved=0, total_available=5, total_valuation=Decimal('0.00'), sku_breakdown={..., 'valuation': Decimal('0.00')}, 'SKU-2': {'on_hand': 5, 'reserved': 0, 'available': 5, 'valuation': Decimal('0.00')}}).sku_breakdown\ndef test_report_includes_only_reserved_skus():\n        \"\"\"Requirement: Report includes SKUs with either on_hand OR reserved balance.\"\"\"\n        inventory = Inventory()\n        catalog = Catalog()\n    \n        # Setup a scenario where on_hand is 0 but reserved is > 0\n        # (e.g. after a commit or specific state)\n        # In this Inventory impl, commit reduces on_hand.\n        inventory.restock(\"SKU-1\", 5)\n        inventory.reserve(\"SKU-1\", 5)\n        inventory.commit(\"SKU-1\", 5)\n        # After commit: _on_hand is 0, _reserved is 0.\n        # Let's check a SKU with only restock:\n        inventory.restock(\"SKU-2\", 5)\n    \n        report = generate_inventory_report(inventory, catalog)\n        assert \"SKU-2\" in report.sku_breakdown\n>       assert \"SKU-1\" not in report.sku_breakdown # Both 0\nE       AssertionError: assert 'SKU-1' not in {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}}\nE        +  where {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}} = InventoryReport(total_on_hand=5, total_reserved=0, total_available=5, total_valuation=Decimal('0.00'), sku_breakdown={..., 'valuation': Decimal('0.00')}, 'SKU-2': {'on_hand': 5, 'reserved': 0, 'available': 5, 'valuation': Decimal('0.00')}}).sku_breakdown\n\ntests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py:132: AssertionError"
+    }
+  },
+  "regression_reference": {
+    "label": "regression_reference",
+    "command": [
+      "tests"
+    ],
+    "passed": [
+      "tests.test_cart::test_add_and_subtotal",
+      "tests.test_cart::test_adding_same_sku_merges_lines",
+      "tests.test_cart::test_quantity_must_be_positive",
+      "tests.test_cart::test_quantity_limit",
+      "tests.test_cart::test_update_and_remove",
+      "tests.test_cart::test_lines_sorted_by_sku",
+      "tests.test_catalog::test_product_price_is_rounded",
+      "tests.test_catalog::test_negative_price_rejected",
+      "tests.test_catalog::test_duplicate_sku_rejected",
+      "tests.test_catalog::test_lookup_and_category",
+      "tests.test_catalog::test_unknown_sku",
+      "tests.test_catalog::test_search_is_case_insensitive",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_generate_report_empty_inventory",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_generate_report_correct_sums",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_sku_breakdown_details",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_missing_catalog_sku_valuation",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_total_valuation_quantization",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_negative_available_edge_case",
+      "tests.test_inventory::test_restock_and_reserve",
+      "tests.test_inventory::test_over_reserve_fails",
+      "tests.test_inventory::test_release_more_than_held_fails",
+      "tests.test_inventory::test_commit_reduces_on_hand",
+      "tests.test_inventory::test_restock_requires_positive_quantity",
+      "tests.test_orders::test_place_reserves_stock",
+      "tests.test_orders::test_place_empty_cart_fails",
+      "tests.test_orders::test_failed_reservation_rolls_back",
+      "tests.test_orders::test_pay_ship_flow",
+      "tests.test_orders::test_wrong_payment_amount",
+      "tests.test_orders::test_cancel_releases_stock",
+      "tests.test_pricing::test_default_tax_and_flat_shipping",
+      "tests.test_pricing::test_free_shipping_at_threshold",
+      "tests.test_pricing::test_category_tax_rates",
+      "tests.test_pricing::test_empty_cart_totals"
+    ],
+    "failed": [
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_report_includes_only_reserved_skus"
+    ],
+    "errors": [],
+    "skipped": [],
+    "exit_code": 1,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\add-inventory-valuation-and-stock-report-aggrega-d74cd0\\attempt-1\\positive\\regression_reference.log",
+    "timed_out": false,
+    "failure_text": {
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_report_includes_only_reserved_skus": "AssertionError: assert 'SKU-1' not in {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}}\n +  where {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}} = InventoryReport(total_on_hand=5, total_reserved=0, total_available=5, total_valuation=Decimal('0.00'), sku_breakdown={..., 'valuation': Decimal('0.00')}, 'SKU-2': {'on_hand': 5, 'reserved': 0, 'available': 5, 'valuation': Decimal('0.00')}}).sku_breakdown\ndef test_report_includes_only_reserved_skus():\n        \"\"\"Requirement: Report includes SKUs with either on_hand OR reserved balance.\"\"\"\n        inventory = Inventory()\n        catalog = Catalog()\n    \n        # Setup a scenario where on_hand is 0 but reserved is > 0\n        # (e.g. after a commit or specific state)\n        # In this Inventory impl, commit reduces on_hand.\n        inventory.restock(\"SKU-1\", 5)\n        inventory.reserve(\"SKU-1\", 5)\n        inventory.commit(\"SKU-1\", 5)\n        # After commit: _on_hand is 0, _reserved is 0.\n        # Let's check a SKU with only restock:\n        inventory.restock(\"SKU-2\", 5)\n    \n        report = generate_inventory_report(inventory, catalog)\n        assert \"SKU-2\" in report.sku_breakdown\n>       assert \"SKU-1\" not in report.sku_breakdown # Both 0\nE       AssertionError: assert 'SKU-1' not in {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}}\nE        +  where {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}} = InventoryReport(total_on_hand=5, total_reserved=0, total_available=5, total_valuation=Decimal('0.00'), sku_breakdown={..., 'valuation': Decimal('0.00')}, 'SKU-2': {'on_hand': 5, 'reserved': 0, 'available': 5, 'valuation': Decimal('0.00')}}).sku_breakdown\n\ntests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py:132: AssertionError"
+    }
+  },
+  "feature_reference_2": {
+    "label": "feature_reference_2",
+    "command": [
+      "tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py"
+    ],
+    "passed": [
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_generate_report_empty_inventory",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_generate_report_correct_sums",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_sku_breakdown_details",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_missing_catalog_sku_valuation",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_total_valuation_quantization",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_negative_available_edge_case"
+    ],
+    "failed": [
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_report_includes_only_reserved_skus"
+    ],
+    "errors": [],
+    "skipped": [],
+    "exit_code": 1,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\add-inventory-valuation-and-stock-report-aggrega-d74cd0\\attempt-1\\positive\\feature_reference_2.log",
+    "timed_out": false,
+    "failure_text": {
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_report_includes_only_reserved_skus": "AssertionError: assert 'SKU-1' not in {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}}\n +  where {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}} = InventoryReport(total_on_hand=5, total_reserved=0, total_available=5, total_valuation=Decimal('0.00'), sku_breakdown={..., 'valuation': Decimal('0.00')}, 'SKU-2': {'on_hand': 5, 'reserved': 0, 'available': 5, 'valuation': Decimal('0.00')}}).sku_breakdown\ndef test_report_includes_only_reserved_skus():\n        \"\"\"Requirement: Report includes SKUs with either on_hand OR reserved balance.\"\"\"\n        inventory = Inventory()\n        catalog = Catalog()\n    \n        # Setup a scenario where on_hand is 0 but reserved is > 0\n        # (e.g. after a commit or specific state)\n        # In this Inventory impl, commit reduces on_hand.\n        inventory.restock(\"SKU-1\", 5)\n        inventory.reserve(\"SKU-1\", 5)\n        inventory.commit(\"SKU-1\", 5)\n        # After commit: _on_hand is 0, _reserved is 0.\n        # Let's check a SKU with only restock:\n        inventory.restock(\"SKU-2\", 5)\n    \n        report = generate_inventory_report(inventory, catalog)\n        assert \"SKU-2\" in report.sku_breakdown\n>       assert \"SKU-1\" not in report.sku_breakdown # Both 0\nE       AssertionError: assert 'SKU-1' not in {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}}\nE        +  where {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}} = InventoryReport(total_on_hand=5, total_reserved=0, total_available=5, total_valuation=Decimal('0.00'), sku_breakdown={..., 'valuation': Decimal('0.00')}, 'SKU-2': {'on_hand': 5, 'reserved': 0, 'available': 5, 'valuation': Decimal('0.00')}}).sku_breakdown\n\ntests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py:132: AssertionError"
+    }
+  },
+  "feature_reference_3": {
+    "label": "feature_reference_3",
+    "command": [
+      "tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py"
+    ],
+    "passed": [
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_generate_report_empty_inventory",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_generate_report_correct_sums",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_sku_breakdown_details",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_missing_catalog_sku_valuation",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_total_valuation_quantization",
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_negative_available_edge_case"
+    ],
+    "failed": [
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_report_includes_only_reserved_skus"
+    ],
+    "errors": [],
+    "skipped": [],
+    "exit_code": 1,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\add-inventory-valuation-and-stock-report-aggrega-d74cd0\\attempt-1\\positive\\feature_reference_3.log",
+    "timed_out": false,
+    "failure_text": {
+      "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_report_includes_only_reserved_skus": "AssertionError: assert 'SKU-1' not in {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}}\n +  where {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}} = InventoryReport(total_on_hand=5, total_reserved=0, total_available=5, total_valuation=Decimal('0.00'), sku_breakdown={..., 'valuation': Decimal('0.00')}, 'SKU-2': {'on_hand': 5, 'reserved': 0, 'available': 5, 'valuation': Decimal('0.00')}}).sku_breakdown\ndef test_report_includes_only_reserved_skus():\n        \"\"\"Requirement: Report includes SKUs with either on_hand OR reserved balance.\"\"\"\n        inventory = Inventory()\n        catalog = Catalog()\n    \n        # Setup a scenario where on_hand is 0 but reserved is > 0\n        # (e.g. after a commit or specific state)\n        # In this Inventory impl, commit reduces on_hand.\n        inventory.restock(\"SKU-1\", 5)\n        inventory.reserve(\"SKU-1\", 5)\n        inventory.commit(\"SKU-1\", 5)\n        # After commit: _on_hand is 0, _reserved is 0.\n        # Let's check a SKU with only restock:\n        inventory.restock(\"SKU-2\", 5)\n    \n        report = generate_inventory_report(inventory, catalog)\n        assert \"SKU-2\" in report.sku_breakdown\n>       assert \"SKU-1\" not in report.sku_breakdown # Both 0\nE       AssertionError: assert 'SKU-1' not in {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}}\nE        +  where {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}} = InventoryReport(total_on_hand=5, total_reserved=0, total_available=5, total_valuation=Decimal('0.00'), sku_breakdown={..., 'valuation': Decimal('0.00')}, 'SKU-2': {'on_hand': 5, 'reserved': 0, 'available': 5, 'valuation': Decimal('0.00')}}).sku_breakdown\n\ntests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py:132: AssertionError"
+    }
+  },
+  "coverage": {
+    "label": "coverage",
+    "command": [
+      "tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py"
+    ],
+    "passed": [],
+    "failed": [],
+    "errors": [
+      "<missing junit report>"
+    ],
+    "skipped": [],
+    "exit_code": 0,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\add-inventory-valuation-and-stock-report-aggrega-d74cd0\\attempt-1\\positive\\coverage.log",
+    "timed_out": false,
+    "failure_text": {}
+  }
+}

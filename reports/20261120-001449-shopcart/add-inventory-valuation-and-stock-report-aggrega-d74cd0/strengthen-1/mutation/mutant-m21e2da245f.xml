@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="0.049" timestamp="2026-11-20T00:21:33.696761+00:00" hostname="3a156b4504a6"><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_report_empty_inventory" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_report_aggregated_totals" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_sku_breakdown_accuracy" time="0.000"><failure message="KeyError: 'reserved'">def test_sku_breakdown_accuracy():
+        """AC2: The sku_breakdown map includes entries for every SKU in inventory with accurate metrics."""
+        inventory = Inventory()
+        catalog = Catalog()
+    
+        price = Decimal("12.50")
+        catalog.add(Product("SKU-A", "Widget", price, "parts"))
+        inventory.restock("SKU-A", 20)
+        inventory.reserve("SKU-A", 4)
+    
+        report = generate_inventory_report(inventory, catalog)
+    
+        assert "SKU-A" in report.sku_breakdown
+        data = report.sku_breakdown["SKU-A"]
+        assert data["on_hand"] == 20
+&gt;       assert data["reserved"] == 4
+E       KeyError: 'reserved'
+
+tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py:54: KeyError</failure></testcase></testsuite></testsuites>

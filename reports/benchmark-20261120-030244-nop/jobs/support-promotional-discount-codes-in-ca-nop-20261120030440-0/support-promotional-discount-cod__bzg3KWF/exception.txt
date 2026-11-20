@@ -1,0 +1,60 @@
+Traceback (most recent call last):
+  File "C:\Users\shiva\AppData\Roaming\uv\tools\harbor\Lib\site-packages\harbor\trial\trial.py", line 616, in run
+    await self._run()
+  File "C:\Users\shiva\AppData\Roaming\uv\tools\harbor\Lib\site-packages\harbor\trial\single_step.py", line 52, in _run
+    await self._run_verifier()
+  File "C:\Users\shiva\AppData\Roaming\uv\tools\harbor\Lib\site-packages\harbor\trial\single_step.py", line 102, in _run_verifier
+    self.result.verifier_result = await self._run_separate_verifier(
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "C:\Users\shiva\AppData\Roaming\uv\tools\harbor\Lib\site-packages\harbor\trial\trial.py", line 1063, in _run_separate_verifier
+    await self._artifact_handler.upload_artifacts(
+    ...<5 lines>...
+    )
+  File "C:\Users\shiva\AppData\Roaming\uv\tools\harbor\Lib\site-packages\harbor\trial\artifact_handler.py", line 214, in upload_artifacts
+    refused = await asyncio.to_thread(
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+        copy_via_tar, host_path, staging / str(index)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\shiva\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\asyncio\threads.py", line 26, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\shiva\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\concurrent\futures\thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "C:\Users\shiva\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\concurrent\futures\thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "C:\Users\shiva\AppData\Roaming\uv\tools\harbor\Lib\site-packages\harbor\environments\tar_transfer.py", line 163, in copy_via_tar
+    return extract_dir(fileobj, dest)
+  File "C:\Users\shiva\AppData\Roaming\uv\tools\harbor\Lib\site-packages\harbor\environments\tar_transfer.py", line 135, in extract_dir
+    tar.extract(member, target_path, filter="data")
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\shiva\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\tarfile.py", line 2541, in extract
+    self._extract_one(tarinfo, path, set_attrs, numeric_owner,
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      filter_function=filter_function)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\shiva\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\tarfile.py", line 2590, in _extract_one
+    self._handle_fatal_error(e)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\shiva\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\tarfile.py", line 2584, in _extract_one
+    self._extract_member(tarinfo, os.path.join(path, tarinfo.name),
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         set_attrs=set_attrs,
+                         ^^^^^^^^^^^^^^^^^^^^
+                         numeric_owner=numeric_owner,
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         filter_function=filter_function,
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                         extraction_root=path)
+                         ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\shiva\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\tarfile.py", line 2673, in _extract_member
+    self.makefile(tarinfo, targetpath)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\shiva\AppData\Roaming\uv\python\cpython-3.14-windows-x86_64-none\Lib\tarfile.py", line 2722, in makefile
+    with bltn_open(targetpath, "wb") as target:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Project\\Innodata AI Hackathon\\reports\\benchmark-20261120-030244-nop\\jobs\\support-promotional-discount-codes-in-ca-nop-20261120030440-0\\support-promotional-discount-cod__bzg3KWF\\.verifier-artifacts-fdlue2rg\\1\\app\\.\\shopcart.egg-info\\dependency_links.txt'

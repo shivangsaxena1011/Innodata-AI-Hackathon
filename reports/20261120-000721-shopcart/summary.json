@@ -1,0 +1,195 @@
+{
+  "codeforge_version": "0.1.0",
+  "started_at": "2026-11-20T00:07:21.152184+00:00",
+  "status": "completed",
+  "tasks": [
+    {
+      "task_id": "support-promotional-discount-codes-in-cart-prici-f04964",
+      "title": "Support promotional discount codes in cart pricing",
+      "archetype": "business_rule",
+      "status": "rejected",
+      "score": 93.2,
+      "gates": [
+        {
+          "gate": "baseline",
+          "status": "passed",
+          "summary": "27 original tests pass consistently across 3 runs"
+        },
+        {
+          "gate": "positive_control",
+          "status": "passed",
+          "summary": "8/8 feature tests pass with the reference"
+        },
+        {
+          "gate": "negative_control",
+          "status": "passed",
+          "summary": "8/8 feature tests fail on the original code (module import fails: the contract does not exist yet)"
+        },
+        {
+          "gate": "regression",
+          "status": "passed",
+          "summary": "27/27 original tests still pass with the reference"
+        },
+        {
+          "gate": "stability",
+          "status": "passed",
+          "summary": "3/3 reference runs identical"
+        },
+        {
+          "gate": "independence",
+          "status": "passed",
+          "summary": "5/5 acceptance criteria traced to tests; 0 error(s), 0 warning(s)"
+        },
+        {
+          "gate": "mutation",
+          "status": "passed",
+          "summary": "mutation score 60% (9/15 killed, threshold 60%)"
+        },
+        {
+          "gate": "semantic_mutants",
+          "status": "warning",
+          "summary": "2/4 plausible wrong implementations caught"
+        },
+        {
+          "gate": "leakage",
+          "status": "failed",
+          "summary": "instruction contains reference code: discount_percent: Decimal = Decimal('0')"
+        },
+        {
+          "gate": "harbor_lint",
+          "status": "passed",
+          "summary": "harbor lint: no findings"
+        },
+        {
+          "gate": "harbor_oracle",
+          "status": "passed",
+          "summary": "oracle reward 1.0"
+        },
+        {
+          "gate": "harbor_nop",
+          "status": "passed",
+          "summary": "nop (no changes) reward 0.0"
+        }
+      ],
+      "reasons": [
+        "leakage: instruction contains reference code: discount_percent: Decimal = Decimal('0')"
+      ],
+      "task_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\generated_tasks\\_rejected\\shopcart\\support-promotional-discount-codes-in-cart-prici-f04964",
+      "error": null
+    },
+    {
+      "task_id": "add-order-refund-and-return-lifecycle-states-059169",
+      "title": "Add order refund and return lifecycle states",
+      "archetype": "state_machine",
+      "status": "valid",
+      "score": 100.0,
+      "gates": [
+        {
+          "gate": "baseline",
+          "status": "passed",
+          "summary": "27 original tests pass consistently across 3 runs"
+        },
+        {
+          "gate": "positive_control",
+          "status": "passed",
+          "summary": "7/7 feature tests pass with the reference"
+        },
+        {
+          "gate": "negative_control",
+          "status": "passed",
+          "summary": "7/7 feature tests fail on the original code"
+        },
+        {
+          "gate": "regression",
+          "status": "passed",
+          "summary": "27/27 original tests still pass with the reference"
+        },
+        {
+          "gate": "stability",
+          "status": "passed",
+          "summary": "3/3 reference runs identical"
+        },
+        {
+          "gate": "independence",
+          "status": "passed",
+          "summary": "6/6 acceptance criteria traced to tests; 0 error(s), 0 warning(s)"
+        },
+        {
+          "gate": "mutation",
+          "status": "warning",
+          "summary": "no mutable lines in the reference change"
+        },
+        {
+          "gate": "semantic_mutants",
+          "status": "passed",
+          "summary": "4/4 plausible wrong implementations caught"
+        },
+        {
+          "gate": "leakage",
+          "status": "passed",
+          "summary": "no leakage or shortcut found"
+        },
+        {
+          "gate": "harbor_lint",
+          "status": "passed",
+          "summary": "harbor lint: no findings"
+        },
+        {
+          "gate": "harbor_oracle",
+          "status": "passed",
+          "summary": "oracle reward 1.0"
+        },
+        {
+          "gate": "harbor_nop",
+          "status": "passed",
+          "summary": "nop (no changes) reward 0.0"
+        }
+      ],
+      "reasons": [],
+      "task_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\generated_tasks\\shopcart\\add-order-refund-and-return-lifecycle-states-059169",
+      "error": null
+    }
+  ],
+  "accepted": 1,
+  "rejected": 1,
+  "run_id": "20261120-000721-shopcart",
+  "repository": {
+    "name": "shopcart",
+    "url": "file:///C:/Users/Project/Innodata%20AI%20Hackathon/workspace/samples/shopcart",
+    "commit": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+    "language": "python",
+    "framework": null,
+    "test_framework": "pytest"
+  },
+  "variation": {
+    "tasks": 1,
+    "distinct_archetypes": 1,
+    "archetypes": [
+      "state_machine"
+    ],
+    "mean_pairwise_similarity": 0.0,
+    "max_pairwise_similarity": 0.0,
+    "diversity_score": null,
+    "pairs": []
+  },
+  "finished_at": "2026-11-20T00:13:23.296737+00:00",
+  "llm_usage": {
+    "calls": 9,
+    "cached_calls": 2,
+    "prompt_tokens": 48068,
+    "completion_tokens": 16856,
+    "by_purpose": {
+      "feature_discovery": 1,
+      "task_spec": 2,
+      "feature_tests": 2,
+      "reference": 2,
+      "semantic_mutants": 2
+    },
+    "models": [
+      "gemini/gemini-3-flash-preview",
+      "gemini/gemini-3.5-flash",
+      "gemini/gemini-3.6-flash",
+      "gemini/gemini-flash-latest"
+    ]
+  }
+}

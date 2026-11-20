@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="0.025" timestamp="2026-11-20T00:18:03.679090+00:00" hostname="e03f2eead8b5"><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_order_status_enum_members" time="0.000" /><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_return_items_flow" time="0.000" /><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_refund_from_paid" time="0.000"><failure message="AssertionError: assert &lt;OrderStatus.PAID: 'paid'&gt; == &lt;OrderStatus.REFUNDED: 'refunded'&gt;&#10; +  where &lt;OrderStatus.PAID: 'paid'&gt; = Order(order_id=2, items={'SKU-1': 1}, totals=Totals(subtotal=Decimal('10.00'), tax=Decimal('0.80'), shipping=Decimal('...us.PAID: 'paid'&gt;, history=[&lt;OrderStatus.PENDING: 'pending'&gt;, &lt;OrderStatus.PAID: 'paid'&gt;], amount_paid=Decimal('16.79')).status&#10; +  and   &lt;OrderStatus.REFUNDED: 'refunded'&gt; = OrderStatus.REFUNDED">def test_refund_from_paid():
+        """AC3: Verify refund from PAID status."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 1)
+        order = Order.place(cart, inventory)
+        order.pay(order.totals.total)
+    
+        order.refund()
+    
+&gt;       assert order.status == OrderStatus.REFUNDED
+E       AssertionError: assert &lt;OrderStatus.PAID: 'paid'&gt; == &lt;OrderStatus.REFUNDED: 'refunded'&gt;
+E        +  where &lt;OrderStatus.PAID: 'paid'&gt; = Order(order_id=2, items={'SKU-1': 1}, totals=Totals(subtotal=Decimal('10.00'), tax=Decimal('0.80'), shipping=Decimal('...us.PAID: 'paid'&gt;, history=[&lt;OrderStatus.PENDING: 'pending'&gt;, &lt;OrderStatus.PAID: 'paid'&gt;], amount_paid=Decimal('16.79')).status
+E        +  and   &lt;OrderStatus.REFUNDED: 'refunded'&gt; = OrderStatus.REFUNDED
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:55: AssertionError</failure></testcase></testsuite></testsuites>

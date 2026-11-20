@@ -66,6 +66,7 @@ research/upstream/
 Thumbs.db
 .idea/
 .vscode/
+.claude/
 *.swp
 *.swo
 *~

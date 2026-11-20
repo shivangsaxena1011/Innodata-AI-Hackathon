@@ -1,0 +1,43 @@
+schema_version = "1.4"
+source = "codeforge-ai 0.1.0"
+artifacts = [{ source = "/app", exclude = ["__pycache__", ".pytest_cache", "*.pyc"] }]
+
+[task]
+name = "codeforge/add-inventory-valuation-and-stock-report-aggrega-d74cd0"
+version = "1.0.0"
+description = "Implement a reporting mechanism to calculate total inventory metrics including quantities on-hand, reserved, and available, alongside a monetary valuation derived from the product catalog prices."
+authors = [{ name = "Team TECH TITAN: Shivang Saxena, Rani Malviya" }]
+keywords = ["codeforge", "feature-development", "query_aggregation", "python"]
+
+[metadata]
+author_name = "Team TECH TITAN"
+author_email = "unknown"
+difficulty = "medium"
+category = "software_engineering"
+tags = ["feature-development", "query_aggregation", "python"]
+expert_time_estimate_min = 45.0
+junior_time_estimate_min = 90.0
+repository_name = "shopcart"
+repository_url = "file:///C:/Users/Project/Innodata%20AI%20Hackathon/workspace/samples/shopcart"
+starting_commit_sha = "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2"
+language = "python"
+test_framework = "pytest"
+archetype = "query_aggregation"
+codeforge_version = "0.1.0"
+validity_score = 95.7
+validation_status = "valid"
+
+[verifier]
+timeout_sec = 1800.0
+environment_mode = "separate"
+network_mode = "no-network"
+
+[agent]
+timeout_sec = 3600.0
+
+[environment]
+network_mode = "public"
+build_timeout_sec = 900.0
+os = "linux"
+cpus = 2
+memory_mb = 4096

@@ -1,0 +1,60 @@
+Propose $count NEW feature-development tasks for the repository below. Each task will be
+given to an AI coding agent, which must implement it; hidden tests will then verify it.
+
+## Repository
+- Name: $repo_name
+- Language: $language   Framework: $framework   Test framework: $test_framework
+- Source directories: $source_dirs
+
+## Ranked repository map (most important definitions first)
+$repo_map
+
+## Likely extension points
+$extension_points
+
+## Public names that ALREADY EXIST (never propose these as new names)
+$existing_names
+
+## Tasks already accepted for this repository (do not repeat their behaviour)
+$accepted
+
+## Behaviour archetypes to cover (use each archetype at most once, in this order of preference)
+$archetypes
+
+## Rules
+1. Each task adds behaviour that does NOT exist yet. Read the map: if the code already does
+   it, do not propose it.
+2. Tasks must differ in BEHAVIOUR (rules, state, interactions), not just names or numbers.
+3. Scope: implementable in 30-200 changed lines, touching 1-3 existing modules, using only
+   the standard library and existing dependencies. No network, clock, randomness or files.
+4. Every behaviour must be observable through a small public interface contract: new
+   functions, classes, methods, constants or exception types with exact signatures. Tests
+   will import ONLY the contract plus the existing public API.
+5. Requirements must be precise enough that two engineers would write the same tests:
+   state exact rules, thresholds, rounding, ordering and error types.
+6. Use realistic product language (what a real user or product manager would ask for).
+
+## Output
+Reply with ONE JSON object:
+{
+  "candidates": [
+    {
+      "title": "short imperative title",
+      "archetype": "one of: $archetype_values",
+      "problem_statement": "2-4 sentences: who needs this and why",
+      "requirements": ["precise requirement", "..."],
+      "acceptance_criteria": ["observable, testable criterion", "..."],
+      "complexity": "easy | medium | hard",
+      "affected_modules": ["path/to/module.py"],
+      "existing_behaviour": "what the code does today in this area",
+      "edge_cases": ["boundary or corner case", "..."],
+      "contract": [
+        {"kind": "function | method | class | constant | exception",
+         "module": "importable.module.path",
+         "name": "NewName",
+         "signature": "exact signature, e.g. def apply_discount(cart: Cart, code: str) -> Decimal",
+         "behaviour": "one sentence"}
+      ]
+    }
+  ]
+}

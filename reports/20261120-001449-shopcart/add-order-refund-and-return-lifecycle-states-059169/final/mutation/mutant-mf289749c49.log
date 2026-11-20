@@ -1,0 +1,34 @@
+.F
+=================================== FAILURES ===================================
+____________________________ test_return_items_flow ____________________________
+
+    def test_return_items_flow():
+        """AC2: Verify return_items transitions state and restocks inventory."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 2)
+        cart.add_item("SKU-2", 1)
+    
+        order = Order.place(cart, inventory)
+        order.pay(order.totals.total)
+        order.ship(inventory)  # Transitions to SHIPPED
+    
+        # Before return check inventory (20 starting total on-hand in fixture-like setup)
+        # Logic: start with 10. Order reserves 2 and 1. Ship commits (on-hand becomes 8 and 9).
+        assert inventory.available("SKU-1") == 8
+        assert inventory.available("SKU-2") == 9
+    
+        order.return_items(inventory)
+    
+        assert order.status == OrderStatus.RETURNED
+        assert OrderStatus.RETURNED in order.history
+>       assert inventory.available("SKU-1") == 10
+E       AssertionError: assert 8 == 10
+E        +  where 8 = available('SKU-1')
+E        +    where available = <shopcart.inventory.Inventory object at 0x7850a1626f90>.available
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:43: AssertionError
+-------------- generated xml file: /cf/out/mutant-mf289749c49.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py::test_return_items_flow
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 1 passed in 0.02s

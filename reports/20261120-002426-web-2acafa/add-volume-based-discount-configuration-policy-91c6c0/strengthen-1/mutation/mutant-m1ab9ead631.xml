@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.037" timestamp="2026-11-20T00:26:32.554041+00:00" hostname="5f2cb0704dd5"><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac1_exact_tier_match" time="0.000"><failure message="AttributeError: 'VolumeDiscountPolicy' object has no attribute 'category_tax_rates'">def test_ac1_exact_tier_match():
+        """Given a VolumeDiscountPolicy with a tier (10 units, 10% discount), 10 units of a $10.00 item results in a subtotal of $90.00."""
+        cart, policy, _ = setup_cart_and_policy()
+        policy.add_tier(10, 10)
+        cart.add_item("SKU-1", 10)
+    
+&gt;       totals = compute_totals(cart, policy)
+
+tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py:22: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+shopcart/pricing.py:100: in compute_totals
+    tax = compute_tax(cart, policy)
+shopcart/pricing.py:68: in compute_tax
+    tax += percent_of(line_total, policy.tax_rate_for(line.product.category))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;[AttributeError("'VolumeDiscountPolicy' object has no attribute 'category_tax_rates'") raised in repr()] VolumeDiscountPolicy object at 0x75a553b770e0&gt;
+category = 'misc'
+
+    def tax_rate_for(self, category: str) -&gt; Decimal:
+&gt;       return Decimal(self.category_tax_rates.get(category, self.default_tax_rate))
+E       AttributeError: 'VolumeDiscountPolicy' object has no attribute 'category_tax_rates'
+
+shopcart/pricing.py:23: AttributeError</failure></testcase></testsuite></testsuites>

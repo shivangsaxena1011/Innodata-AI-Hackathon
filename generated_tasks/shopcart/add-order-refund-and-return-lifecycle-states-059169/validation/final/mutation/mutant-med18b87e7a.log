@@ -1,0 +1,40 @@
+.F
+=================================== FAILURES ===================================
+____________________________ test_return_items_flow ____________________________
+
+    def test_return_items_flow():
+        """AC2: Verify return_items transitions state and restocks inventory."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 2)
+        cart.add_item("SKU-2", 1)
+    
+        order = Order.place(cart, inventory)
+        order.pay(order.totals.total)
+        order.ship(inventory)  # Transitions to SHIPPED
+    
+        # Before return check inventory (20 starting total on-hand in fixture-like setup)
+        # Logic: start with 10. Order reserves 2 and 1. Ship commits (on-hand becomes 8 and 9).
+        assert inventory.available("SKU-1") == 8
+        assert inventory.available("SKU-2") == 9
+    
+>       order.return_items(inventory)
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+shopcart/orders.py:93: in return_items
+    self._transition(OrderStatus.RETURNED)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Order(order_id=1, items={'SKU-1': 2, 'SKU-2': 1}, totals=Totals(subtotal=Decimal('40.00'), tax=Decimal('3.20'), shippi...tatus.PENDING: 'pending'>, <OrderStatus.PAID: 'paid'>, <OrderStatus.SHIPPED: 'shipped'>], amount_paid=Decimal('49.19'))
+new_status = <OrderStatus.RETURNED: 'returned'>
+
+    def _transition(self, new_status: OrderStatus) -> None:
+>       if new_status not in ALLOWED_TRANSITIONS[self.status]:
+E       KeyError: <OrderStatus.SHIPPED: 'shipped'>
+
+shopcart/orders.py:68: KeyError
+-------------- generated xml file: /cf/out/mutant-med18b87e7a.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py::test_return_items_flow
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 1 passed in 0.04s

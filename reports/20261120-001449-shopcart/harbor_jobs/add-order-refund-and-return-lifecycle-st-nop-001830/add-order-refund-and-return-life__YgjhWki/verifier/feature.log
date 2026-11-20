@@ -1,0 +1,113 @@
+FFFFFFF                                                                  [100%]
+=================================== FAILURES ===================================
+________________________ test_order_status_enum_members ________________________
+
+    def test_order_status_enum_members():
+        """AC1: Verify OrderStatus has REFUNDED and RETURNED with correct values."""
+>       assert OrderStatus.REFUNDED.value == "refunded"
+E       AttributeError: type object 'OrderStatus' has no attribute 'REFUNDED'
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:21: AttributeError
+____________________________ test_return_items_flow ____________________________
+
+    def test_return_items_flow():
+        """AC2: Verify return_items transitions state and restocks inventory."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 2)
+        cart.add_item("SKU-2", 1)
+    
+        order = Order.place(cart, inventory)
+        order.pay(order.totals.total)
+        order.ship(inventory)  # Transitions to SHIPPED
+    
+        # Before return check inventory (20 starting total on-hand in fixture-like setup)
+        # Logic: start with 10. Order reserves 2 and 1. Ship commits (on-hand becomes 8 and 9).
+        assert inventory.available("SKU-1") == 8
+        assert inventory.available("SKU-2") == 9
+    
+>       order.return_items(inventory)
+E       AttributeError: 'Order' object has no attribute 'return_items'
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:39: AttributeError
+____________________________ test_refund_from_paid _____________________________
+
+    def test_refund_from_paid():
+        """AC3: Verify refund from PAID status."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 1)
+        order = Order.place(cart, inventory)
+        order.pay(order.totals.total)
+    
+>       order.refund()
+E       AttributeError: 'Order' object has no attribute 'refund'
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:53: AttributeError
+__________________________ test_refund_from_returned ___________________________
+
+    def test_refund_from_returned():
+        """AC4: Verify refund from RETURNED status."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 1)
+        order = Order.place(cart, inventory)
+        order.pay(order.totals.total)
+        order.ship(inventory)
+>       order.return_items(inventory)
+E       AttributeError: 'Order' object has no attribute 'return_items'
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:65: AttributeError
+_______________________ test_invalid_refund_transitions ________________________
+
+    def test_invalid_refund_transitions():
+        """AC5: refund() should fail from PENDING, SHIPPED, CANCELLED, REFUNDED."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 1)
+    
+        # PENDING
+        order = Order.place(cart, inventory)
+        with pytest.raises(OrderError):
+>           order.refund()
+E           AttributeError: 'Order' object has no attribute 'refund'
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:80: AttributeError
+_______________________ test_invalid_return_transitions ________________________
+
+    def test_invalid_return_transitions():
+        """AC6: return_items() should fail from PENDING, PAID, CANCELLED, RETURNED, REFUNDED."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 1)
+    
+        # PENDING
+        order = Order.place(cart, inventory)
+        initial_stock = inventory.available("SKU-1")
+        with pytest.raises(OrderError):
+>           order.return_items(inventory)
+E           AttributeError: 'Order' object has no attribute 'return_items'
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:110: AttributeError
+________________ test_return_items_empty_order_restocks_nothing ________________
+
+    def test_return_items_empty_order_restocks_nothing():
+        """Edge case: return_items on empty dict should still transition status."""
+        # Note: Order.place prevents empty cart, but we can verify status transition logic
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 1)
+        order = Order.place(cart, inventory)
+        order.pay(order.totals.total)
+        order.ship(inventory)
+    
+        # Manually clear items for edge case test if internal state allows,
+        # but here we just ensure normal operation
+>       order.return_items(inventory)
+E       AttributeError: 'Order' object has no attribute 'return_items'
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:148: AttributeError
+---------------- generated xml file: /logs/verifier/feature.xml ----------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py::test_order_status_enum_members
+FAILED tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py::test_return_items_flow
+FAILED tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py::test_refund_from_paid
+FAILED tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py::test_refund_from_returned
+FAILED tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py::test_invalid_refund_transitions
+FAILED tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py::test_invalid_return_transitions
+FAILED tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py::test_return_items_empty_order_restocks_nothing
+7 failed in 0.04s

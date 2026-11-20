@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="0.042" timestamp="2026-11-20T00:15:11.295144+00:00" hostname="a3fbae13b11a"><testcase classname="tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964" name="test_ac1_min_subtotal_below_threshold_raises_pricing_error" time="0.000" /><testcase classname="tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964" name="test_ac1_min_subtotal_exact_match_succeeds" time="0.000"><failure message="shopcart.pricing.PricingError: cart subtotal 61.00 does not meet coupon minimum 61.00">def test_ac1_min_subtotal_exact_match_succeeds():
+        catalog = _make_catalog()
+        cart = Cart(catalog)
+        cart.add_item("BOOK-1", 2)  # subtotal = 49.00
+        cart.add_item("FOOD-1", 1)  # subtotal = 61.00
+    
+        coupon = DiscountCoupon("MIN61", fixed_amount=Decimal("10.00"), min_subtotal=Decimal("61.00"))
+&gt;       totals = compute_totals(cart, coupon=coupon)
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cart = &lt;shopcart.cart.Cart object at 0x72436ec24550&gt;
+policy = PricingPolicy(default_tax_rate=Decimal('8'), category_tax_rates={}, flat_shipping=Decimal('5.99'), free_shipping_threshold=Decimal('50.00'))
+coupon = DiscountCoupon(code='MIN61', discount_percent=Decimal('0'), fixed_amount=Decimal('10.00'), min_subtotal=Decimal('61.00'))
+
+    def compute_totals(
+        cart: Cart,
+        policy: PricingPolicy | None = None,
+        coupon: DiscountCoupon | None = None,
+    ) -&gt; Totals:
+        policy = policy or PricingPolicy()
+        subtotal = cart.subtotal
+    
+        if coupon is not None:
+            if subtotal &lt;= coupon.min_subtotal:
+&gt;               raise PricingError(f"cart subtotal {subtotal} does not meet coupon minimum {coupon.min_subtotal}")
+E               shopcart.pricing.PricingError: cart subtotal 61.00 does not meet coupon minimum 61.00
+
+shopcart/pricing.py:81: PricingError</failure></testcase></testsuite></testsuites>

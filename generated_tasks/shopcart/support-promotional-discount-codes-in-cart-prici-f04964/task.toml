@@ -1,0 +1,43 @@
+schema_version = "1.4"
+source = "codeforge-ai 0.1.0"
+artifacts = [{ source = "/app", exclude = ["__pycache__", ".pytest_cache", "*.pyc"] }]
+
+[task]
+name = "codeforge/support-promotional-discount-codes-in-cart-prici-f04964"
+version = "1.0.0"
+description = "Introduce promotional coupon support to the pricing calculation module by defining `PricingError` and `DiscountCoupon`, adding a `discount` field to `Totals`, and updating `compute_totals` to validate coupons, apply clamped percentage and fixed discounts, and compute tax on the discounted subtotal proportionally distributed across cart line items."
+authors = [{ name = "Team TECH TITAN: Shivang Saxena, Rani Malviya" }]
+keywords = ["codeforge", "feature-development", "business_rule", "python"]
+
+[metadata]
+author_name = "Team TECH TITAN"
+author_email = "unknown"
+difficulty = "medium"
+category = "software_engineering"
+tags = ["feature-development", "business_rule", "python"]
+expert_time_estimate_min = 30.0
+junior_time_estimate_min = 60.0
+repository_name = "shopcart"
+repository_url = "file:///C:/Users/Project/Innodata%20AI%20Hackathon/workspace/samples/shopcart"
+starting_commit_sha = "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2"
+language = "python"
+test_framework = "pytest"
+archetype = "business_rule"
+codeforge_version = "0.1.0"
+validity_score = 98.5
+validation_status = "valid"
+
+[verifier]
+timeout_sec = 1800.0
+environment_mode = "separate"
+network_mode = "no-network"
+
+[agent]
+timeout_sec = 3600.0
+
+[environment]
+network_mode = "public"
+build_timeout_sec = 900.0
+os = "linux"
+cpus = 2
+memory_mb = 4096

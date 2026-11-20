@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CodeForge AI</title>
+  <meta name="description" content="CodeForge AI turns real repositories into validated feature-development tasks for evaluating AI coding agents. By Team TECH TITAN.">
+  <link rel="icon" href="/static/assets/codeforge-mark.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <div class="orb orb-a"></div><div class="orb orb-b"></div><div class="orb orb-c"></div>
+    <div class="grid"></div>
+    <canvas id="particles"></canvas>
+  </div>
+
+  <header class="nav">
+    <a class="brand" href="#top">
+      <img class="brand-logo" data-logo="codeforge" src="/static/assets/codeforge-mark.svg" alt="">
+      <span>CodeForge <b>AI</b></span>
+    </a>
+    <nav class="links">
+      <a href="#forge">Forge</a>
+      <a href="#tasks">Tasks</a>
+      <a href="#how">How it works</a>
+      <a href="#team">Team</a>
+    </nav>
+    <div class="status" id="status" title="System status">
+      <span class="dot" data-k="docker"></span>Docker
+      <span class="dot" data-k="harbor"></span>Harbor
+      <span class="dot" data-k="llm"></span>Model
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-logo">
+        <div class="halo"></div>
+        <img data-logo="codeforge" src="/static/assets/codeforge-mark.svg" alt="CodeForge AI logo">
+      </div>
+      <h1 class="title">CodeForge <span>AI</span></h1>
+      <div class="tagline"><i></i>BUILD <b>•</b> TEST <b>•</b> BENCHMARK<i></i></div>
+      <p class="lead">Turn any real repository into <em>validated</em> feature-development tasks
+        for AI coding agents, with hidden tests proven to catch wrong code.</p>
+      <div class="cta">
+        <a class="btn primary" href="#forge">Forge a task</a>
+        <a class="btn ghost" href="#tasks">Explore tasks</a>
+      </div>
+      <div class="stats" id="stats">
+        <div><b data-stat="tasks">—</b><span>validated tasks</span></div>
+        <div><b data-stat="score">—</b><span>avg validity score</span></div>
+        <div><b data-stat="mutants">—</b><span>mutant kill rate</span></div>
+        <div><b data-stat="archetypes">—</b><span>behaviour archetypes</span></div>
+      </div>
+    </section>
+
+    <!-- FORGE -->
+    <section id="forge" class="section reveal">
+      <h2 class="h2">Forge</h2>
+      <p class="sub">Point CodeForge at a repository. Leave it as <code>sample</code> to use the
+        bundled demo repo (not the Innodata repository).</p>
+      <form class="panel forge-form" id="forge-form">
+        <label class="field grow">
+          <span>Repository</span>
+          <input id="repo" value="sample" placeholder="sample · https://github.com/org/repo · C:\path\to\repo" autocomplete="off">
+        </label>
+        <label class="field">
+          <span>Ref</span>
+          <input id="ref" placeholder="HEAD" autocomplete="off">
+        </label>
+        <label class="field small">
+          <span>Tasks</span>
+          <select id="count"><option>1</option><option>2</option><option>3</option></select>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="harbor" checked><span class="track"></span>Harbor
+        </label>
+        <div class="actions">
+          <button type="button" class="btn ghost" id="analyze-btn">Analyze</button>
+          <button type="submit" class="btn primary" id="forge-btn">Forge</button>
+        </div>
+      </form>
+
+      <div class="panel analysis hidden" id="analysis"></div>
+
+      <div class="panel live hidden" id="live">
+        <div class="live-head">
+          <h3>Pipeline</h3>
+          <span class="pill" id="run-state">idle</span>
+        </div>
+        <ol class="stepper" id="stepper"></ol>
+        <div class="candidates" id="candidates"></div>
+        <pre class="console" id="console"></pre>
+      </div>
+    </section>
+
+    <!-- TASKS -->
+    <section id="tasks" class="section reveal">
+      <h2 class="h2">Validated tasks</h2>
+      <p class="sub">Every card below is a Harbor task package that passed its executed gates.</p>
+      <div class="cards" id="task-cards"><p class="empty">No tasks yet. Forge one above.</p></div>
+    </section>
+
+    <!-- HOW -->
+    <section id="how" class="section reveal">
+      <h2 class="h2">How it works</h2>
+      <div class="how">
+        <article><span class="num">01</span><h3>Understand</h3>
+          <p>Pin the exact commit, parse with tree-sitter, rank symbols with PageRank, and build a reproducible Docker environment.</p></article>
+        <article><span class="num">02</span><h3>Generate</h3>
+          <p>Discover new behaviour across 7 archetypes, then write the spec, the hidden tests and the reference in separate model calls.</p></article>
+        <article><span class="num">03</span><h3>Prove</h3>
+          <p>Red → Green → Regression → Mutation. Tests must fail on the original code, pass with the reference, and catch plausible bugs.</p></article>
+        <article><span class="num">04</span><h3>Package</h3>
+          <p>Ship a Harbor task, confirmed by Harbor itself: <code>lint</code> clean, oracle reward 1, no-op reward 0.</p></article>
+      </div>
+    </section>
+
+    <!-- TEAM -->
+    <section id="team" class="section reveal">
+      <div class="team">
+        <div class="team-logo">
+          <img data-logo="techtitan" src="/static/assets/tech-titan-emblem.svg" alt="Team TECH TITAN logo">
+        </div>
+        <div class="team-info">
+          <span class="eyebrow">Built by team</span>
+          <h2 class="team-name">TECH TITAN</h2>
+          <p class="sub">Innodata AI Hackathon 2026 · Track 1: Coding Task Factory</p>
+          <div class="devs">
+            <div class="dev"><span class="avatar">SS</span><div><b>Shivang Saxena</b><small>Developer</small></div></div>
+            <div class="dev"><span class="avatar">RM</span><div><b>Rani Malviya</b><small>Developer</small></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>CodeForge AI · Team TECH TITAN</span>
+    <span>Python · tree-sitter · LiteLLM · Docker · Harbor</span>
+  </footer>
+
+  <!-- Task detail drawer -->
+  <div class="drawer hidden" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+    <div class="drawer-backdrop" data-close></div>
+    <aside class="drawer-panel">
+      <header class="drawer-head">
+        <div>
+          <span class="eyebrow" id="drawer-arch"></span>
+          <h3 id="drawer-title"></h3>
+          <code id="drawer-commit"></code>
+        </div>
+        <div class="drawer-actions">
+          <a class="btn primary sm" id="drawer-download">Download package</a>
+          <button class="icon-btn" data-close aria-label="Close">✕</button>
+        </div>
+      </header>
+      <nav class="tabs" id="tabs">
+        <button data-tab="overview" class="active">Overview</button>
+        <button data-tab="validation">Validation</button>
+        <button data-tab="diff">Reference</button>
+        <button data-tab="tests">Hidden tests</button>
+        <button data-tab="manifest">Manifest</button>
+      </nav>
+      <div class="tab-body" id="tab-body"></div>
+    </aside>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

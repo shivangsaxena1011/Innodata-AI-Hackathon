@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="5" time="0.025" timestamp="2026-11-20T00:26:07.943000+00:00" hostname="041c4c66d071"><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac1_exact_tier_match" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac2_highest_applicable_tier" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac3_below_tier_no_discount" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac4_tax_on_discounted_price" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac5_shipping_on_discounted_subtotal" time="0.000"><failure message="AssertionError: assert Decimal('0.00') == Decimal('5.99')&#10; +  where Decimal('0.00') = Totals(subtotal=Decimal('45.00'), tax=Decimal('3.60'), shipping=Decimal('0.00'), total=Decimal('48.60')).shipping&#10; +  and   Decimal('5.99') = Decimal('5.99')">def test_ac5_shipping_on_discounted_subtotal():
+        # Threshold $50.00. 5 items of $10.00 discounted by 10% = $45.00.
+        # Should trigger shipping fee because $45 &lt; $50.
+        cart, policy, _ = setup_cart_and_policy()
+        policy.add_tier(5, 10)
+        cart.add_item("SKU-1", 5)
+    
+        # subtotal = 50 * 0.9 = 45.00. Threshold is 50.00.
+        totals = compute_totals(cart, policy)
+        assert totals.subtotal == Decimal("45.00")
+&gt;       assert totals.shipping == Decimal("5.99")
+E       AssertionError: assert Decimal('0.00') == Decimal('5.99')
+E        +  where Decimal('0.00') = Totals(subtotal=Decimal('45.00'), tax=Decimal('3.60'), shipping=Decimal('0.00'), total=Decimal('48.60')).shipping
+E        +  and   Decimal('5.99') = Decimal('5.99')
+
+tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py:73: AssertionError</failure></testcase></testsuite></testsuites>

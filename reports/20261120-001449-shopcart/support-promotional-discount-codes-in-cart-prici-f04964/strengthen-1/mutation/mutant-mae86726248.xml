@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="0.042" timestamp="2026-11-20T00:16:03.233900+00:00" hostname="85246fc5f18d"><testcase classname="tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964" name="test_ac1_min_subtotal_below_threshold_raises_pricing_error" time="0.000" /><testcase classname="tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964" name="test_ac1_min_subtotal_exact_match_succeeds" time="0.000"><failure message="AttributeError: 'NoneType' object has no attribute 'discount'">def test_ac1_min_subtotal_exact_match_succeeds():
+        catalog = _make_catalog()
+        cart = Cart(catalog)
+        cart.add_item("BOOK-1", 2)  # subtotal = 49.00
+        cart.add_item("FOOD-1", 1)  # subtotal = 61.00
+        coupon = DiscountCoupon("MIN61", fixed_amount=Decimal("10.00"), min_subtotal=Decimal("61.00"))
+        totals = compute_totals(cart, coupon=coupon)
+&gt;       assert totals.discount == Decimal("10.00")
+E       AttributeError: 'NoneType' object has no attribute 'discount'
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:40: AttributeError</failure></testcase></testsuite></testsuites>

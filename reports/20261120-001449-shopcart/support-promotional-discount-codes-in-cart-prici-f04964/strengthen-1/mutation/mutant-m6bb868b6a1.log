@@ -1,0 +1,24 @@
+..F
+=================================== FAILURES ===================================
+_______________________ test_ac2_valid_percentage_coupon _______________________
+
+    def test_ac2_valid_percentage_coupon():
+        catalog = _make_catalog()
+        cart = Cart(catalog)
+        cart.add_item("BOOK-2", 2)  # subtotal = 78.00
+        policy = PricingPolicy(default_tax_rate=Decimal("10"), flat_shipping=Decimal("5.99"), free_shipping_threshold=Decimal("100.00"))
+        coupon = DiscountCoupon("PERCENT15", discount_percent=Decimal("15"))
+        totals = compute_totals(cart, policy, coupon=coupon)
+        assert totals.subtotal == Decimal("78.00")
+        assert totals.discount == Decimal("11.70") # 15% of 78
+>       assert totals.tax == Decimal("6.63") # 10% of (78 - 11.70)
+E       AssertionError: assert Decimal('0.00') == Decimal('6.63')
+E        +  where Decimal('0.00') = Totals(subtotal=Decimal('78.00'), discount=Decimal('11.70'), tax=Decimal('0.00'), shipping=Decimal('5.99'), total=Decimal('72.29')).tax
+E        +  and   Decimal('6.63') = Decimal('6.63')
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:51: AssertionError
+-------------- generated xml file: /cf/out/mutant-m6bb868b6a1.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py::test_ac2_valid_percentage_coupon
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 2 passed in 0.04s

@@ -64,8 +64,10 @@ class PythonAdapter(LanguageAdapter):
 
     def test_shell(self, test_paths: list[str], junit_path: str) -> str:
         paths = " ".join(test_paths) if test_paths else ""
-        return (f"python -m pytest -p no:cacheprovider -q -o addopts='' --junitxml={junit_path} "
-                f"{paths}")
+        # --continue-on-collection-errors: a hidden test module that cannot import yet (the
+        # feature does not exist) must not abort the regression suite in the same run.
+        return (f"python -m pytest -p no:cacheprovider -q -o addopts='' "
+                f"--continue-on-collection-errors --junitxml={junit_path} {paths}")
 
     def feature_test_path(self, profile: RepositoryProfile, slug: str) -> str:
         base = profile.test_dirs[0] if profile.test_dirs else "tests"

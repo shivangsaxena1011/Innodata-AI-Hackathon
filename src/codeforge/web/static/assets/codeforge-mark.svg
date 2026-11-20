@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none" role="img" aria-label="CodeForge AI">
+  <defs>
+    <linearGradient id="cf-g" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="0.5" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#a855f7"/>
+    </linearGradient>
+    <filter id="cf-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <g filter="url(#cf-glow)" stroke="url(#cf-g)" stroke-linecap="round" stroke-linejoin="round">
+    <path class="cf-shield" stroke-width="9" d="M120 14C150 27 182 33 212 35v74c0 58-38 97-92 118C66 206 28 167 28 109V35c30-2 62-8 92-21z"/>
+    <g class="cf-brain" stroke-width="4.5">
+      <path d="M117 50c-14-6-28 0-30 12-11 2-15 15-9 23-7 7-3 21 9 22 3 10 17 12 26 6"/>
+      <path d="M123 50c14-6 28 0 30 12 11 2 15 15 9 23 7 7 3 21-9 22-3 10-17 12-26 6"/>
+      <path d="M120 48v68"/>
+      <path d="M98 66h10l6 8M94 86h14M102 100l8-6h6M140 66h-10l-6 8M146 86h-14M138 100l-8-6h-6"/>
+    </g>
+    <g class="cf-traces" stroke-width="3.5">
+      <path d="M80 76H62l-8-9M80 90H52M84 104H66l-8 9M160 76h18l8-9M160 90h28M156 104h18l8 9"/>
+    </g>
+    <path class="cf-screen" stroke-width="5" d="M76 132h88l10 44H66z"/>
+  </g>
+  <g class="cf-nodes" fill="#0b1024" stroke="url(#cf-g)" stroke-width="3.5">
+    <circle cx="51" cy="64" r="5"/><circle cx="47" cy="90" r="5"/><circle cx="55" cy="116" r="5"/>
+    <circle cx="189" cy="64" r="5"/><circle cx="193" cy="90" r="5"/><circle cx="185" cy="116" r="5"/>
+  </g>
+  <g class="cf-people" fill="#050816" stroke="url(#cf-g)" stroke-width="4">
+    <circle cx="88" cy="160" r="11"/><path d="M66 194c2-14 11-22 22-22s20 8 22 22"/>
+    <circle cx="152" cy="160" r="11"/><path d="M130 194c2-14 11-22 22-22s20 8 22 22"/>
+    <circle cx="120" cy="152" r="14"/><path d="M92 196c3-18 14-28 28-28s25 10 28 28"/>
+  </g>
+</svg>

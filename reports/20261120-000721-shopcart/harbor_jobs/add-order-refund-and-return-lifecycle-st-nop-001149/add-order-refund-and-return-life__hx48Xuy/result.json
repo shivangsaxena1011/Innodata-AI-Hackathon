@@ -1,0 +1,126 @@
+{
+    "schema_version": 1,
+    "id": "ae7e1503-a542-43e7-aa51-1242a75b66e4",
+    "task_name": "codeforge/add-order-refund-and-return-lifecycle-states-059169",
+    "trial_name": "add-order-refund-and-return-life__hx48Xuy",
+    "trial_uri": "file:///C:/Users/Project/Innodata%20AI%20Hackathon/reports/20261120-000721-shopcart/harbor_jobs/add-order-refund-and-return-lifecycle-st-nop-001149/add-order-refund-and-return-life__hx48Xuy",
+    "task_id": {
+        "path": "C:\\Users\\Project\\Innodata AI Hackathon\\generated_tasks\\shopcart\\add-order-refund-and-return-lifecycle-states-059169"
+    },
+    "source": null,
+    "task_checksum": "076bc19cfb6cc769dae6cb95a2a88c501cb7eb3b3b06a0ca9de44e20b2bd4301",
+    "config": {
+        "schema_version": 1,
+        "task": {
+            "path": "C:\\Users\\Project\\Innodata AI Hackathon\\generated_tasks\\shopcart\\add-order-refund-and-return-lifecycle-states-059169",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+        },
+        "trial_name": "add-order-refund-and-return-life__hx48Xuy",
+        "trials_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-000721-shopcart\\harbor_jobs\\add-order-refund-and-return-lifecycle-st-nop-001149",
+        "install_only": false,
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": "nop",
+            "import_path": null,
+            "model_name": null,
+            "base_url": null,
+            "model_api_key_name": null,
+            "model_api_format": null,
+            "skip_model_parsing": false,
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {},
+            "mcp_servers": []
+        },
+        "user_agent": null,
+        "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "override_error_policy": {},
+        "artifacts": [],
+        "extra_instruction_paths": [],
+        "extra_instructions": [],
+        "job_id": "06e5b3ae-27a0-44bc-8f7e-38c1ebef5a38",
+        "source_trial": null
+    },
+    "agent_info": {
+        "name": "nop",
+        "version": "1.0.0",
+        "model_info": null
+    },
+    "agent_result": {
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": null
+    },
+    "verifier_result": {
+        "rewards": {
+            "reward": 0.0,
+            "feature_pass_rate": 0.0,
+            "regression_pass_rate": 1.0
+        }
+    },
+    "verifier_environment_mode": "separate",
+    "exception_info": null,
+    "started_at": "2026-11-20T00:12:38.555491Z",
+    "finished_at": "2026-11-20T00:13:18.624961Z",
+    "environment_setup": {
+        "started_at": "2026-11-20T00:12:38.843793Z",
+        "finished_at": "2026-11-20T00:12:44.909907Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-11-20T00:12:44.910063Z",
+        "finished_at": "2026-11-20T00:12:44.910250Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-11-20T00:12:44.910484Z",
+        "finished_at": "2026-11-20T00:12:44.919050Z"
+    },
+    "verifier": {
+        "started_at": "2026-11-20T00:12:54.308329Z",
+        "finished_at": "2026-11-20T00:13:18.624929Z"
+    },
+    "step_results": null,
+    "reward_valid": true
+}

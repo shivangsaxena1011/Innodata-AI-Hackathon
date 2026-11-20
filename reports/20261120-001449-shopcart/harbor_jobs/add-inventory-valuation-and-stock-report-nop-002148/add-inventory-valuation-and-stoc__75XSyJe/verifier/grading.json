@@ -1,0 +1,17 @@
+{
+  "rewards": {
+    "reward": 0.0,
+    "feature_pass_rate": 0.0,
+    "regression_pass_rate": 1.0
+  },
+  "feature_not_passed": [
+    "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_generate_report_correct_sums",
+    "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_generate_report_empty_inventory",
+    "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_missing_catalog_sku_valuation",
+    "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_negative_available_edge_case",
+    "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_report_includes_only_reserved_skus",
+    "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_sku_breakdown_details",
+    "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_total_valuation_quantization"
+  ],
+  "regression_not_passed": []
+}

@@ -1,0 +1,42 @@
+.F
+=================================== FAILURES ===================================
+____________________________ test_return_items_flow ____________________________
+
+    def test_return_items_flow():
+        """AC2: Verify return_items transitions state and restocks inventory."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 2)
+        cart.add_item("SKU-2", 1)
+    
+        order = Order.place(cart, inventory)
+        order.pay(order.totals.total)
+        order.ship(inventory)  # Transitions to SHIPPED
+    
+        # Before return check inventory (20 starting total on-hand in fixture-like setup)
+        # Logic: start with 10. Order reserves 2 and 1. Ship commits (on-hand becomes 8 and 9).
+        assert inventory.available("SKU-1") == 8
+        assert inventory.available("SKU-2") == 9
+    
+>       order.return_items(inventory)
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+shopcart/orders.py:95: in return_items
+    inventory.release(sku, qty)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <shopcart.inventory.Inventory object at 0x7efd576eee40>, sku = 'SKU-1'
+quantity = 2
+
+    def release(self, sku: str, quantity: int) -> None:
+        held = self._reserved.get(sku, 0)
+        if quantity <= 0 or quantity > held:
+>           raise InventoryError(f"cannot release {quantity} of {sku}")
+E           shopcart.inventory.InventoryError: cannot release 2 of SKU-1
+
+shopcart/inventory.py:33: InventoryError
+------------------ generated xml file: /cf/out/mutant-s3.xml -------------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py::test_return_items_flow
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 1 passed in 0.03s

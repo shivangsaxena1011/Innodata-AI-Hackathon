@@ -57,7 +57,7 @@ def _git(args: list[str], cwd: Path, env: dict | None = None, timeout: float = 3
 
 
 def repo_name_from(source: str) -> str:
-    name = source.rstrip("/").split("/")[-1].split(":")[-1]
+    name = source.replace("\\", "/").rstrip("/").split("/")[-1].split(":")[-1]
     name = name.removesuffix(".git") or "repository"
     return re.sub(r"[^A-Za-z0-9_.-]", "-", name).lower()
 

@@ -1,0 +1,52 @@
+{
+    "schema_version": 1,
+    "id": "115bf932-b6d4-4778-9028-1cb1728d2395",
+    "started_at": "2026-11-20T05:56:55.059822",
+    "updated_at": "2026-11-20T05:57:40.290793",
+    "finished_at": "2026-11-20T05:57:40.290793",
+    "n_total_trials": 1,
+    "stats": {
+        "n_completed_trials": 1,
+        "n_errored_trials": 0,
+        "n_running_trials": 0,
+        "n_pending_trials": 0,
+        "n_cancelled_trials": 0,
+        "n_retries": 0,
+        "evals": {
+            "oracle__adhoc": {
+                "n_trials": 1,
+                "n_errors": 0,
+                "metrics": [
+                    {
+                        "feature_pass_rate": 1.0,
+                        "regression_pass_rate": 1.0,
+                        "reward": 1.0
+                    }
+                ],
+                "pass_at_k": {},
+                "reward_stats": {
+                    "reward": {
+                        "1.0": [
+                            "add-volume-based-discount-config__Vf3Yp8X"
+                        ]
+                    },
+                    "feature_pass_rate": {
+                        "1.0": [
+                            "add-volume-based-discount-config__Vf3Yp8X"
+                        ]
+                    },
+                    "regression_pass_rate": {
+                        "1.0": [
+                            "add-volume-based-discount-config__Vf3Yp8X"
+                        ]
+                    }
+                },
+                "exception_stats": {}
+            }
+        },
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null
+    }
+}

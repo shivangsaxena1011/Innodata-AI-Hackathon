@@ -1,0 +1,93 @@
+# Machine-readable third-party integration manifest for CodeForge AI.
+# kind: vendored | reimplemented | dependency | research-only
+components:
+  - project: tree-sitter-python
+    url: https://github.com/tree-sitter/tree-sitter-python
+    version: "0.25.0"
+    spdx: MIT
+    kind: vendored
+    files:
+      - source: queries/tags.scm
+        destination: src/codeforge/repository/queries/python-tags.scm
+        changes: capture names renamed to name.definition.* / name.reference.*; header added
+    license_file: licenses/tree-sitter-python-MIT.txt
+
+  - project: tree-sitter-javascript
+    url: https://github.com/tree-sitter/tree-sitter-javascript
+    version: "0.25.0"
+    spdx: MIT
+    kind: vendored
+    files:
+      - source: queries/tags.scm
+        destination: src/codeforge/repository/queries/javascript-tags.scm
+        changes: capture names renamed; member-expression constructors resolve to class; header added
+    license_file: licenses/tree-sitter-javascript-MIT.txt
+
+  - project: aider
+    url: https://github.com/Aider-AI/aider
+    commit: 5dc9490bb35f9729ef2c95d00a19ccd30c26339c
+    spdx: Apache-2.0
+    kind: reimplemented
+    inspiration:
+      - aider/repomap.py -> src/codeforge/repository/repo_mapper.py
+      - SEARCH/REPLACE edit format -> src/codeforge/generation/patch_generator.py
+    license_file: licenses/aider-Apache-2.0.txt
+
+  - project: SWE-smith
+    url: https://github.com/SWE-bench/SWE-smith
+    commit: 9b74ac08118a85c39c356802f7961893af73e07f
+    spdx: MIT
+    kind: reimplemented
+    inspiration:
+      - swesmith/profiles -> src/codeforge/repository/profiles.py, src/codeforge/environment/profile_builder.py
+      - swesmith/harness/valid.py, gather.py, utils.py -> src/codeforge/validation/engine.py
+      - swesmith/issue_gen -> src/codeforge/generation/task_generator.py
+    license_file: licenses/SWE-smith-MIT.txt
+
+  - project: SWE-bench
+    url: https://github.com/SWE-bench/SWE-bench
+    commit: 02e7a74ffd0b707aab73d203fe87bdc7c76afc8e
+    spdx: MIT
+    kind: reimplemented
+    inspiration:
+      - swebench/harness/run_evaluation.py, grading.py -> src/codeforge/validation/test_runner.py, src/codeforge/harbor/templates/grade.py
+    license_file: licenses/SWE-bench-MIT.txt
+
+  - project: SWE-Gym
+    url: https://github.com/SWE-Gym/SWE-Gym
+    commit: 005c2fbeda594d329f53770707b2ae7832aa6ac8
+    spdx: Apache-2.0
+    kind: research-only
+    lesson: git-history reward shortcut -> git_manager.export_tree, environment_validator.check_image_for_shortcuts, leakage_checker
+    license_file: licenses/SWE-Gym-Apache-2.0.txt
+
+  - project: harbor
+    url: https://github.com/harbor-framework/harbor
+    commit: 2ea52267e95ed7fb00bb72f0386d9c1289d331ca
+    version: "0.26.0"
+    spdx: Apache-2.0
+    kind: dependency
+    usage: CLI (init, lint, run -a oracle|nop|<agent>); adapters/swebench studied for package shape
+    license_file: licenses/harbor-Apache-2.0.txt
+
+  - project: mutmut
+    url: https://github.com/boxed/mutmut
+    spdx: BSD-3-Clause
+    kind: reimplemented
+    inspiration:
+      - operator families -> src/codeforge/validation/mutation_validator.py
+
+dependencies:
+  - {name: litellm, version: "1.110.1", spdx: MIT}
+  - {name: pydantic, version: "2.14.4", spdx: MIT}
+  - {name: pydantic-settings, version: "2.16.3", spdx: MIT}
+  - {name: tree-sitter, version: "0.26.1", spdx: MIT, license_file: licenses/py-tree-sitter-MIT.txt}
+  - {name: tree-sitter-python, version: "0.25.0", spdx: MIT}
+  - {name: tree-sitter-javascript, version: "0.25.0", spdx: MIT}
+  - {name: typer, version: "0.29.2", spdx: MIT}
+  - {name: fastapi, version: "0.165.0", spdx: MIT}
+  - {name: uvicorn, version: "0.54.0", spdx: BSD-3-Clause}
+  - {name: pytest, version: "9.2.0", spdx: MIT, group: dev}
+  - {name: pytest-cov, version: "7.1.0", spdx: MIT, group: dev}
+  - {name: hypothesis, version: "6.170.16", spdx: MPL-2.0, group: dev, note: unmodified}
+  - {name: coverage, version: "7.17.3", spdx: Apache-2.0, scope: validation image only}

@@ -1,0 +1,119 @@
+{
+  "codeforge_version": "0.1.0",
+  "started_at": "2026-11-20T00:24:26.447106+00:00",
+  "status": "completed",
+  "tasks": [
+    {
+      "task_id": "add-volume-based-discount-configuration-policy-91c6c0",
+      "title": "Add volume-based discount configuration policy",
+      "archetype": "configuration_policy",
+      "status": "valid",
+      "score": 99.2,
+      "gates": [
+        {
+          "gate": "baseline",
+          "status": "passed",
+          "summary": "27 original tests pass consistently across 3 runs"
+        },
+        {
+          "gate": "positive_control",
+          "status": "passed",
+          "summary": "13/13 feature tests pass with the reference"
+        },
+        {
+          "gate": "negative_control",
+          "status": "passed",
+          "summary": "13/13 feature tests fail on the original code (module import fails: the contract does not exist yet)"
+        },
+        {
+          "gate": "regression",
+          "status": "passed",
+          "summary": "27/27 original tests still pass with the reference"
+        },
+        {
+          "gate": "stability",
+          "status": "passed",
+          "summary": "3/3 reference runs identical"
+        },
+        {
+          "gate": "independence",
+          "status": "passed",
+          "summary": "5/5 acceptance criteria traced to tests; 0 error(s), 0 warning(s)"
+        },
+        {
+          "gate": "mutation",
+          "status": "passed",
+          "summary": "mutation score 90% (27/30 killed, threshold 60%)"
+        },
+        {
+          "gate": "semantic_mutants",
+          "status": "passed",
+          "summary": "4/4 plausible wrong implementations caught"
+        },
+        {
+          "gate": "leakage",
+          "status": "passed",
+          "summary": "no leakage or shortcut found"
+        },
+        {
+          "gate": "harbor_lint",
+          "status": "passed",
+          "summary": "harbor lint: no findings"
+        },
+        {
+          "gate": "harbor_oracle",
+          "status": "passed",
+          "summary": "oracle reward 1.0"
+        },
+        {
+          "gate": "harbor_nop",
+          "status": "passed",
+          "summary": "nop (no changes) reward 0.0"
+        }
+      ],
+      "reasons": [],
+      "task_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\generated_tasks\\shopcart\\add-volume-based-discount-configuration-policy-91c6c0",
+      "error": null
+    }
+  ],
+  "accepted": 1,
+  "rejected": 0,
+  "run_id": "20261120-002426-web-2acafa",
+  "repository": {
+    "name": "shopcart",
+    "url": "file:///C:/Users/Project/Innodata%20AI%20Hackathon/workspace/samples/shopcart",
+    "commit": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+    "language": "python",
+    "framework": null,
+    "test_framework": "pytest"
+  },
+  "variation": {
+    "tasks": 1,
+    "distinct_archetypes": 1,
+    "archetypes": [
+      "configuration_policy"
+    ],
+    "mean_pairwise_similarity": 0.0,
+    "max_pairwise_similarity": 0.0,
+    "diversity_score": null,
+    "pairs": []
+  },
+  "finished_at": "2026-11-20T00:28:29.520182+00:00",
+  "llm_usage": {
+    "calls": 6,
+    "cached_calls": 0,
+    "prompt_tokens": 33221,
+    "completion_tokens": 11645,
+    "by_purpose": {
+      "feature_discovery": 1,
+      "task_spec": 1,
+      "feature_tests": 1,
+      "reference": 1,
+      "semantic_mutants": 1,
+      "feature_tests_repair": 1
+    },
+    "models": [
+      "gemini/gemini-3-flash-preview"
+    ]
+  }
+}

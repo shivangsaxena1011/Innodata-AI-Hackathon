@@ -56,3 +56,5 @@ extend-exclude = ["research", "generated_tasks", "workspace", "examples"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+# Typer declares CLI options as call defaults by design.
+extend-ignore = ["B008"]

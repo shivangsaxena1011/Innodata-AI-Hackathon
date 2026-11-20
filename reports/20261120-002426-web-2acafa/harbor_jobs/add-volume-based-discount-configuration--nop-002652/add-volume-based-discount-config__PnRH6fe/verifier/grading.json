@@ -1,0 +1,23 @@
+{
+  "rewards": {
+    "reward": 0.0,
+    "feature_pass_rate": 0.0,
+    "regression_pass_rate": 1.0
+  },
+  "feature_not_passed": [
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac2_highest_applicable_tier",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac3_below_tier_no_discount",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac4_tax_calculated_on_discounted_price",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac5_shipping_on_discounted_subtotal",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_discount_rounding_half_up",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_edge_case_duplicate_threshold_last_wins",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_edge_case_non_sequential_tiers",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_empty_subtotal_with_volume_policy",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_discount_percent",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_min_quantity",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_exact_100_percent_discount_allowed",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_shipping_at_threshold_boundary"
+  ],
+  "regression_not_passed": []
+}

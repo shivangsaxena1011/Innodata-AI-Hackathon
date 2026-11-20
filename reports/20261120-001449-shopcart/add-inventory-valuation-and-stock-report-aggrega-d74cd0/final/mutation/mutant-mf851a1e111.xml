@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="0.024" timestamp="2026-11-20T00:20:59.677871+00:00" hostname="730bc3bfb1ff"><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_generate_report_empty_inventory" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_generate_report_correct_sums" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_sku_breakdown_details" time="0.000"><failure message="AssertionError: assert {'SKU-1': {'a...al('155.00')}} == {'SKU-1': {'a...al('155.00')}}&#10;  &#10;  Differing items:&#10;  {'SKU-1': {'available': 6, 'reserved': 4, 'valuation': Decimal('155.00')}} != {'SKU-1': {'available': 6, 'on_hand': 10, 'reserved': 4, 'valuation': Decimal('155.00')}}&#10;  Use -v to get more diff">def test_sku_breakdown_details():
+        """AC2: The sku_breakdown map includes accurate per-SKU metrics."""
+        inventory = Inventory()
+        catalog = Catalog()
+    
+        price = Decimal("15.50")
+        catalog.add(Product("SKU-1", "Test Item", price, "cat"))
+        inventory.restock("SKU-1", 10)
+        inventory.reserve("SKU-1", 4)
+    
+        report = generate_inventory_report(inventory, catalog)
+    
+        expected_breakdown = {
+            "SKU-1": {
+                "on_hand": 10,
+                "reserved": 4,
+                "available": 6,
+                "valuation": to_money(Decimal("155.00"))
+            }
+        }
+&gt;       assert report.sku_breakdown == expected_breakdown
+E       AssertionError: assert {'SKU-1': {'a...al('155.00')}} == {'SKU-1': {'a...al('155.00')}}
+E         
+E         Differing items:
+E         {'SKU-1': {'available': 6, 'reserved': 4, 'valuation': Decimal('155.00')}} != {'SKU-1': {'available': 6, 'on_hand': 10, 'reserved': 4, 'valuation': Decimal('155.00')}}
+E         Use -v to get more diff
+
+tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py:62: AssertionError</failure></testcase></testsuite></testsuites>

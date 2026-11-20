@@ -1,0 +1,35 @@
+F
+=================================== FAILURES ===================================
+__________________________ test_ac1_exact_tier_match ___________________________
+
+    def test_ac1_exact_tier_match():
+        """Given a VolumeDiscountPolicy with a tier (10 units, 10% discount), 10 units of a $10.00 item results in a subtotal of $90.00."""
+        cart, policy, _ = setup_cart_and_policy()
+        policy.add_tier(10, 10)
+        cart.add_item("SKU-1", 10)
+    
+>       totals = compute_totals(cart, policy)
+
+tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py:22: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cart = <shopcart.cart.Cart object at 0x7067a9482f90>
+policy = VolumeDiscountPolicy(default_tax_rate=Decimal('8'), category_tax_rates={}, flat_shipping=Decimal('5.99'), free_shipping_threshold=Decimal('50.00'))
+
+    def compute_totals(cart: Cart, policy: PricingPolicy | None = None) -> Totals:
+        policy = policy or PricingPolicy()
+        if isinstance(policy, VolumeDiscountPolicy):
+            subtotal = to_money(
+>               sum(
+                    (policy.calculate_discounted_line_total(line) for line in cart.lines),
+                    Decimal("0"),
+                )
+            )
+E           TypeError: unsupported operand type(s) for +: 'decimal.Decimal' and 'NoneType'
+
+shopcart/pricing.py:92: TypeError
+-------------- generated xml file: /cf/out/mutant-m0c62de482b.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py::test_ac1_exact_tier_match
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 0.03s

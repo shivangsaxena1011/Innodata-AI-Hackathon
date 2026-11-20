@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="0.028" timestamp="2026-11-20T00:25:58.648836+00:00" hostname="041c4c66d071"><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac1_exact_tier_match" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac2_highest_applicable_tier" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac3_below_tier_no_discount" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac4_tax_on_discounted_price" time="0.000"><failure message="ValueError: min_quantity must be at least 1">def test_ac4_tax_on_discounted_price():
+        # $100 line item discounted to $90. Tax rate 10% -&gt; tax $9.00
+        catalog = Catalog()
+        p = Product("SKU-1", "Item", Decimal("100.00"), "misc")
+        catalog.add(p)
+        cart = Cart(catalog)
+        cart.add_item("SKU-1", 1)
+    
+        # default tax is 8%, we force 10% for AC4
+        policy = VolumeDiscountPolicy(default_tax_rate=Decimal("10"))
+&gt;       policy.add_tier(1, 10)
+
+tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = VolumeDiscountPolicy(default_tax_rate=Decimal('10'), category_tax_rates={}, flat_shipping=Decimal('5.99'), free_shipping_threshold=Decimal('50.00'))
+min_quantity = 1, discount_percent = 10
+
+    def add_tier(self, min_quantity: int, discount_percent: Decimal | int | str) -&gt; None:
+        if (min_quantity &lt;= 1):
+&gt;           raise ValueError("min_quantity must be at least 1")
+E           ValueError: min_quantity must be at least 1
+
+shopcart/pricing.py:33: ValueError</failure></testcase></testsuite></testsuites>

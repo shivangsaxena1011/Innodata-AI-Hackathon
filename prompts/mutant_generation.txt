@@ -1,0 +1,29 @@
+You are testing the strength of a hidden test suite. Below is a feature specification and
+its correct reference implementation. Write $count PLAUSIBLE BUT WRONG implementations: the
+kind of subtle mistake a capable AI coding agent might make.
+
+## Specification
+$spec
+
+## Reference implementation (unified diff against the original repository)
+$diff
+
+## Current content of the changed files (with the reference applied)
+$sources
+
+## Rules
+- Each mutant violates exactly ONE requirement or acceptance criterion, subtly (an off-by-one
+  boundary, a wrong rounding mode, a missed edge case, a wrong error type, an ignored rule,
+  a wrong ordering). Each must be a different kind of fault.
+- The code must still import and run; do not introduce syntax errors or crash on import.
+- Do not touch test files. Express each mutant as SEARCH/REPLACE edits against the CURRENT
+  content shown above ("search" must match exactly).
+
+## Output
+Reply with ONE JSON object:
+{
+  "mutants": [
+    {"fault_hypothesis": "which requirement is violated and how",
+     "edits": [{"path": "relative/path.py", "search": "exact existing text", "replace": "wrong text"}]}
+  ]
+}

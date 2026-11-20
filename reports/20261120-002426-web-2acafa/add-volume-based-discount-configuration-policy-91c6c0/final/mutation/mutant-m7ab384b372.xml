@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.025" timestamp="2026-11-20T00:25:57.706224+00:00" hostname="041c4c66d071"><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac1_exact_tier_match" time="0.000"><failure message="ValueError: min_quantity must be at least 1">def test_ac1_exact_tier_match():
+        # Given a VolumeDiscountPolicy with a tier (10 units, 10% discount)
+        # 10 units of a $10.00 item results in a subtotal of $90.00
+        cart, policy, _ = setup_cart_and_policy()
+&gt;       policy.add_tier(10, 10)
+
+tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = VolumeDiscountPolicy(default_tax_rate=Decimal('8'), category_tax_rates={}, flat_shipping=Decimal('5.99'), free_shipping_threshold=Decimal('50.00'))
+min_quantity = 10, discount_percent = 10
+
+    def add_tier(self, min_quantity: int, discount_percent: Decimal | int | str) -&gt; None:
+        if not (min_quantity &lt; 1):
+&gt;           raise ValueError("min_quantity must be at least 1")
+E           ValueError: min_quantity must be at least 1
+
+shopcart/pricing.py:33: ValueError</failure></testcase></testsuite></testsuites>

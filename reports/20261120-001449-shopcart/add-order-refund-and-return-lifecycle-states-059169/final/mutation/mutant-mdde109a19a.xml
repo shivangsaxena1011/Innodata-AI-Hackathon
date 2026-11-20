@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="0.027" timestamp="2026-11-20T00:18:07.309174+00:00" hostname="e03f2eead8b5"><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_order_status_enum_members" time="0.000" /><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_return_items_flow" time="0.000" /><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_refund_from_paid" time="0.000"><failure message="shopcart.orders.OrderError: cannot move order from paid to returned">def test_refund_from_paid():
+        """AC3: Verify refund from PAID status."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 1)
+        order = Order.place(cart, inventory)
+        order.pay(order.totals.total)
+    
+&gt;       order.refund()
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+shopcart/orders.py:90: in refund
+    self._transition(OrderStatus.RETURNED)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Order(order_id=2, items={'SKU-1': 1}, totals=Totals(subtotal=Decimal('10.00'), tax=Decimal('0.80'), shipping=Decimal('...us.PAID: 'paid'&gt;, history=[&lt;OrderStatus.PENDING: 'pending'&gt;, &lt;OrderStatus.PAID: 'paid'&gt;], amount_paid=Decimal('16.79'))
+new_status = &lt;OrderStatus.RETURNED: 'returned'&gt;
+
+    def _transition(self, new_status: OrderStatus) -&gt; None:
+        if new_status not in ALLOWED_TRANSITIONS[self.status]:
+&gt;           raise OrderError(f"cannot move order from {self.status.value} to {new_status.value}")
+E           shopcart.orders.OrderError: cannot move order from paid to returned
+
+shopcart/orders.py:69: OrderError</failure></testcase></testsuite></testsuites>

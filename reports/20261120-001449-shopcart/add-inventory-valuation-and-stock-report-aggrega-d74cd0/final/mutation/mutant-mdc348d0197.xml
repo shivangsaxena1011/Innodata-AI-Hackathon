@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.028" timestamp="2026-11-20T00:21:01.961808+00:00" hostname="730bc3bfb1ff"><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_generate_report_empty_inventory" time="0.000"><failure message="AttributeError: 'NoneType' object has no attribute 'total_on_hand'">def test_generate_report_empty_inventory():
+        """AC4: An empty inventory returns a report with zeros and empty breakdown."""
+        inventory = Inventory()
+        catalog = Catalog()
+        report = generate_inventory_report(inventory, catalog)
+    
+&gt;       assert report.total_on_hand == 0
+E       AttributeError: 'NoneType' object has no attribute 'total_on_hand'
+
+tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py:13: AttributeError</failure></testcase></testsuite></testsuites>

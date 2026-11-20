@@ -1,0 +1,25 @@
+.....F
+=================================== FAILURES ===================================
+_______________________ test_invalid_return_transitions ________________________
+
+    def test_invalid_return_transitions():
+        """AC6: return_items() should fail from PENDING, PAID, CANCELLED, RETURNED, REFUNDED."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 1)
+    
+        # PENDING
+        order = Order.place(cart, inventory)
+        initial_stock = inventory.available("SKU-1")
+        with pytest.raises(OrderError):
+            order.return_items(inventory)
+>       assert inventory.available("SKU-1") == initial_stock
+E       AssertionError: assert 10 == 9
+E        +  where 10 = available('SKU-1')
+E        +    where available = <shopcart.inventory.Inventory object at 0x70ce8f98b6f0>.available
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:111: AssertionError
+------------------ generated xml file: /cf/out/mutant-s1.xml -------------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py::test_invalid_return_transitions
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 5 passed in 0.02s

@@ -1,0 +1,19 @@
+F
+=================================== FAILURES ===================================
+_________________________ test_report_empty_inventory __________________________
+
+    def test_report_empty_inventory():
+        """AC4: An empty inventory returns a report with all numeric totals at 0."""
+        inventory = Inventory()
+        catalog = Catalog()
+        report = generate_inventory_report(inventory, catalog)
+    
+>       assert report.total_on_hand == 0
+E       AttributeError: 'NoneType' object has no attribute 'total_on_hand'
+
+tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py:13: AttributeError
+-------------- generated xml file: /cf/out/mutant-mdc348d0197.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py::test_report_empty_inventory
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 0.03s

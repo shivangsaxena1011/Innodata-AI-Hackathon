@@ -1,0 +1,31 @@
+......F
+=================================== FAILURES ===================================
+___________________ test_report_includes_only_reserved_skus ____________________
+
+    def test_report_includes_only_reserved_skus():
+        """Requirement: Report includes SKUs with either on_hand OR reserved balance."""
+        inventory = Inventory()
+        catalog = Catalog()
+    
+        # Setup a scenario where on_hand is 0 but reserved is > 0
+        # (e.g. after a commit or specific state)
+        # In this Inventory impl, commit reduces on_hand.
+        inventory.restock("SKU-1", 5)
+        inventory.reserve("SKU-1", 5)
+        inventory.commit("SKU-1", 5)
+        # After commit: _on_hand is 0, _reserved is 0.
+        # Let's check a SKU with only restock:
+        inventory.restock("SKU-2", 5)
+    
+        report = generate_inventory_report(inventory, catalog)
+        assert "SKU-2" in report.sku_breakdown
+>       assert "SKU-1" not in report.sku_breakdown # Both 0
+E       AssertionError: assert 'SKU-1' not in {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}}
+E        +  where {'SKU-1': {'available': 0, 'on_hand': 0, 'reserved': 0, 'valuation': Decimal('0.00')}, 'SKU-2': {'available': 5, 'on_hand': 5, 'reserved': 0, 'valuation': Decimal('0.00')}} = InventoryReport(total_on_hand=5, total_reserved=0, total_available=5, total_valuation=Decimal('0.00'), sku_breakdown={..., 'valuation': Decimal('0.00')}, 'SKU-2': {'on_hand': 5, 'reserved': 0, 'available': 5, 'valuation': Decimal('0.00')}}).sku_breakdown
+
+tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py:132: AssertionError
+-------------- generated xml file: /cf/out/mutant-m46e66fe6c4.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py::test_report_includes_only_reserved_skus
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 6 passed in 0.03s

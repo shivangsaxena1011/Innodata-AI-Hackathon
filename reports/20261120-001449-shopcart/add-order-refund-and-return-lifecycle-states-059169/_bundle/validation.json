@@ -1,0 +1,893 @@
+{
+  "task_id": "add-order-refund-and-return-lifecycle-states-059169",
+  "baseline_result": null,
+  "feature_negative_control": {
+    "label": "feature_original",
+    "command": [
+      "tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py"
+    ],
+    "passed": [],
+    "failed": [
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_order_status_enum_members",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_paid",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_returned",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_refund_transitions",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_return_transitions",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_empty_order_restocks_nothing"
+    ],
+    "errors": [],
+    "skipped": [],
+    "exit_code": 1,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\add-order-refund-and-return-lifecycle-states-059169\\attempt-1\\negative\\feature_original.log",
+    "timed_out": false,
+    "failure_text": {
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_order_status_enum_members": "AttributeError: type object 'OrderStatus' has no attribute 'REFUNDED'\ndef test_order_status_enum_members():\n        \"\"\"AC1: Verify OrderStatus has REFUNDED and RETURNED with correct values.\"\"\"\n>       assert OrderStatus.REFUNDED.value == \"refunded\"\nE       AttributeError: type object 'OrderStatus' has no attribute 'REFUNDED'\n\ntests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:21: AttributeError",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow": "AttributeError: 'Order' object has no attribute 'return_items'\ndef test_return_items_flow():\n        \"\"\"AC2: Verify return_items transitions state and restocks inventory.\"\"\"\n        catalog, inventory, cart = setup_env()\n        cart.add_item(\"SKU-1\", 2)\n        cart.add_item(\"SKU-2\", 1)\n    \n        order = Order.place(cart, inventory)\n        order.pay(order.totals.total)\n        order.ship(inventory)  # Transitions to SHIPPED\n    \n        # Before return check inventory (20 starting total on-hand in fixture-like setup)\n        # Logic: start with 10. Order reserves 2 and 1. Ship commits (on-hand becomes 8 and 9).\n        assert inventory.available(\"SKU-1\") == 8\n        assert inventory.available(\"SKU-2\") == 9\n    \n>       order.return_items(inventory)\nE       AttributeError: 'Order' object has no attribute 'return_items'\n\ntests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:39: AttributeError",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_paid": "AttributeError: 'Order' object has no attribute 'refund'\ndef test_refund_from_paid():\n        \"\"\"AC3: Verify refund from PAID status.\"\"\"\n        catalog, inventory, cart = setup_env()\n        cart.add_item(\"SKU-1\", 1)\n        order = Order.place(cart, inventory)\n        order.pay(order.totals.total)\n    \n>       order.refund()\nE       AttributeError: 'Order' object has no attribute 'refund'\n\ntests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:53: AttributeError",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_returned": "AttributeError: 'Order' object has no attribute 'return_items'\ndef test_refund_from_returned():\n        \"\"\"AC4: Verify refund from RETURNED status.\"\"\"\n        catalog, inventory, cart = setup_env()\n        cart.add_item(\"SKU-1\", 1)\n        order = Order.place(cart, inventory)\n        order.pay(order.totals.total)\n        order.ship(inventory)\n>       order.return_items(inventory)\nE       AttributeError: 'Order' object has no attribute 'return_items'\n\ntests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:65: AttributeError",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_refund_transitions": "AttributeError: 'Order' object has no attribute 'refund'\ndef test_invalid_refund_transitions():\n        \"\"\"AC5: refund() should fail from PENDING, SHIPPED, CANCELLED, REFUNDED.\"\"\"\n        catalog, inventory, cart = setup_env()\n        cart.add_item(\"SKU-1\", 1)\n    \n        # PENDING\n        order = Order.place(cart, inventory)\n        with pytest.raises(OrderError):\n>           order.refund()\nE           AttributeError: 'Order' object has no attribute 'refund'\n\ntests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:80: AttributeError",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_return_transitions": "AttributeError: 'Order' object has no attribute 'return_items'\ndef test_invalid_return_transitions():\n        \"\"\"AC6: return_items() should fail from PENDING, PAID, CANCELLED, RETURNED, REFUNDED.\"\"\"\n        catalog, inventory, cart = setup_env()\n        cart.add_item(\"SKU-1\", 1)\n    \n        # PENDING\n        order = Order.place(cart, inventory)\n        initial_stock = inventory.available(\"SKU-1\")\n        with pytest.raises(OrderError):\n>           order.return_items(inventory)\nE           AttributeError: 'Order' object has no attribute 'return_items'\n\ntests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:110: AttributeError",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_empty_order_restocks_nothing": "AttributeError: 'Order' object has no attribute 'return_items'\ndef test_return_items_empty_order_restocks_nothing():\n        \"\"\"Edge case: return_items on empty dict should still transition status.\"\"\"\n        # Note: Order.place prevents empty cart, but we can verify status transition logic\n        catalog, inventory, cart = setup_env()\n        cart.add_item(\"SKU-1\", 1)\n        order = Order.place(cart, inventory)\n        order.pay(order.totals.total)\n        order.ship(inventory)\n    \n        # Manually clear items for edge case test if internal state allows,\n        # but here we just ensure normal operation\n>       order.return_items(inventory)\nE       AttributeError: 'Order' object has no attribute 'return_items'\n\ntests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:148: AttributeError"
+    }
+  },
+  "reference_positive_control": {
+    "label": "feature_reference_1",
+    "command": [
+      "tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py"
+    ],
+    "passed": [
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_order_status_enum_members",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_paid",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_returned",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_refund_transitions",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_return_transitions",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_empty_order_restocks_nothing"
+    ],
+    "failed": [],
+    "errors": [],
+    "skipped": [],
+    "exit_code": 0,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\add-order-refund-and-return-lifecycle-states-059169\\attempt-1\\positive\\feature_reference_1.log",
+    "timed_out": false,
+    "failure_text": {}
+  },
+  "regression_result": {
+    "label": "regression_reference",
+    "command": [
+      "tests"
+    ],
+    "passed": [
+      "tests.test_cart::test_add_and_subtotal",
+      "tests.test_cart::test_adding_same_sku_merges_lines",
+      "tests.test_cart::test_quantity_must_be_positive",
+      "tests.test_cart::test_quantity_limit",
+      "tests.test_cart::test_update_and_remove",
+      "tests.test_cart::test_lines_sorted_by_sku",
+      "tests.test_catalog::test_product_price_is_rounded",
+      "tests.test_catalog::test_negative_price_rejected",
+      "tests.test_catalog::test_duplicate_sku_rejected",
+      "tests.test_catalog::test_lookup_and_category",
+      "tests.test_catalog::test_unknown_sku",
+      "tests.test_catalog::test_search_is_case_insensitive",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_order_status_enum_members",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_paid",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_returned",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_refund_transitions",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_return_transitions",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_empty_order_restocks_nothing",
+      "tests.test_inventory::test_restock_and_reserve",
+      "tests.test_inventory::test_over_reserve_fails",
+      "tests.test_inventory::test_release_more_than_held_fails",
+      "tests.test_inventory::test_commit_reduces_on_hand",
+      "tests.test_inventory::test_restock_requires_positive_quantity",
+      "tests.test_orders::test_place_reserves_stock",
+      "tests.test_orders::test_place_empty_cart_fails",
+      "tests.test_orders::test_failed_reservation_rolls_back",
+      "tests.test_orders::test_pay_ship_flow",
+      "tests.test_orders::test_wrong_payment_amount",
+      "tests.test_orders::test_cancel_releases_stock",
+      "tests.test_pricing::test_default_tax_and_flat_shipping",
+      "tests.test_pricing::test_free_shipping_at_threshold",
+      "tests.test_pricing::test_category_tax_rates",
+      "tests.test_pricing::test_empty_cart_totals"
+    ],
+    "failed": [],
+    "errors": [],
+    "skipped": [],
+    "exit_code": 0,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\add-order-refund-and-return-lifecycle-states-059169\\attempt-1\\positive\\regression_reference.log",
+    "timed_out": false,
+    "failure_text": {}
+  },
+  "mutation_result": {
+    "engine": "codeforge-ast (diff-scoped, mutmut-style operators)",
+    "total": 19,
+    "killed": 17,
+    "survived": 2,
+    "errors": 0,
+    "score": 0.895,
+    "outcomes": [
+      {
+        "mutant_id": "m95e00f16b1",
+        "operator": "enum_swap",
+        "file": "shopcart/orders.py",
+        "line": 32,
+        "description": "OrderStatus.PAID -> PENDING",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -31,3 +31,3 @@\n     OrderStatus.PENDING: {OrderStatus.PAID, OrderStatus.CANCELLED},\n-    OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.CANCELLED, OrderStatus.REFUNDED},\n+    OrderStatus.PENDING: {OrderStatus.SHIPPED, OrderStatus.CANCELLED, OrderStatus.REFUNDED},\n     OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n"
+      },
+      {
+        "mutant_id": "med18b87e7a",
+        "operator": "enum_swap",
+        "file": "shopcart/orders.py",
+        "line": 33,
+        "description": "OrderStatus.SHIPPED -> CANCELLED",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -32,3 +32,3 @@\n     OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.CANCELLED, OrderStatus.REFUNDED},\n-    OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n+    OrderStatus.CANCELLED: {OrderStatus.RETURNED},\n     OrderStatus.RETURNED: {OrderStatus.REFUNDED},\n"
+      },
+      {
+        "mutant_id": "mcc50f30dce",
+        "operator": "enum_swap",
+        "file": "shopcart/orders.py",
+        "line": 34,
+        "description": "OrderStatus.RETURNED -> SHIPPED",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -33,3 +33,3 @@\n     OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n-    OrderStatus.RETURNED: {OrderStatus.REFUNDED},\n+    OrderStatus.SHIPPED: {OrderStatus.REFUNDED},\n     OrderStatus.REFUNDED: set(),\n"
+      },
+      {
+        "mutant_id": "mcc9aaddcc1",
+        "operator": "enum_swap",
+        "file": "shopcart/orders.py",
+        "line": 35,
+        "description": "OrderStatus.REFUNDED -> RETURNED",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_returned"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -34,3 +34,3 @@\n     OrderStatus.RETURNED: {OrderStatus.REFUNDED},\n-    OrderStatus.REFUNDED: set(),\n+    OrderStatus.RETURNED: set(),\n     OrderStatus.CANCELLED: set(),\n"
+      },
+      {
+        "mutant_id": "m9f733581ea",
+        "operator": "collection",
+        "file": "shopcart/orders.py",
+        "line": 32,
+        "description": "remove element OrderStatus.SHIPPED",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -31,3 +31,3 @@\n     OrderStatus.PENDING: {OrderStatus.PAID, OrderStatus.CANCELLED},\n-    OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.CANCELLED, OrderStatus.REFUNDED},\n+    OrderStatus.PAID: {OrderStatus.CANCELLED, OrderStatus.REFUNDED},\n     OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n"
+      },
+      {
+        "mutant_id": "m8cf0268e5f",
+        "operator": "collection",
+        "file": "shopcart/orders.py",
+        "line": 32,
+        "description": "remove element OrderStatus.CANCELLED",
+        "killed": false,
+        "killed_by": [],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -31,3 +31,3 @@\n     OrderStatus.PENDING: {OrderStatus.PAID, OrderStatus.CANCELLED},\n-    OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.CANCELLED, OrderStatus.REFUNDED},\n+    OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.REFUNDED},\n     OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n"
+      },
+      {
+        "mutant_id": "m2308247f5a",
+        "operator": "collection",
+        "file": "shopcart/orders.py",
+        "line": 32,
+        "description": "remove element OrderStatus.REFUNDED",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_paid"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -31,3 +31,3 @@\n     OrderStatus.PENDING: {OrderStatus.PAID, OrderStatus.CANCELLED},\n-    OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.CANCELLED, OrderStatus.REFUNDED},\n+    OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.CANCELLED},\n     OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n"
+      },
+      {
+        "mutant_id": "m27f1c3ab39",
+        "operator": "collection",
+        "file": "shopcart/orders.py",
+        "line": 33,
+        "description": "remove element OrderStatus.RETURNED",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -32,3 +32,3 @@\n     OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.CANCELLED, OrderStatus.REFUNDED},\n-    OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n+    OrderStatus.SHIPPED: set(),\n     OrderStatus.RETURNED: {OrderStatus.REFUNDED},\n"
+      },
+      {
+        "mutant_id": "mf195f8d18f",
+        "operator": "collection",
+        "file": "shopcart/orders.py",
+        "line": 34,
+        "description": "remove element OrderStatus.REFUNDED",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_returned"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -33,3 +33,3 @@\n     OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n-    OrderStatus.RETURNED: {OrderStatus.REFUNDED},\n+    OrderStatus.RETURNED: set(),\n     OrderStatus.REFUNDED: set(),\n"
+      },
+      {
+        "mutant_id": "m9feeb94aa0",
+        "operator": "statement",
+        "file": "shopcart/orders.py",
+        "line": 90,
+        "description": "delete call self._transition(...)",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_paid"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -89,3 +89,3 @@\n     def refund(self) -> None:\n-        self._transition(OrderStatus.REFUNDED)\n+        pass\n \n"
+      },
+      {
+        "mutant_id": "m9bd6a7dc7f",
+        "operator": "statement",
+        "file": "shopcart/orders.py",
+        "line": 93,
+        "description": "delete call self._transition(...)",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -92,3 +92,3 @@\n     def return_items(self, inventory: Inventory) -> None:\n-        self._transition(OrderStatus.RETURNED)\n+        pass\n         for sku, qty in self.items.items():\n"
+      },
+      {
+        "mutant_id": "m0a00d5c168",
+        "operator": "enum_swap",
+        "file": "shopcart/orders.py",
+        "line": 32,
+        "description": "OrderStatus.SHIPPED -> CANCELLED",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -31,3 +31,3 @@\n     OrderStatus.PENDING: {OrderStatus.PAID, OrderStatus.CANCELLED},\n-    OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.CANCELLED, OrderStatus.REFUNDED},\n+    OrderStatus.PAID: {OrderStatus.CANCELLED, OrderStatus.CANCELLED, OrderStatus.REFUNDED},\n     OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n"
+      },
+      {
+        "mutant_id": "m485cfc1398",
+        "operator": "enum_swap",
+        "file": "shopcart/orders.py",
+        "line": 32,
+        "description": "OrderStatus.CANCELLED -> PAID",
+        "killed": false,
+        "killed_by": [],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -31,3 +31,3 @@\n     OrderStatus.PENDING: {OrderStatus.PAID, OrderStatus.CANCELLED},\n-    OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.CANCELLED, OrderStatus.REFUNDED},\n+    OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.PAID, OrderStatus.REFUNDED},\n     OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n"
+      },
+      {
+        "mutant_id": "m3f67afb369",
+        "operator": "enum_swap",
+        "file": "shopcart/orders.py",
+        "line": 32,
+        "description": "OrderStatus.REFUNDED -> RETURNED",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_paid"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -31,3 +31,3 @@\n     OrderStatus.PENDING: {OrderStatus.PAID, OrderStatus.CANCELLED},\n-    OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.CANCELLED, OrderStatus.REFUNDED},\n+    OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.CANCELLED, OrderStatus.RETURNED},\n     OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n"
+      },
+      {
+        "mutant_id": "m97644cb397",
+        "operator": "enum_swap",
+        "file": "shopcart/orders.py",
+        "line": 33,
+        "description": "OrderStatus.RETURNED -> SHIPPED",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -32,3 +32,3 @@\n     OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.CANCELLED, OrderStatus.REFUNDED},\n-    OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n+    OrderStatus.SHIPPED: {OrderStatus.SHIPPED},\n     OrderStatus.RETURNED: {OrderStatus.REFUNDED},\n"
+      },
+      {
+        "mutant_id": "ma7016d7739",
+        "operator": "enum_swap",
+        "file": "shopcart/orders.py",
+        "line": 34,
+        "description": "OrderStatus.REFUNDED -> RETURNED",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_returned"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -33,3 +33,3 @@\n     OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n-    OrderStatus.RETURNED: {OrderStatus.REFUNDED},\n+    OrderStatus.RETURNED: {OrderStatus.RETURNED},\n     OrderStatus.REFUNDED: set(),\n"
+      },
+      {
+        "mutant_id": "mf289749c49",
+        "operator": "statement",
+        "file": "shopcart/orders.py",
+        "line": 95,
+        "description": "delete call inventory.restock(...)",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -94,2 +94,2 @@\n         for sku, qty in self.items.items():\n-            inventory.restock(sku, qty)\n+            pass\n"
+      },
+      {
+        "mutant_id": "mdde109a19a",
+        "operator": "enum_swap",
+        "file": "shopcart/orders.py",
+        "line": 90,
+        "description": "OrderStatus.REFUNDED -> RETURNED",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_paid"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -89,3 +89,3 @@\n     def refund(self) -> None:\n-        self._transition(OrderStatus.REFUNDED)\n+        self._transition(OrderStatus.RETURNED)\n \n"
+      },
+      {
+        "mutant_id": "mf5f033a589",
+        "operator": "enum_swap",
+        "file": "shopcart/orders.py",
+        "line": 93,
+        "description": "OrderStatus.RETURNED -> SHIPPED",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+        ],
+        "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -92,3 +92,3 @@\n     def return_items(self, inventory: Inventory) -> None:\n-        self._transition(OrderStatus.RETURNED)\n+        self._transition(OrderStatus.SHIPPED)\n         for sku, qty in self.items.items():\n"
+      }
+    ],
+    "supported": true,
+    "note": ""
+  },
+  "semantic_mutation_result": {
+    "engine": "llm-semantic-mutants",
+    "total": 4,
+    "killed": 4,
+    "survived": 0,
+    "errors": 0,
+    "score": 1.0,
+    "outcomes": [
+      {
+        "mutant_id": "s1",
+        "operator": "semantic",
+        "file": "shopcart/orders.py",
+        "line": 0,
+        "description": "The AI restocks inventory before performing the status transition, violating the requirement that the transition must happen first and must raise OrderError without calling restock if it fails.",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_return_transitions"
+        ],
+        "diff": "--- reference/shopcart/orders.py\n+++ mutant/shopcart/orders.py\n@@ -92,4 +92,4 @@\n     def return_items(self, inventory: Inventory) -> None:\n-        self._transition(OrderStatus.RETURNED)\n         for sku, qty in self.items.items():\n             inventory.restock(sku, qty)\n+        self._transition(OrderStatus.RETURNED)\n"
+      },
+      {
+        "mutant_id": "s2",
+        "operator": "semantic",
+        "file": "shopcart/orders.py",
+        "line": 0,
+        "description": "The AI forgets to update the ALLOWED_TRANSITIONS map for RETURNED to REFUNDED, causing AC4 to fail even though the method is implemented.",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_returned"
+        ],
+        "diff": "--- reference/shopcart/orders.py\n+++ mutant/shopcart/orders.py\n@@ -33,3 +33,3 @@\n     OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n-    OrderStatus.RETURNED: {OrderStatus.REFUNDED},\n+    OrderStatus.RETURNED: set(),\n     OrderStatus.REFUNDED: set(),\n"
+      },
+      {
+        "mutant_id": "s3",
+        "operator": "semantic",
+        "file": "shopcart/orders.py",
+        "line": 0,
+        "description": "The AI uses inventory.release instead of inventory.restock in return_items, a plausible confusion of internal APIs since cancel() uses release().",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+        ],
+        "diff": "--- reference/shopcart/orders.py\n+++ mutant/shopcart/orders.py\n@@ -94,2 +94,2 @@\n         for sku, qty in self.items.items():\n-            inventory.restock(sku, qty)\n+            inventory.release(sku, qty)\n"
+      },
+      {
+        "mutant_id": "s4",
+        "operator": "semantic",
+        "file": "shopcart/orders.py",
+        "line": 0,
+        "description": "The AI uses the wrong string value for the RETURNED enum member, using 'return' instead of 'returned', violating AC1.",
+        "killed": true,
+        "killed_by": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_order_status_enum_members"
+        ],
+        "diff": "--- reference/shopcart/orders.py\n+++ mutant/shopcart/orders.py\n@@ -26,3 +26,3 @@\n     REFUNDED = \"refunded\"\n-    RETURNED = \"returned\"\n+    RETURNED = \"return\"\n \n"
+      }
+    ],
+    "supported": true,
+    "note": ""
+  },
+  "coverage_result": {
+    "changed_statements": 8,
+    "covered": 8,
+    "percent": 100.0,
+    "files": {
+      "shopcart/orders.py": {
+        "statements": 8,
+        "covered": 8,
+        "missing_lines": [],
+        "percent": 100.0
+      }
+    },
+    "tool": "coverage==7.17.3"
+  },
+  "harbor_validation": {
+    "lint": {
+      "ok": true,
+      "findings": [],
+      "output": "[]\n"
+    },
+    "oracle": {
+      "agent": "oracle",
+      "ok": true,
+      "reward": 1.0,
+      "rewards": {
+        "reward": 1.0,
+        "feature_pass_rate": 1.0,
+        "regression_pass_rate": 1.0
+      },
+      "exception": null,
+      "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\harbor_jobs\\add-order-refund-and-return-lifecycle-st-oracle-001830",
+      "duration_sec": 46.2,
+      "output_tail": "  1/1 Feature_Pass_Rate: 1.000 -------------------------------- 0:00:43 0:00:00\nadhoc • oracle\n┌────────┬────────────┬───────────────────┬──────────────────────┬────────┐\n│ Trials │ Exceptions │ Feature_Pass_Rate │ Regression_Pass_Rate │ Reward │\n├────────┼────────────┼───────────────────┼──────────────────────┼────────┤\n│      1 │          0 │             1.000 │                1.000 │  1.000 │\n└────────┴────────────┴───────────────────┴──────────────────────┴────────┘\n\n┌────────┬───────┐\n│ Reward │ Count │\n├────────┼───────┤\n│ 1.0    │     1 │\n│ 1.0    │     1 │\n│ 1.0    │     1 │\n└────────┴───────┘\n\nJob Info\nTotal runtime: 43s\nResults written to C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-001449-shopcart\\harbor_jobs\\add-order-refund-and-ret\nurn-lifecycle-st-oracle-001830\\result.json\nInspect results by running `harbor view C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-001449-shopcart\\harbor_jobs`\nShare results by running `harbor upload C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-001449-shopcart\\harbor_jobs\\add-order-refund-and-ret\nurn-lifecycle-st-oracle-001830`\n\nfatal: bad revision 'HEAD'\n"
+    },
+    "nop": {
+      "agent": "nop",
+      "ok": true,
+      "reward": 0.0,
+      "rewards": {
+        "reward": 0.0,
+        "feature_pass_rate": 0.0,
+        "regression_pass_rate": 1.0
+      },
+      "exception": null,
+      "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\harbor_jobs\\add-order-refund-and-return-lifecycle-st-nop-001830",
+      "duration_sec": 43.7,
+      "output_tail": "  1/1 Feature_Pass_Rate: 0.000 -------------------------------- 0:00:40 0:00:00\nadhoc • nop\n┌────────┬────────────┬───────────────────┬──────────────────────┬────────┐\n│ Trials │ Exceptions │ Feature_Pass_Rate │ Regression_Pass_Rate │ Reward │\n├────────┼────────────┼───────────────────┼──────────────────────┼────────┤\n│      1 │          0 │             0.000 │                1.000 │  0.000 │\n└────────┴────────────┴───────────────────┴──────────────────────┴────────┘\n\n┌────────┬───────┐\n│ Reward │ Count │\n├────────┼───────┤\n│ 0.0    │     1 │\n│ 0.0    │     1 │\n│ 1.0    │     1 │\n└────────┴───────┘\n\nJob Info\nTotal runtime: 41s\nResults written to C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-001449-shopcart\\harbor_jobs\\add-order-refund-and-ret\nurn-lifecycle-st-nop-001830\\result.json\nInspect results by running `harbor view C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-001449-shopcart\\harbor_jobs`\nShare results by running `harbor upload C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-001449-shopcart\\harbor_jobs\\add-order-refund-and-ret\nurn-lifecycle-st-nop-001830`\n\nfatal: bad revision 'HEAD'\n"
+    },
+    "harbor_version": "0.26.0"
+  },
+  "gates": [
+    {
+      "gate": "baseline",
+      "status": "passed",
+      "summary": "27 original tests pass consistently across 3 runs",
+      "details": {
+        "runs": 3,
+        "command": [
+          "tests"
+        ],
+        "passed": [
+          "tests.test_cart::test_add_and_subtotal",
+          "tests.test_cart::test_adding_same_sku_merges_lines",
+          "tests.test_cart::test_lines_sorted_by_sku",
+          "tests.test_cart::test_quantity_limit",
+          "tests.test_cart::test_quantity_must_be_positive",
+          "tests.test_cart::test_update_and_remove",
+          "tests.test_catalog::test_duplicate_sku_rejected",
+          "tests.test_catalog::test_lookup_and_category",
+          "tests.test_catalog::test_negative_price_rejected",
+          "tests.test_catalog::test_product_price_is_rounded",
+          "tests.test_catalog::test_search_is_case_insensitive",
+          "tests.test_catalog::test_unknown_sku",
+          "tests.test_inventory::test_commit_reduces_on_hand",
+          "tests.test_inventory::test_over_reserve_fails",
+          "tests.test_inventory::test_release_more_than_held_fails",
+          "tests.test_inventory::test_restock_and_reserve",
+          "tests.test_inventory::test_restock_requires_positive_quantity",
+          "tests.test_orders::test_cancel_releases_stock",
+          "tests.test_orders::test_failed_reservation_rolls_back",
+          "tests.test_orders::test_pay_ship_flow",
+          "tests.test_orders::test_place_empty_cart_fails",
+          "tests.test_orders::test_place_reserves_stock",
+          "tests.test_orders::test_wrong_payment_amount",
+          "tests.test_pricing::test_category_tax_rates",
+          "tests.test_pricing::test_default_tax_and_flat_shipping",
+          "tests.test_pricing::test_empty_cart_totals",
+          "tests.test_pricing::test_free_shipping_at_threshold"
+        ],
+        "failed": [],
+        "flaky": [],
+        "duration_sec": 0.0,
+        "healthy": true,
+        "notes": []
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "positive_control",
+      "status": "passed",
+      "summary": "7/7 feature tests pass with the reference",
+      "details": {
+        "passed": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_order_status_enum_members",
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow",
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_paid",
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_returned",
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_refund_transitions",
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_return_transitions",
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_empty_order_restocks_nothing"
+        ],
+        "failed": [],
+        "errors": [],
+        "skipped": []
+      },
+      "log_paths": [
+        "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\add-order-refund-and-return-lifecycle-states-059169\\attempt-1\\positive\\feature_reference_1.log"
+      ]
+    },
+    {
+      "gate": "negative_control",
+      "status": "passed",
+      "summary": "7/7 feature tests fail on the original code",
+      "details": {
+        "passing_on_original": [],
+        "failed": [
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_order_status_enum_members",
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow",
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_paid",
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_returned",
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_refund_transitions",
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_return_transitions",
+          "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_empty_order_restocks_nothing"
+        ],
+        "errors": [],
+        "collection_error": false
+      },
+      "log_paths": [
+        "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\add-order-refund-and-return-lifecycle-states-059169\\attempt-1\\negative\\feature_original.log"
+      ]
+    },
+    {
+      "gate": "regression",
+      "status": "passed",
+      "summary": "27/27 original tests still pass with the reference",
+      "details": {
+        "broken": [],
+        "broken_by_adding_tests": [],
+        "pass_to_pass": [
+          "tests.test_cart::test_add_and_subtotal",
+          "tests.test_cart::test_adding_same_sku_merges_lines",
+          "tests.test_cart::test_lines_sorted_by_sku",
+          "tests.test_cart::test_quantity_limit",
+          "tests.test_cart::test_quantity_must_be_positive",
+          "tests.test_cart::test_update_and_remove",
+          "tests.test_catalog::test_duplicate_sku_rejected",
+          "tests.test_catalog::test_lookup_and_category",
+          "tests.test_catalog::test_negative_price_rejected",
+          "tests.test_catalog::test_product_price_is_rounded",
+          "tests.test_catalog::test_search_is_case_insensitive",
+          "tests.test_catalog::test_unknown_sku",
+          "tests.test_inventory::test_commit_reduces_on_hand",
+          "tests.test_inventory::test_over_reserve_fails",
+          "tests.test_inventory::test_release_more_than_held_fails",
+          "tests.test_inventory::test_restock_and_reserve",
+          "tests.test_inventory::test_restock_requires_positive_quantity",
+          "tests.test_orders::test_cancel_releases_stock",
+          "tests.test_orders::test_failed_reservation_rolls_back",
+          "tests.test_orders::test_pay_ship_flow",
+          "tests.test_orders::test_place_empty_cart_fails",
+          "tests.test_orders::test_place_reserves_stock",
+          "tests.test_orders::test_wrong_payment_amount",
+          "tests.test_pricing::test_category_tax_rates",
+          "tests.test_pricing::test_default_tax_and_flat_shipping",
+          "tests.test_pricing::test_empty_cart_totals",
+          "tests.test_pricing::test_free_shipping_at_threshold"
+        ]
+      },
+      "log_paths": [
+        "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\add-order-refund-and-return-lifecycle-states-059169\\attempt-1\\positive\\regression_reference.log"
+      ]
+    },
+    {
+      "gate": "stability",
+      "status": "passed",
+      "summary": "3/3 reference runs identical",
+      "details": {
+        "runs": [
+          [
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_refund_transitions",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_return_transitions",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_order_status_enum_members",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_paid",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_returned",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_empty_order_restocks_nothing",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+          ],
+          [
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_refund_transitions",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_return_transitions",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_order_status_enum_members",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_paid",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_returned",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_empty_order_restocks_nothing",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+          ],
+          [
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_refund_transitions",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_return_transitions",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_order_status_enum_members",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_paid",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_returned",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_empty_order_restocks_nothing",
+            "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+          ]
+        ]
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "independence",
+      "status": "passed",
+      "summary": "6/6 acceptance criteria traced to tests; 0 error(s), 0 warning(s)",
+      "details": {
+        "errors": [],
+        "warnings": [],
+        "ac_coverage": {
+          "AC1": [
+            "test_order_status_enum_members"
+          ],
+          "AC2": [
+            "test_return_items_empty_order_restocks_nothing",
+            "test_return_items_flow"
+          ],
+          "AC3": [
+            "test_refund_from_paid"
+          ],
+          "AC4": [
+            "test_refund_from_returned"
+          ],
+          "AC5": [
+            "test_invalid_refund_transitions"
+          ],
+          "AC6": [
+            "test_invalid_return_transitions"
+          ]
+        },
+        "tests": [
+          "test_order_status_enum_members",
+          "test_return_items_flow",
+          "test_refund_from_paid",
+          "test_refund_from_returned",
+          "test_invalid_refund_transitions",
+          "test_invalid_return_transitions",
+          "test_return_items_empty_order_restocks_nothing"
+        ]
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "mutation",
+      "status": "passed",
+      "summary": "mutation score 90% (17/19 killed, threshold 60%)",
+      "details": {
+        "survivors": [
+          {
+            "mutant_id": "m8cf0268e5f",
+            "operator": "collection",
+            "file": "shopcart/orders.py",
+            "line": 32,
+            "description": "remove element OrderStatus.CANCELLED",
+            "killed": false,
+            "killed_by": [],
+            "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -31,3 +31,3 @@\n     OrderStatus.PENDING: {OrderStatus.PAID, OrderStatus.CANCELLED},\n-    OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.CANCELLED, OrderStatus.REFUNDED},\n+    OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.REFUNDED},\n     OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n"
+          },
+          {
+            "mutant_id": "m485cfc1398",
+            "operator": "enum_swap",
+            "file": "shopcart/orders.py",
+            "line": 32,
+            "description": "OrderStatus.CANCELLED -> PAID",
+            "killed": false,
+            "killed_by": [],
+            "diff": "--- a/shopcart/orders.py\n+++ b/shopcart/orders.py\n@@ -31,3 +31,3 @@\n     OrderStatus.PENDING: {OrderStatus.PAID, OrderStatus.CANCELLED},\n-    OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.CANCELLED, OrderStatus.REFUNDED},\n+    OrderStatus.PAID: {OrderStatus.SHIPPED, OrderStatus.PAID, OrderStatus.REFUNDED},\n     OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n"
+          }
+        ]
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "semantic_mutants",
+      "status": "passed",
+      "summary": "4/4 plausible wrong implementations caught",
+      "details": {
+        "outcomes": [
+          {
+            "mutant_id": "s1",
+            "operator": "semantic",
+            "file": "shopcart/orders.py",
+            "line": 0,
+            "description": "The AI restocks inventory before performing the status transition, violating the requirement that the transition must happen first and must raise OrderError without calling restock if it fails.",
+            "killed": true,
+            "killed_by": [
+              "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_return_transitions"
+            ],
+            "diff": "--- reference/shopcart/orders.py\n+++ mutant/shopcart/orders.py\n@@ -92,4 +92,4 @@\n     def return_items(self, inventory: Inventory) -> None:\n-        self._transition(OrderStatus.RETURNED)\n         for sku, qty in self.items.items():\n             inventory.restock(sku, qty)\n+        self._transition(OrderStatus.RETURNED)\n"
+          },
+          {
+            "mutant_id": "s2",
+            "operator": "semantic",
+            "file": "shopcart/orders.py",
+            "line": 0,
+            "description": "The AI forgets to update the ALLOWED_TRANSITIONS map for RETURNED to REFUNDED, causing AC4 to fail even though the method is implemented.",
+            "killed": true,
+            "killed_by": [
+              "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_returned"
+            ],
+            "diff": "--- reference/shopcart/orders.py\n+++ mutant/shopcart/orders.py\n@@ -33,3 +33,3 @@\n     OrderStatus.SHIPPED: {OrderStatus.RETURNED},\n-    OrderStatus.RETURNED: {OrderStatus.REFUNDED},\n+    OrderStatus.RETURNED: set(),\n     OrderStatus.REFUNDED: set(),\n"
+          },
+          {
+            "mutant_id": "s3",
+            "operator": "semantic",
+            "file": "shopcart/orders.py",
+            "line": 0,
+            "description": "The AI uses inventory.release instead of inventory.restock in return_items, a plausible confusion of internal APIs since cancel() uses release().",
+            "killed": true,
+            "killed_by": [
+              "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+            ],
+            "diff": "--- reference/shopcart/orders.py\n+++ mutant/shopcart/orders.py\n@@ -94,2 +94,2 @@\n         for sku, qty in self.items.items():\n-            inventory.restock(sku, qty)\n+            inventory.release(sku, qty)\n"
+          },
+          {
+            "mutant_id": "s4",
+            "operator": "semantic",
+            "file": "shopcart/orders.py",
+            "line": 0,
+            "description": "The AI uses the wrong string value for the RETURNED enum member, using 'return' instead of 'returned', violating AC1.",
+            "killed": true,
+            "killed_by": [
+              "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_order_status_enum_members"
+            ],
+            "diff": "--- reference/shopcart/orders.py\n+++ mutant/shopcart/orders.py\n@@ -26,3 +26,3 @@\n     REFUNDED = \"refunded\"\n-    RETURNED = \"returned\"\n+    RETURNED = \"return\"\n \n"
+          }
+        ]
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "leakage",
+      "status": "passed",
+      "summary": "no leakage or shortcut found",
+      "details": {
+        "problems": []
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "harbor_lint",
+      "status": "passed",
+      "summary": "harbor lint: no findings",
+      "details": {
+        "findings": [],
+        "output": "[]\n"
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "harbor_oracle",
+      "status": "passed",
+      "summary": "oracle reward 1.0",
+      "details": {
+        "agent": "oracle",
+        "ok": true,
+        "reward": 1.0,
+        "rewards": {
+          "reward": 1.0,
+          "feature_pass_rate": 1.0,
+          "regression_pass_rate": 1.0
+        },
+        "exception": null,
+        "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\harbor_jobs\\add-order-refund-and-return-lifecycle-st-oracle-001830",
+        "duration_sec": 46.2,
+        "output_tail": "  1/1 Feature_Pass_Rate: 1.000 -------------------------------- 0:00:43 0:00:00\nadhoc • oracle\n┌────────┬────────────┬───────────────────┬──────────────────────┬────────┐\n│ Trials │ Exceptions │ Feature_Pass_Rate │ Regression_Pass_Rate │ Reward │\n├────────┼────────────┼───────────────────┼──────────────────────┼────────┤\n│      1 │          0 │             1.000 │                1.000 │  1.000 │\n└────────┴────────────┴───────────────────┴──────────────────────┴────────┘\n\n┌────────┬───────┐\n│ Reward │ Count │\n├────────┼───────┤\n│ 1.0    │     1 │\n│ 1.0    │     1 │\n│ 1.0    │     1 │\n└────────┴───────┘\n\nJob Info\nTotal runtime: 43s\nResults written to C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-001449-shopcart\\harbor_jobs\\add-order-refund-and-ret\nurn-lifecycle-st-oracle-001830\\result.json\nInspect results by running `harbor view C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-001449-shopcart\\harbor_jobs`\nShare results by running `harbor upload C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-001449-shopcart\\harbor_jobs\\add-order-refund-and-ret\nurn-lifecycle-st-oracle-001830`\n\nfatal: bad revision 'HEAD'\n"
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "harbor_nop",
+      "status": "passed",
+      "summary": "nop (no changes) reward 0.0",
+      "details": {
+        "agent": "nop",
+        "ok": true,
+        "reward": 0.0,
+        "rewards": {
+          "reward": 0.0,
+          "feature_pass_rate": 0.0,
+          "regression_pass_rate": 1.0
+        },
+        "exception": null,
+        "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-001449-shopcart\\harbor_jobs\\add-order-refund-and-return-lifecycle-st-nop-001830",
+        "duration_sec": 43.7,
+        "output_tail": "  1/1 Feature_Pass_Rate: 0.000 -------------------------------- 0:00:40 0:00:00\nadhoc • nop\n┌────────┬────────────┬───────────────────┬──────────────────────┬────────┐\n│ Trials │ Exceptions │ Feature_Pass_Rate │ Regression_Pass_Rate │ Reward │\n├────────┼────────────┼───────────────────┼──────────────────────┼────────┤\n│      1 │          0 │             0.000 │                1.000 │  0.000 │\n└────────┴────────────┴───────────────────┴──────────────────────┴────────┘\n\n┌────────┬───────┐\n│ Reward │ Count │\n├────────┼───────┤\n│ 0.0    │     1 │\n│ 0.0    │     1 │\n│ 1.0    │     1 │\n└────────┴───────┘\n\nJob Info\nTotal runtime: 41s\nResults written to C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-001449-shopcart\\harbor_jobs\\add-order-refund-and-ret\nurn-lifecycle-st-nop-001830\\result.json\nInspect results by running `harbor view C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-001449-shopcart\\harbor_jobs`\nShare results by running `harbor upload C:\\Users\\Project\\Innodata AI \nHackathon\\reports\\20261120-001449-shopcart\\harbor_jobs\\add-order-refund-and-ret\nurn-lifecycle-st-nop-001830`\n\nfatal: bad revision 'HEAD'\n"
+      },
+      "log_paths": []
+    }
+  ],
+  "score": {
+    "total": 99.2,
+    "components": [
+      {
+        "name": "Requirement clarity",
+        "weight": 0.1,
+        "score": 1.0,
+        "rule": "min(1, #criteria/4) x share of criteria traced to >=1 test"
+      },
+      {
+        "name": "Requirement test coverage",
+        "weight": 0.1,
+        "score": 1.0,
+        "rule": "share of acceptance criteria with at least one hidden test"
+      },
+      {
+        "name": "Repository compatibility",
+        "weight": 0.1,
+        "score": 1.0,
+        "rule": "baseline suite healthy and stable in the task environment"
+      },
+      {
+        "name": "Negative control",
+        "weight": 0.15,
+        "score": 1.0,
+        "rule": "every hidden feature test fails on the original code"
+      },
+      {
+        "name": "Reference success",
+        "weight": 0.15,
+        "score": 1.0,
+        "rule": "every hidden feature test passes with the reference"
+      },
+      {
+        "name": "Regression safety",
+        "weight": 0.15,
+        "score": 1.0,
+        "rule": "all baseline-passing original tests still pass with the reference"
+      },
+      {
+        "name": "Mutation evidence",
+        "weight": 0.15,
+        "score": 0.948,
+        "rule": "mean kill rate of diff-scoped AST mutants and semantic mutants"
+      },
+      {
+        "name": "Reproducibility",
+        "weight": 0.1,
+        "score": 1.0,
+        "rule": "identical results across repeated reference runs"
+      }
+    ],
+    "disclaimer": "Heuristic quality score. Proof of validity comes from the executed gates, not this number."
+  },
+  "final_validity_status": "valid",
+  "rejection_reasons": [],
+  "attempts": [
+    {
+      "attempt": 1,
+      "gates": {
+        "positive_control": "passed",
+        "negative_control": "passed",
+        "regression": "passed",
+        "stability": "passed"
+      },
+      "independence_errors": []
+    },
+    {
+      "strengthen_round": 1,
+      "survivors": 2,
+      "adopted": false,
+      "gates": {
+        "positive_control": "passed",
+        "negative_control": "failed",
+        "regression": "passed",
+        "stability": "passed"
+      },
+      "reason": "strengthened tests failed a control; kept the previous tests"
+    }
+  ],
+  "validation_logs": [],
+  "timestamp": "2026-11-20T00:17:50.983823+00:00"
+}

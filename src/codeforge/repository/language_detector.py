@@ -35,7 +35,8 @@ def detect_languages(root: Path, files: list[str]) -> dict[str, int]:
         if not lang:
             continue
         try:
-            counts[lang] += sum(1 for _ in open(root / rel, encoding="utf-8", errors="ignore"))
+            with open(root / rel, encoding="utf-8", errors="ignore") as fh:
+                counts[lang] += sum(1 for _ in fh)
         except OSError:
             continue
     return dict(counts.most_common())

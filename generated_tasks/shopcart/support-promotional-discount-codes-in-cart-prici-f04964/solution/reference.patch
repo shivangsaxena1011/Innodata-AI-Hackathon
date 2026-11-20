@@ -1,0 +1,106 @@
+--- a/shopcart/__init__.py
++++ b/shopcart/__init__.py
+@@ -4,18 +4,20 @@
+ from shopcart.catalog import Catalog, Product
+ from shopcart.inventory import Inventory, InventoryError
+ from shopcart.orders import Order, OrderError, OrderStatus
+-from shopcart.pricing import PricingPolicy, Totals, compute_totals
++from shopcart.pricing import DiscountCoupon, PricingError, PricingPolicy, Totals, compute_totals
+ 
+ __all__ = [
+     "Cart",
+     "CartError",
+     "Catalog",
++    "DiscountCoupon",
+     "Inventory",
+     "InventoryError",
+     "LineItem",
+     "Order",
+     "OrderError",
+     "OrderStatus",
++    "PricingError",
+     "PricingPolicy",
+     "Product",
+     "Totals",
+--- a/shopcart/pricing.py
++++ b/shopcart/pricing.py
+@@ -7,6 +7,23 @@
+ 
+ from shopcart.cart import Cart
+ from shopcart.money import percent_of, to_money
++
++
++class PricingError(Exception):
++    """Raised when pricing operations fail."""
++
++
++@dataclass(frozen=True)
++class DiscountCoupon:
++    code: str
++    discount_percent: Decimal = Decimal('0')
++    fixed_amount: Decimal = Decimal('0')
++    min_subtotal: Decimal = Decimal('0')
++
++    def __post_init__(self) -> None:
++        object.__setattr__(self, "discount_percent", Decimal(str(self.discount_percent)))
++        object.__setattr__(self, "fixed_amount", Decimal(str(self.fixed_amount)))
++        object.__setattr__(self, "min_subtotal", Decimal(str(self.min_subtotal)))
+ 
+ 
+ @dataclass(frozen=True)
+@@ -25,9 +42,15 @@
+ @dataclass(frozen=True)
+ class Totals:
+     subtotal: Decimal
+-    tax: Decimal
+-    shipping: Decimal
+-    total: Decimal
++    discount: Decimal = Decimal('0.00')
++    tax: Decimal = Decimal('0.00')
++    shipping: Decimal = Decimal('0.00')
++    total: Decimal = Decimal('0.00')
++
++    def __post_init__(self) -> None:
++        calculated_total = to_money(self.subtotal - self.discount + self.tax + self.shipping)
++        if self.total != calculated_total:
++            object.__setattr__(self, "total", calculated_total)
+ 
+ 
+ def compute_tax(cart: Cart, policy: PricingPolicy) -> Decimal:
+@@ -45,9 +68,33 @@
+     return to_money(policy.flat_shipping)
+ 
+ 
+-def compute_totals(cart: Cart, policy: PricingPolicy | None = None) -> Totals:
++def compute_totals(
++    cart: Cart,
++    policy: PricingPolicy | None = None,
++    coupon: DiscountCoupon | None = None,
++) -> Totals:
+     policy = policy or PricingPolicy()
+     subtotal = cart.subtotal
+-    tax = compute_tax(cart, policy)
++
++    if coupon is not None:
++        if subtotal < coupon.min_subtotal:
++            raise PricingError(f"cart subtotal {subtotal} does not meet coupon minimum {coupon.min_subtotal}")
++        raw_discount = percent_of(subtotal, coupon.discount_percent) + to_money(coupon.fixed_amount)
++        discount = min(raw_discount, subtotal)
++    else:
++        discount = Decimal("0.00")
++
++    if subtotal == Decimal("0.00") or discount == subtotal:
++        tax = Decimal("0.00")
++    else:
++        line_taxes = []
++        factor = Decimal("1") - (discount / subtotal)
++        for line in cart.lines:
++            discounted_line_base = line.line_total * factor
++            line_tax = percent_of(discounted_line_base, policy.tax_rate_for(line.product.category))
++            line_taxes.append(line_tax)
++        tax = to_money(sum(line_taxes))
++
+     shipping = compute_shipping(cart, policy)
+-    return Totals(subtotal, tax, shipping, to_money(subtotal + tax + shipping))
++    total = to_money(subtotal - discount + tax + shipping)
++    return Totals(subtotal=subtotal, discount=discount, tax=tax, shipping=shipping, total=total)

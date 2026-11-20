@@ -27,8 +27,8 @@ def redact(text: str) -> str:
 class RedactingFilter(logging.Filter):
     def filter(self, record: logging.LogRecord) -> bool:
         record.msg = redact(str(record.msg))
-        if record.args:
-            record.args = tuple(redact(str(a)) for a in record.args)
+        if isinstance(record.args, tuple):
+            record.args = tuple(redact(a) if isinstance(a, str) else a for a in record.args)
         return True
 
 

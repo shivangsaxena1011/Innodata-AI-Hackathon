@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="5" time="0.026" timestamp="2026-11-20T00:20:59.217863+00:00" hostname="730bc3bfb1ff"><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_generate_report_empty_inventory" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_generate_report_correct_sums" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_sku_breakdown_details" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_missing_catalog_sku_valuation" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_total_valuation_quantization" time="0.000"><failure message="AssertionError: assert Decimal('-3.99') == Decimal('3.99')&#10; +  where Decimal('-3.99') = InventoryReport(total_on_hand=3, total_reserved=0, total_available=3, total_valuation=Decimal('-3.99'), sku_breakdown={'SKU-1': {'on_hand': 3, 'reserved': 0, 'available': 3, 'valuation': Decimal('3.99')}}).total_valuation&#10; +  and   Decimal('3.99') = Decimal('3.99')">def test_total_valuation_quantization():
+        """AC5: total_valuation is correctly quantized to two decimal places."""
+        inventory = Inventory()
+        catalog = Catalog()
+    
+        # 3 items at 1.333 (will be rounded to 1.33 by Product constructor)
+        # 1.33 * 3 = 3.99
+        catalog.add(Product("SKU-1", "P1", Decimal("1.333"), "cat"))
+        inventory.restock("SKU-1", 3)
+    
+        report = generate_inventory_report(inventory, catalog)
+    
+        # Product constructor uses to_money, so price is 1.33.
+        # Valuation per SKU: 1.33 * 3 = 3.99.
+&gt;       assert report.total_valuation == Decimal("3.99")
+E       AssertionError: assert Decimal('-3.99') == Decimal('3.99')
+E        +  where Decimal('-3.99') = InventoryReport(total_on_hand=3, total_reserved=0, total_available=3, total_valuation=Decimal('-3.99'), sku_breakdown={'SKU-1': {'on_hand': 3, 'reserved': 0, 'available': 3, 'valuation': Decimal('3.99')}}).total_valuation
+E        +  and   Decimal('3.99') = Decimal('3.99')
+
+tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py:91: AssertionError</failure></testcase></testsuite></testsuites>

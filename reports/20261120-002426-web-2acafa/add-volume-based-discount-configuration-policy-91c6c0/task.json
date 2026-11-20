@@ -1,0 +1,272 @@
+{
+  "task_id": "add-volume-based-discount-configuration-policy-91c6c0",
+  "title": "Add volume-based discount configuration policy",
+  "archetype": "configuration_policy",
+  "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+  "repository_url": "file:///C:/Users/Project/Innodata%20AI%20Hackathon/workspace/samples/shopcart",
+  "spec": {
+    "task_id": "add-volume-based-discount-configuration-policy-91c6c0",
+    "title": "Add volume-based discount configuration policy",
+    "archetype": "configuration_policy",
+    "summary": "Introduce a VolumeDiscountPolicy class that extends the existing pricing logic to allow bulk discounts. This policy will support multiple quantity tiers and apply the highest applicable discount to line items, rounding results to the nearest cent.",
+    "background": "Wholesale customers frequently purchase items in bulk and expect price breaks based on volume. The current system calculates subtotal as a simple sum of (price * quantity), which makes it impossible to offer incentives for larger orders.",
+    "requirements": [
+      "Create a new class VolumeDiscountPolicy that inherits from PricingPolicy in shopcart/pricing.py.",
+      "Implement an add_tier(min_quantity: int, discount_percent: Decimal | int | str) method to register discount thresholds.",
+      "The policy must apply the highest applicable discount tier for a given line item quantity. For example, if tiers exist for 5 and 10 units, a quantity of 12 should receive the 10% discount.",
+      "Update compute_tax to use the discounted line item totals when calculating taxes.",
+      "Update compute_totals to respect the new VolumeDiscountPolicy if provided as the policy argument.",
+      "All discounted amounts must be rounded to the nearest cent using the existing shopcart.money.to_money utility.",
+      "Discount calculation must use the logic: discounted_total = to_money(original_total * (1 - discount_percent / 100))."
+    ],
+    "acceptance_criteria": [
+      {
+        "id": "AC1",
+        "text": "Given a VolumeDiscountPolicy with a tier (10 units, 10% discount), a cart with 10 units of a $10.00 item results in a subtotal of $90.00."
+      },
+      {
+        "id": "AC2",
+        "text": "Given a VolumeDiscountPolicy with tiers (5 units, 5%) and (10 units, 10%), a cart with 12 units of a $10.00 item results in a subtotal of $108.00 (10% off $120.00)."
+      },
+      {
+        "id": "AC3",
+        "text": "Given a VolumeDiscountPolicy with a tier (10 units, 10%), a cart with 9 units of a $10.00 item results in a subtotal of $90.00 (no discount applied)."
+      },
+      {
+        "id": "AC4",
+        "text": "Tax is calculated based on the discounted price. If a $100.00 line item is discounted to $90.00 and the tax rate is 10%, the tax is $9.00."
+      },
+      {
+        "id": "AC5",
+        "text": "Free shipping thresholds are evaluated against the discounted subtotal."
+      }
+    ],
+    "contract": [
+      {
+        "kind": "class",
+        "module": "shopcart.pricing",
+        "name": "VolumeDiscountPolicy",
+        "signature": "class VolumeDiscountPolicy(PricingPolicy):",
+        "behaviour": "A pricing policy that maintains a list of volume-based discount tiers and applies them to cart line items."
+      },
+      {
+        "kind": "method",
+        "module": "shopcart.pricing",
+        "name": "VolumeDiscountPolicy.add_tier",
+        "signature": "def add_tier(self, min_quantity: int, discount_percent: Decimal | int | str) -> None:",
+        "behaviour": "Adds a discount tier. Higher min_quantity values overwrite or take precedence over lower ones when both are met."
+      },
+      {
+        "kind": "method",
+        "module": "shopcart.pricing",
+        "name": "VolumeDiscountPolicy.calculate_discounted_line_total",
+        "signature": "def calculate_discounted_line_total(self, line: LineItem) -> Decimal:",
+        "behaviour": "Returns the discounted total for a line item based on its quantity and the applicable tiers, rounded to money."
+      }
+    ],
+    "edge_cases": [
+      "Quantity exactly matching a threshold applies that threshold's discount.",
+      "Multiple tiers with the same threshold: the last one added should be used.",
+      "Tiers added in non-sequential order (e.g., 10 added before 5) must still correctly apply the highest met threshold.",
+      "Empty tier list results in standard pricing (0% discount).",
+      "A tier with 0% discount behaves as no discount."
+    ],
+    "error_handling": [
+      "add_tier should raise ValueError if min_quantity is less than 1.",
+      "add_tier should raise ValueError if discount_percent is negative or greater than 100."
+    ],
+    "constraints": [
+      "Do not modify shopcart/cart.py; the pricing logic must reside within the pricing module to keep the Cart model clean.",
+      "No new third-party dependencies.",
+      "Ensure compatibility with existing PricingPolicy usage in Order.place."
+    ],
+    "interactions": [
+      "The compute_totals function in shopcart/pricing.py must be updated to use the discount logic if the passed policy is an instance of VolumeDiscountPolicy.",
+      "Tax calculations in compute_tax must use the discounted line total rather than line.line_total if a discount applies."
+    ],
+    "out_of_scope": [
+      "Discounts targeting specific product SKUs or categories.",
+      "Coupons or fixed-amount discounts.",
+      "Persistent storage for policies."
+    ],
+    "difficulty": "medium",
+    "estimated_minutes": 45,
+    "relevant_files": [
+      "shopcart/pricing.py",
+      "shopcart/money.py"
+    ]
+  },
+  "instruction": "# Add volume-based discount configuration policy\n\nIntroduce a VolumeDiscountPolicy class that extends the existing pricing logic to allow bulk discounts. This policy will support multiple quantity tiers and apply the highest applicable discount to line items, rounding results to the nearest cent.\n\n## Background\nWholesale customers frequently purchase items in bulk and expect price breaks based on volume. The current system calculates subtotal as a simple sum of (price * quantity), which makes it impossible to offer incentives for larger orders.\n\n## Requirements\n1. Create a new class VolumeDiscountPolicy that inherits from PricingPolicy in shopcart/pricing.py.\n2. Implement an add_tier(min_quantity: int, discount_percent: Decimal | int | str) method to register discount thresholds.\n3. The policy must apply the highest applicable discount tier for a given line item quantity. For example, if tiers exist for 5 and 10 units, a quantity of 12 should receive the 10% discount.\n4. Update compute_tax to use the discounted line item totals when calculating taxes.\n5. Update compute_totals to respect the new VolumeDiscountPolicy if provided as the policy argument.\n6. All discounted amounts must be rounded to the nearest cent using the existing shopcart.money.to_money utility.\n7. Discount calculation must use the logic: discounted_total = to_money(original_total * (1 - discount_percent / 100)).\n\n## Acceptance criteria\n- **AC1**: Given a VolumeDiscountPolicy with a tier (10 units, 10% discount), a cart with 10 units of a $10.00 item results in a subtotal of $90.00.\n- **AC2**: Given a VolumeDiscountPolicy with tiers (5 units, 5%) and (10 units, 10%), a cart with 12 units of a $10.00 item results in a subtotal of $108.00 (10% off $120.00).\n- **AC3**: Given a VolumeDiscountPolicy with a tier (10 units, 10%), a cart with 9 units of a $10.00 item results in a subtotal of $90.00 (no discount applied).\n- **AC4**: Tax is calculated based on the discounted price. If a $100.00 line item is discounted to $90.00 and the tax rate is 10%, the tax is $9.00.\n- **AC5**: Free shipping thresholds are evaluated against the discounted subtotal.\n\n## Interface contract\nImplement exactly these public names; automated checks use them.\n\n- `shopcart.pricing` → **class** `class VolumeDiscountPolicy(PricingPolicy):`  \n  A pricing policy that maintains a list of volume-based discount tiers and applies them to cart line items.\n- `shopcart.pricing` → **method** `def add_tier(self, min_quantity: int, discount_percent: Decimal | int | str) -> None:`  \n  Adds a discount tier. Higher min_quantity values overwrite or take precedence over lower ones when both are met.\n- `shopcart.pricing` → **method** `def calculate_discounted_line_total(self, line: LineItem) -> Decimal:`  \n  Returns the discounted total for a line item based on its quantity and the applicable tiers, rounded to money.\n\n## Edge cases\n- Quantity exactly matching a threshold applies that threshold's discount.\n- Multiple tiers with the same threshold: the last one added should be used.\n- Tiers added in non-sequential order (e.g., 10 added before 5) must still correctly apply the highest met threshold.\n- Empty tier list results in standard pricing (0% discount).\n- A tier with 0% discount behaves as no discount.\n\n## Error handling\n- add_tier should raise ValueError if min_quantity is less than 1.\n- add_tier should raise ValueError if discount_percent is negative or greater than 100.\n\n## Interaction with existing behaviour\n- The compute_totals function in shopcart/pricing.py must be updated to use the discount logic if the passed policy is an instance of VolumeDiscountPolicy.\n- Tax calculations in compute_tax must use the discounted line total rather than line.line_total if a discount applies.\n\n## Constraints\n- Do not modify shopcart/cart.py; the pricing logic must reside within the pricing module to keep the Cart model clean.\n- No new third-party dependencies.\n- Ensure compatibility with existing PricingPolicy usage in Order.place.\n- Do not modify or delete existing tests.\n- Do not add new third-party dependencies.\n- Keep all existing behaviour working.\n\n## Out of scope\n- Discounts targeting specific product SKUs or categories.\n- Coupons or fixed-amount discounts.\n- Persistent storage for policies.\n\n## Environment\nThe repository (python) is in the current working directory. You may run the existing test suite to check your work.\n",
+  "reference": {
+    "explanation": "I have implemented the `VolumeDiscountPolicy` in `shopcart/pricing.py`, inheriting from `PricingPolicy`. This new policy manages quantity-based discount tiers and calculates discounted line totals. I updated `compute_tax` and `compute_totals` to check if the policy provides specialized line total logic, ensuring that volume discounts are correctly factored into taxes, subtotals, and shipping thresholds while maintaining backward compatibility with the base `PricingPolicy`.",
+    "changes": [
+      {
+        "path": "shopcart/pricing.py",
+        "action": "modify",
+        "before_sha256": "d6692d7b2c64d06733d0b225492f72d06338849a96807c545c4f2a01f4f93b65",
+        "content": "\"\"\"Tax and shipping calculation for a cart.\"\"\"\n\nfrom __future__ import annotations\n\nfrom dataclasses import dataclass, field\nfrom decimal import Decimal\nfrom typing import Any\n\nfrom shopcart.cart import Cart, LineItem\nfrom shopcart.money import percent_of, to_money\n\n\n@dataclass(frozen=True)\nclass PricingPolicy:\n    \"\"\"Tax rates are percentages per product category; `default_tax_rate` covers the rest.\"\"\"\n\n    default_tax_rate: Decimal = Decimal(\"8\")\n    category_tax_rates: dict[str, Decimal] = field(default_factory=dict)\n    flat_shipping: Decimal = Decimal(\"5.99\")\n    free_shipping_threshold: Decimal = Decimal(\"50.00\")\n\n    def tax_rate_for(self, category: str) -> Decimal:\n        return Decimal(self.category_tax_rates.get(category, self.default_tax_rate))\n\n\nclass VolumeDiscountPolicy(PricingPolicy):\n    def __init__(self, *args: Any, **kwargs: Any) -> None:\n        super().__init__(*args, **kwargs)\n        self._tiers: dict[int, Decimal] = {}\n\n    def add_tier(self, min_quantity: int, discount_percent: Decimal | int | str) -> None:\n        if min_quantity < 1:\n            raise ValueError(\"min_quantity must be at least 1\")\n        percent = Decimal(discount_percent)\n        if percent < 0 or percent > 100:\n            raise ValueError(\"discount_percent must be between 0 and 100\")\n        self._tiers[min_quantity] = percent\n\n    def calculate_discounted_line_total(self, line: LineItem) -> Decimal:\n        applicable_discount = Decimal(\"0\")\n        # Sort tiers to find the highest threshold met by the quantity\n        for min_qty in sorted(self._tiers.keys()):\n            if line.quantity >= min_qty:\n                applicable_discount = self._tiers[min_qty]\n        \n        original_total = line.line_total\n        if applicable_discount == 0:\n            return original_total\n            \n        multiplier = (Decimal(\"100\") - applicable_discount) / Decimal(\"100\")\n        return to_money(original_total * multiplier)\n\n\n@dataclass(frozen=True)\nclass Totals:\n    subtotal: Decimal\n    tax: Decimal\n    shipping: Decimal\n    total: Decimal\n\n\ndef compute_tax(cart: Cart, policy: PricingPolicy) -> Decimal:\n    tax = Decimal(\"0\")\n    for line in cart.lines:\n        line_total = line.line_total\n        if isinstance(policy, VolumeDiscountPolicy):\n            line_total = policy.calculate_discounted_line_total(line)\n        tax += percent_of(line_total, policy.tax_rate_for(line.product.category))\n    return to_money(tax)\n\n\ndef compute_shipping(cart: Cart, policy: PricingPolicy) -> Decimal:\n    if cart.is_empty():\n        return Decimal(\"0.00\")\n\n    subtotal = cart.subtotal\n    if isinstance(policy, VolumeDiscountPolicy):\n        subtotal = sum(\n            (policy.calculate_discounted_line_total(line) for line in cart.lines),\n            Decimal(\"0\"),\n        )\n\n    if subtotal >= policy.free_shipping_threshold:\n        return Decimal(\"0.00\")\n    return to_money(policy.flat_shipping)\n\n\ndef compute_totals(cart: Cart, policy: PricingPolicy | None = None) -> Totals:\n    policy = policy or PricingPolicy()\n    if isinstance(policy, VolumeDiscountPolicy):\n        subtotal = to_money(\n            sum(\n                (policy.calculate_discounted_line_total(line) for line in cart.lines),\n                Decimal(\"0\"),\n            )\n        )\n    else:\n        subtotal = cart.subtotal\n\n    tax = compute_tax(cart, policy)\n    shipping = compute_shipping(cart, policy)\n    return Totals(subtotal, tax, shipping, to_money(subtotal + tax + shipping))\n"
+      }
+    ],
+    "unified_diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -4,8 +4,9 @@\n \n from dataclasses import dataclass, field\n from decimal import Decimal\n+from typing import Any\n \n-from shopcart.cart import Cart\n+from shopcart.cart import Cart, LineItem\n from shopcart.money import percent_of, to_money\n \n \n@@ -22,6 +23,34 @@\n         return Decimal(self.category_tax_rates.get(category, self.default_tax_rate))\n \n \n+class VolumeDiscountPolicy(PricingPolicy):\n+    def __init__(self, *args: Any, **kwargs: Any) -> None:\n+        super().__init__(*args, **kwargs)\n+        self._tiers: dict[int, Decimal] = {}\n+\n+    def add_tier(self, min_quantity: int, discount_percent: Decimal | int | str) -> None:\n+        if min_quantity < 1:\n+            raise ValueError(\"min_quantity must be at least 1\")\n+        percent = Decimal(discount_percent)\n+        if percent < 0 or percent > 100:\n+            raise ValueError(\"discount_percent must be between 0 and 100\")\n+        self._tiers[min_quantity] = percent\n+\n+    def calculate_discounted_line_total(self, line: LineItem) -> Decimal:\n+        applicable_discount = Decimal(\"0\")\n+        # Sort tiers to find the highest threshold met by the quantity\n+        for min_qty in sorted(self._tiers.keys()):\n+            if line.quantity >= min_qty:\n+                applicable_discount = self._tiers[min_qty]\n+        \n+        original_total = line.line_total\n+        if applicable_discount == 0:\n+            return original_total\n+            \n+        multiplier = (Decimal(\"100\") - applicable_discount) / Decimal(\"100\")\n+        return to_money(original_total * multiplier)\n+\n+\n @dataclass(frozen=True)\n class Totals:\n     subtotal: Decimal\n@@ -33,21 +62,41 @@\n def compute_tax(cart: Cart, policy: PricingPolicy) -> Decimal:\n     tax = Decimal(\"0\")\n     for line in cart.lines:\n-        tax += percent_of(line.line_total, policy.tax_rate_for(line.product.category))\n+        line_total = line.line_total\n+        if isinstance(policy, VolumeDiscountPolicy):\n+            line_total = policy.calculate_discounted_line_total(line)\n+        tax += percent_of(line_total, policy.tax_rate_for(line.product.category))\n     return to_money(tax)\n \n \n def compute_shipping(cart: Cart, policy: PricingPolicy) -> Decimal:\n     if cart.is_empty():\n         return Decimal(\"0.00\")\n-    if cart.subtotal >= policy.free_shipping_threshold:\n+\n+    subtotal = cart.subtotal\n+    if isinstance(policy, VolumeDiscountPolicy):\n+        subtotal = sum(\n+            (policy.calculate_discounted_line_total(line) for line in cart.lines),\n+            Decimal(\"0\"),\n+        )\n+\n+    if subtotal >= policy.free_shipping_threshold:\n         return Decimal(\"0.00\")\n     return to_money(policy.flat_shipping)\n \n \n def compute_totals(cart: Cart, policy: PricingPolicy | None = None) -> Totals:\n     policy = policy or PricingPolicy()\n-    subtotal = cart.subtotal\n+    if isinstance(policy, VolumeDiscountPolicy):\n+        subtotal = to_money(\n+            sum(\n+                (policy.calculate_discounted_line_total(line) for line in cart.lines),\n+                Decimal(\"0\"),\n+            )\n+        )\n+    else:\n+        subtotal = cart.subtotal\n+\n     tax = compute_tax(cart, policy)\n     shipping = compute_shipping(cart, policy)\n     return Totals(subtotal, tax, shipping, to_money(subtotal + tax + shipping))\n"
+  },
+  "feature_test_files": [
+    {
+      "path": "tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py",
+      "content": "import pytest\nfrom decimal import Decimal\nfrom shopcart.catalog import Catalog, Product\nfrom shopcart.cart import Cart\nfrom shopcart.pricing import VolumeDiscountPolicy, compute_totals, compute_tax\nfrom shopcart.money import to_money\n\ndef setup_cart_and_policy():\n    catalog = Catalog()\n    product = Product(\"SKU-1\", \"Test Item\", Decimal(\"10.00\"), \"misc\")\n    catalog.add(product)\n    cart = Cart(catalog)\n    policy = VolumeDiscountPolicy()\n    return cart, policy, product\n\ndef test_ac1_exact_tier_match():\n    \"\"\"Given a VolumeDiscountPolicy with a tier (10 units, 10% discount), 10 units of a $10.00 item results in a subtotal of $90.00.\"\"\"\n    cart, policy, _ = setup_cart_and_policy()\n    policy.add_tier(10, 10)\n    cart.add_item(\"SKU-1\", 10)\n    \n    totals = compute_totals(cart, policy)\n    # 10 * 10 = 100. 100 * (1 - 0.10) = 90.00\n    assert totals.subtotal == Decimal(\"90.00\")\n\ndef test_ac2_highest_applicable_tier():\n    \"\"\"Given tiers (5 units, 5%) and (10 units, 10%), a cart with 12 units of a $10.00 item results in a subtotal of $108.00.\"\"\"\n    cart, policy, _ = setup_cart_and_policy()\n    policy.add_tier(5, 5)\n    policy.add_tier(10, 10)\n    cart.add_item(\"SKU-1\", 12)\n    \n    totals = compute_totals(cart, policy)\n    # 12 * 10 = 120. 120 * (1 - 0.10) = 108.00\n    assert totals.subtotal == Decimal(\"108.00\")\n\ndef test_ac3_below_tier_no_discount():\n    \"\"\"Given a VolumeDiscountPolicy with a tier (10 units, 10%), a cart with 9 units of a $10.00 item results in a subtotal of $90.00 (no discount applied).\"\"\"\n    cart, policy, _ = setup_cart_and_policy()\n    policy.add_tier(10, 10)\n    cart.add_item(\"SKU-1\", 9)\n    \n    totals = compute_totals(cart, policy)\n    # 9 * 10 = 90.00\n    assert totals.subtotal == Decimal(\"90.00\")\n\ndef test_ac4_tax_calculated_on_discounted_price():\n    \"\"\"Tax is calculated based on the discounted price. If a $100.00 line item is discounted to $90.00 and the tax rate is 10%, the tax is $9.00.\"\"\"\n    catalog = Catalog()\n    product = Product(\"SKU-100\", \"Big Item\", Decimal(\"100.00\"), \"misc\")\n    catalog.add(product)\n    cart = Cart(catalog)\n    cart.add_item(\"SKU-100\", 1)\n    \n    policy = VolumeDiscountPolicy(default_tax_rate=Decimal(\"10\"))\n    policy.add_tier(1, 10)\n    \n    tax = compute_tax(cart, policy)\n    # Discounted total = 90.00. 10% of 90.00 = 9.00\n    assert tax == Decimal(\"9.00\")\n\ndef test_ac5_shipping_on_discounted_subtotal():\n    \"\"\"Free shipping thresholds are evaluated against the discounted subtotal.\"\"\"\n    # Threshold 50.00. 5 units * 10.00 = 50.00. 10% discount = 45.00.\n    # 45.00 < 50.00, so shipping is applied.\n    cart, policy, _ = setup_cart_and_policy()\n    policy.add_tier(5, 10)\n    cart.add_item(\"SKU-1\", 5)\n    \n    totals = compute_totals(cart, policy)\n    assert totals.subtotal == Decimal(\"45.00\")\n    assert totals.shipping == Decimal(\"5.99\")\n\ndef test_shipping_at_threshold_boundary():\n    \"\"\"Ensure shipping is free exactly at the threshold with discount.\"\"\"\n    # Product price 10.00, quantity 10 = 100.00. 50% discount = 50.00.\n    # Free shipping threshold is 50.00. GtE 50.00 should be free.\n    cart, policy, _ = setup_cart_and_policy()\n    policy.add_tier(10, 50)\n    cart.add_item(\"SKU-1\", 10)\n    \n    totals = compute_totals(cart, policy)\n    assert totals.subtotal == Decimal(\"50.00\")\n    assert totals.shipping == Decimal(\"0.00\")\n\ndef test_discount_rounding_half_up():\n    \"\"\"Discounted amounts must be rounded to nearest cent.\"\"\"\n    # 1 item of $10.00, discount 12.51%. \n    # 10.00 * (1 - 0.1251) = 8.749. Rounding half-up to cents = 8.75.\n    catalog = Catalog()\n    catalog.add(Product(\"SKU-1\", \"Test\", Decimal(\"10.00\"), \"misc\"))\n    cart = Cart(catalog)\n    cart.add_item(\"SKU-1\", 1)\n    policy = VolumeDiscountPolicy()\n    policy.add_tier(1, \"12.51\")\n    \n    assert policy.calculate_discounted_line_total(cart.lines[0]) == Decimal(\"8.75\")\n\ndef test_empty_subtotal_with_volume_policy():\n    \"\"\"Ensure compute_totals does not initialize subtotal/tax at 1.00 when cart is empty.\"\"\"\n    catalog = Catalog()\n    cart = Cart(catalog)\n    policy = VolumeDiscountPolicy()\n    totals = compute_totals(cart, policy)\n    assert totals.subtotal == Decimal(\"0.00\")\n    assert totals.tax == Decimal(\"0.00\")\n\ndef test_edge_case_duplicate_threshold_last_wins():\n    \"\"\"Multiple tiers with the same threshold: the last one added should be used.\"\"\"\n    cart, policy, _ = setup_cart_and_policy()\n    policy.add_tier(5, 10)\n    policy.add_tier(5, 20)\n    cart.add_item(\"SKU-1\", 5)\n    \n    # 50.00 * 0.8 = 40.00\n    assert policy.calculate_discounted_line_total(cart.lines[0]) == Decimal(\"40.00\")\n\ndef test_edge_case_non_sequential_tiers():\n    \"\"\"Tiers added in non-sequential order must still apply highest met threshold.\"\"\"\n    cart, policy, _ = setup_cart_and_policy()\n    policy.add_tier(10, 20)\n    policy.add_tier(5, 10)\n    cart.add_item(\"SKU-1\", 12)\n    \n    # 12 * 10 = 120. 120 * 0.8 = 96.00\n    assert policy.calculate_discounted_line_total(cart.lines[0]) == Decimal(\"96.00\")\n\ndef test_error_invalid_min_quantity():\n    policy = VolumeDiscountPolicy()\n    with pytest.raises(ValueError):\n        policy.add_tier(0, 10)\n\ndef test_error_invalid_discount_percent():\n    policy = VolumeDiscountPolicy()\n    with pytest.raises(ValueError):\n        policy.add_tier(1, -1)\n    with pytest.raises(ValueError):\n        policy.add_tier(1, 100.01)\n\ndef test_exact_100_percent_discount_allowed():\n    \"\"\"Discount of exactly 100% is valid.\"\"\"\n    policy = VolumeDiscountPolicy()\n    policy.add_tier(1, 100)\n    catalog = Catalog()\n    catalog.add(Product(\"SKU-1\", \"Test\", Decimal(\"10.00\"), \"misc\"))\n    cart = Cart(catalog)\n    cart.add_item(\"SKU-1\", 1)\n    assert policy.calculate_discounted_line_total(cart.lines[0]) == Decimal(\"0.00\")"
+    }
+  ],
+  "feature_test_ids": [
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac1_exact_tier_match",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac2_highest_applicable_tier",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac3_below_tier_no_discount",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac4_tax_calculated_on_discounted_price",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_ac5_shipping_on_discounted_subtotal",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_discount_rounding_half_up",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_edge_case_duplicate_threshold_last_wins",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_edge_case_non_sequential_tiers",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_empty_subtotal_with_volume_policy",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_discount_percent",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_error_invalid_min_quantity",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_exact_100_percent_discount_allowed",
+    "tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0::test_shipping_at_threshold_boundary"
+  ],
+  "regression_test_ids": [
+    "tests.test_cart::test_add_and_subtotal",
+    "tests.test_cart::test_adding_same_sku_merges_lines",
+    "tests.test_cart::test_lines_sorted_by_sku",
+    "tests.test_cart::test_quantity_limit",
+    "tests.test_cart::test_quantity_must_be_positive",
+    "tests.test_cart::test_update_and_remove",
+    "tests.test_catalog::test_duplicate_sku_rejected",
+    "tests.test_catalog::test_lookup_and_category",
+    "tests.test_catalog::test_negative_price_rejected",
+    "tests.test_catalog::test_product_price_is_rounded",
+    "tests.test_catalog::test_search_is_case_insensitive",
+    "tests.test_catalog::test_unknown_sku",
+    "tests.test_inventory::test_commit_reduces_on_hand",
+    "tests.test_inventory::test_over_reserve_fails",
+    "tests.test_inventory::test_release_more_than_held_fails",
+    "tests.test_inventory::test_restock_and_reserve",
+    "tests.test_inventory::test_restock_requires_positive_quantity",
+    "tests.test_orders::test_cancel_releases_stock",
+    "tests.test_orders::test_failed_reservation_rolls_back",
+    "tests.test_orders::test_pay_ship_flow",
+    "tests.test_orders::test_place_empty_cart_fails",
+    "tests.test_orders::test_place_reserves_stock",
+    "tests.test_orders::test_wrong_payment_amount",
+    "tests.test_pricing::test_category_tax_rates",
+    "tests.test_pricing::test_default_tax_and_flat_shipping",
+    "tests.test_pricing::test_empty_cart_totals",
+    "tests.test_pricing::test_free_shipping_at_threshold"
+  ],
+  "traceability": [
+    {
+      "test_name": "test_ac1_exact_tier_match",
+      "criteria": [
+        "AC1"
+      ]
+    },
+    {
+      "test_name": "test_ac2_highest_applicable_tier",
+      "criteria": [
+        "AC2"
+      ]
+    },
+    {
+      "test_name": "test_ac3_below_tier_no_discount",
+      "criteria": [
+        "AC3"
+      ]
+    },
+    {
+      "test_name": "test_ac4_tax_calculated_on_discounted_price",
+      "criteria": [
+        "AC4"
+      ]
+    },
+    {
+      "test_name": "test_ac5_shipping_on_discounted_subtotal",
+      "criteria": [
+        "AC5"
+      ]
+    },
+    {
+      "test_name": "test_shipping_at_threshold_boundary",
+      "criteria": [
+        "AC5"
+      ]
+    },
+    {
+      "test_name": "test_discount_rounding_half_up",
+      "criteria": [
+        "AC6"
+      ]
+    },
+    {
+      "test_name": "test_empty_subtotal_with_volume_policy",
+      "criteria": [
+        "AC7"
+      ]
+    },
+    {
+      "test_name": "test_edge_case_duplicate_threshold_last_wins",
+      "criteria": [
+        "AC3"
+      ]
+    },
+    {
+      "test_name": "test_edge_case_non_sequential_tiers",
+      "criteria": [
+        "AC3"
+      ]
+    },
+    {
+      "test_name": "test_error_invalid_min_quantity",
+      "criteria": [
+        "AC7"
+      ]
+    },
+    {
+      "test_name": "test_error_invalid_discount_percent",
+      "criteria": [
+        "AC7"
+      ]
+    },
+    {
+      "test_name": "test_exact_100_percent_discount_allowed",
+      "criteria": [
+        "AC7"
+      ]
+    }
+  ],
+  "generation_metadata": {
+    "model": "gemini/gemini-flash-latest",
+    "attempts": [
+      {
+        "stage": "apply_edits",
+        "ok": true,
+        "files": [
+          "shopcart/pricing.py"
+        ]
+      }
+    ],
+    "seed": 1337,
+    "llm_usage": {
+      "calls": 6,
+      "cached_calls": 0,
+      "prompt_tokens": 33221,
+      "completion_tokens": 11645,
+      "by_purpose": {
+        "feature_discovery": 1,
+        "task_spec": 1,
+        "feature_tests": 1,
+        "reference": 1,
+        "semantic_mutants": 1,
+        "feature_tests_repair": 1
+      },
+      "models": [
+        "gemini/gemini-3-flash-preview"
+      ]
+    }
+  }
+}

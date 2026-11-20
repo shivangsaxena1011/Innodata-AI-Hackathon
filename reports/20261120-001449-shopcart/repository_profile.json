@@ -1,0 +1,1938 @@
+{
+  "repository_name": "shopcart",
+  "repository_url": "file:///C:/Users/Project/Innodata%20AI%20Hackathon/workspace/samples/shopcart",
+  "local_path": "C:\\Users\\Project\\Innodata AI Hackathon\\workspace\\samples\\shopcart",
+  "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+  "branch": "main",
+  "primary_language": "python",
+  "detected_languages": {
+    "python": 579
+  },
+  "framework": null,
+  "runtime_version": ">=3.10",
+  "package_manager": "pip",
+  "dependency_files": {
+    "pyproject.toml": "9bcd2a6325a40014faa227e4c6cf57547dab41d8875bce4b9d409320ae01f6ab",
+    "requirements-dev.txt": "a0e201ecda2bc871726ea3bb5db9cfe6b2109f60d8da88eecf910b790794b03d"
+  },
+  "test_framework": "pytest",
+  "test_command": [
+    "bash",
+    "-lc",
+    "python -m pytest -p no:cacheprovider -q -o addopts='' --continue-on-collection-errors --junitxml=/cf/out/junit.xml tests"
+  ],
+  "build_command": [
+    "pip",
+    "install",
+    "-e",
+    "."
+  ],
+  "test_dirs": [
+    "tests"
+  ],
+  "source_dirs": [
+    "shopcart"
+  ],
+  "important_files": [
+    "shopcart/money.py",
+    "shopcart/catalog.py",
+    "shopcart/cart.py",
+    "shopcart/inventory.py",
+    "shopcart/pricing.py",
+    "shopcart/orders.py",
+    "shopcart/__init__.py"
+  ],
+  "repository_map": {
+    "files": [
+      {
+        "path": "shopcart/__init__.py",
+        "language": "python",
+        "lines": 24,
+        "sha256": "d0edfc28b716d6740d2f1be8e418c30dd71a358cb42e0113bf9ee60131ea2f63",
+        "is_test": false,
+        "syntax_errors": 0
+      },
+      {
+        "path": "shopcart/cart.py",
+        "language": "python",
+        "lines": 79,
+        "sha256": "1cce00fa186c25179420573e6525210bf44e9fbd517521453ec0b039f09df020",
+        "is_test": false,
+        "syntax_errors": 0
+      },
+      {
+        "path": "shopcart/catalog.py",
+        "language": "python",
+        "lines": 61,
+        "sha256": "d97e0d563b12c9ca980555bb02ecc3c2c428146fce51b3e11b3aac0c3c5bbf70",
+        "is_test": false,
+        "syntax_errors": 0
+      },
+      {
+        "path": "shopcart/inventory.py",
+        "language": "python",
+        "lines": 40,
+        "sha256": "0da644e129508cba10de9297eaab44dcc4dbca01f0feaa66c1ff9440268c50c0",
+        "is_test": false,
+        "syntax_errors": 0
+      },
+      {
+        "path": "shopcart/money.py",
+        "language": "python",
+        "lines": 20,
+        "sha256": "da61acafb5908cf57a8cc4021fc09f43a040671effd23cd58e6142752988b5c4",
+        "is_test": false,
+        "syntax_errors": 0
+      },
+      {
+        "path": "shopcart/orders.py",
+        "language": "python",
+        "lines": 84,
+        "sha256": "cd76eb4036f5f591ee8c9aa5af082bd67beccb469ddef4a2ef06484bc07d40c4",
+        "is_test": false,
+        "syntax_errors": 0
+      },
+      {
+        "path": "shopcart/pricing.py",
+        "language": "python",
+        "lines": 54,
+        "sha256": "d6692d7b2c64d06733d0b225492f72d06338849a96807c545c4f2a01f4f93b65",
+        "is_test": false,
+        "syntax_errors": 0
+      },
+      {
+        "path": "tests/conftest.py",
+        "language": "python",
+        "lines": 29,
+        "sha256": "22c7dccd8334aa99ed610386cafae775e462512b8bbd5b90aee05b0988869b12",
+        "is_test": true,
+        "syntax_errors": 0
+      },
+      {
+        "path": "tests/test_cart.py",
+        "language": "python",
+        "lines": 47,
+        "sha256": "bf4b31a653200a51aa7532e6bc6a3c23b8edbda33da863bffd400c0d9ee8015a",
+        "is_test": true,
+        "syntax_errors": 0
+      },
+      {
+        "path": "tests/test_catalog.py",
+        "language": "python",
+        "lines": 35,
+        "sha256": "732c39cdfe65cfee0ba81647c479cbdb062bb377a5e13d78905dc1eeb07212ed",
+        "is_test": true,
+        "syntax_errors": 0
+      },
+      {
+        "path": "tests/test_inventory.py",
+        "language": "python",
+        "lines": 39,
+        "sha256": "ca9ad047dc60805a86113d676cd2c372b0dbb798de257599f71a94be0fdae2b4",
+        "is_test": true,
+        "syntax_errors": 0
+      },
+      {
+        "path": "tests/test_orders.py",
+        "language": "python",
+        "lines": 49,
+        "sha256": "6a785d7b82b9eb065a6ddda8c5abbd765e9815780cc211491693779e74b83df1",
+        "is_test": true,
+        "syntax_errors": 0
+      },
+      {
+        "path": "tests/test_pricing.py",
+        "language": "python",
+        "lines": 31,
+        "sha256": "cd3905b81ac128e19b7c1c10c759659b00afcb6ec4b9f54f1da11ef521855e51",
+        "is_test": true,
+        "syntax_errors": 0
+      }
+    ],
+    "symbols": [
+      {
+        "name": "CartError",
+        "kind": "class",
+        "file": "shopcart/cart.py",
+        "line": 14,
+        "signature": "class CartError(Exception)",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "LineItem",
+        "kind": "class",
+        "file": "shopcart/cart.py",
+        "line": 19,
+        "signature": "class LineItem",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "line_total",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 24,
+        "signature": "def line_total(self) -> Decimal",
+        "parent": "LineItem",
+        "is_test": false
+      },
+      {
+        "name": "Cart",
+        "kind": "class",
+        "file": "shopcart/cart.py",
+        "line": 28,
+        "signature": "class Cart",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "__init__",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 29,
+        "signature": "def __init__(self, catalog: Catalog) -> None",
+        "parent": "Cart",
+        "is_test": false
+      },
+      {
+        "name": "lines",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 34,
+        "signature": "def lines(self) -> list[LineItem]",
+        "parent": "Cart",
+        "is_test": false
+      },
+      {
+        "name": "add_item",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 37,
+        "signature": "def add_item(self, sku: str, quantity: int = 1) -> LineItem",
+        "parent": "Cart",
+        "is_test": false
+      },
+      {
+        "name": "update_quantity",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 52,
+        "signature": "def update_quantity(self, sku: str, quantity: int) -> None",
+        "parent": "Cart",
+        "is_test": false
+      },
+      {
+        "name": "remove_item",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 62,
+        "signature": "def remove_item(self, sku: str) -> None",
+        "parent": "Cart",
+        "is_test": false
+      },
+      {
+        "name": "clear",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 66,
+        "signature": "def clear(self) -> None",
+        "parent": "Cart",
+        "is_test": false
+      },
+      {
+        "name": "subtotal",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 70,
+        "signature": "def subtotal(self) -> Decimal",
+        "parent": "Cart",
+        "is_test": false
+      },
+      {
+        "name": "total_items",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 74,
+        "signature": "def total_items(self) -> int",
+        "parent": "Cart",
+        "is_test": false
+      },
+      {
+        "name": "is_empty",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 77,
+        "signature": "def is_empty(self) -> bool",
+        "parent": "Cart",
+        "is_test": false
+      },
+      {
+        "name": "MAX_QUANTITY_PER_LINE",
+        "kind": "constant",
+        "file": "shopcart/cart.py",
+        "line": 11,
+        "signature": "MAX_QUANTITY_PER_LINE = 99",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "Product",
+        "kind": "class",
+        "file": "shopcart/catalog.py",
+        "line": 12,
+        "signature": "class Product",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "__post_init__",
+        "kind": "method",
+        "file": "shopcart/catalog.py",
+        "line": 19,
+        "signature": "def __post_init__(self) -> None",
+        "parent": "Product",
+        "is_test": false
+      },
+      {
+        "name": "Catalog",
+        "kind": "class",
+        "file": "shopcart/catalog.py",
+        "line": 28,
+        "signature": "class Catalog",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "__init__",
+        "kind": "method",
+        "file": "shopcart/catalog.py",
+        "line": 31,
+        "signature": "def __init__(self) -> None",
+        "parent": "Catalog",
+        "is_test": false
+      },
+      {
+        "name": "add",
+        "kind": "method",
+        "file": "shopcart/catalog.py",
+        "line": 34,
+        "signature": "def add(self, product: Product) -> None",
+        "parent": "Catalog",
+        "is_test": false
+      },
+      {
+        "name": "get",
+        "kind": "method",
+        "file": "shopcart/catalog.py",
+        "line": 39,
+        "signature": "def get(self, sku: str) -> Product",
+        "parent": "Catalog",
+        "is_test": false
+      },
+      {
+        "name": "by_category",
+        "kind": "method",
+        "file": "shopcart/catalog.py",
+        "line": 45,
+        "signature": "def by_category(self, category: str) -> list[Product]",
+        "parent": "Catalog",
+        "is_test": false
+      },
+      {
+        "name": "search",
+        "kind": "method",
+        "file": "shopcart/catalog.py",
+        "line": 50,
+        "signature": "def search(self, text: str) -> list[Product]",
+        "parent": "Catalog",
+        "is_test": false
+      },
+      {
+        "name": "__len__",
+        "kind": "method",
+        "file": "shopcart/catalog.py",
+        "line": 56,
+        "signature": "def __len__(self) -> int",
+        "parent": "Catalog",
+        "is_test": false
+      },
+      {
+        "name": "__contains__",
+        "kind": "method",
+        "file": "shopcart/catalog.py",
+        "line": 59,
+        "signature": "def __contains__(self, sku: object) -> bool",
+        "parent": "Catalog",
+        "is_test": false
+      },
+      {
+        "name": "InventoryError",
+        "kind": "class",
+        "file": "shopcart/inventory.py",
+        "line": 6,
+        "signature": "class InventoryError(Exception)",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "Inventory",
+        "kind": "class",
+        "file": "shopcart/inventory.py",
+        "line": 10,
+        "signature": "class Inventory",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "__init__",
+        "kind": "method",
+        "file": "shopcart/inventory.py",
+        "line": 11,
+        "signature": "def __init__(self) -> None",
+        "parent": "Inventory",
+        "is_test": false
+      },
+      {
+        "name": "restock",
+        "kind": "method",
+        "file": "shopcart/inventory.py",
+        "line": 15,
+        "signature": "def restock(self, sku: str, quantity: int) -> None",
+        "parent": "Inventory",
+        "is_test": false
+      },
+      {
+        "name": "available",
+        "kind": "method",
+        "file": "shopcart/inventory.py",
+        "line": 20,
+        "signature": "def available(self, sku: str) -> int",
+        "parent": "Inventory",
+        "is_test": false
+      },
+      {
+        "name": "reserve",
+        "kind": "method",
+        "file": "shopcart/inventory.py",
+        "line": 23,
+        "signature": "def reserve(self, sku: str, quantity: int) -> None",
+        "parent": "Inventory",
+        "is_test": false
+      },
+      {
+        "name": "release",
+        "kind": "method",
+        "file": "shopcart/inventory.py",
+        "line": 30,
+        "signature": "def release(self, sku: str, quantity: int) -> None",
+        "parent": "Inventory",
+        "is_test": false
+      },
+      {
+        "name": "commit",
+        "kind": "method",
+        "file": "shopcart/inventory.py",
+        "line": 36,
+        "signature": "def commit(self, sku: str, quantity: int) -> None",
+        "parent": "Inventory",
+        "is_test": false
+      },
+      {
+        "name": "to_money",
+        "kind": "function",
+        "file": "shopcart/money.py",
+        "line": 10,
+        "signature": "def to_money(value: Decimal | int | float | str) -> Decimal",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "percent_of",
+        "kind": "function",
+        "file": "shopcart/money.py",
+        "line": 17,
+        "signature": "def percent_of(amount: Decimal, percent: Decimal | int | str) -> Decimal",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "CENT",
+        "kind": "constant",
+        "file": "shopcart/money.py",
+        "line": 7,
+        "signature": "CENT = Decimal(\"0.01\")",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "OrderError",
+        "kind": "class",
+        "file": "shopcart/orders.py",
+        "line": 17,
+        "signature": "class OrderError(Exception)",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "OrderStatus",
+        "kind": "class",
+        "file": "shopcart/orders.py",
+        "line": 21,
+        "signature": "class OrderStatus(Enum)",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "Order",
+        "kind": "class",
+        "file": "shopcart/orders.py",
+        "line": 37,
+        "signature": "class Order",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "place",
+        "kind": "method",
+        "file": "shopcart/orders.py",
+        "line": 46,
+        "signature": "def place(cls, cart: Cart, inventory: Inventory, policy: PricingPolicy | None = None) -> Order",
+        "parent": "Order",
+        "is_test": false
+      },
+      {
+        "name": "_transition",
+        "kind": "method",
+        "file": "shopcart/orders.py",
+        "line": 63,
+        "signature": "def _transition(self, new_status: OrderStatus) -> None",
+        "parent": "Order",
+        "is_test": false
+      },
+      {
+        "name": "pay",
+        "kind": "method",
+        "file": "shopcart/orders.py",
+        "line": 69,
+        "signature": "def pay(self, amount: Decimal) -> None",
+        "parent": "Order",
+        "is_test": false
+      },
+      {
+        "name": "ship",
+        "kind": "method",
+        "file": "shopcart/orders.py",
+        "line": 75,
+        "signature": "def ship(self, inventory: Inventory) -> None",
+        "parent": "Order",
+        "is_test": false
+      },
+      {
+        "name": "cancel",
+        "kind": "method",
+        "file": "shopcart/orders.py",
+        "line": 80,
+        "signature": "def cancel(self, inventory: Inventory) -> None",
+        "parent": "Order",
+        "is_test": false
+      },
+      {
+        "name": "ALLOWED_TRANSITIONS",
+        "kind": "constant",
+        "file": "shopcart/orders.py",
+        "line": 28,
+        "signature": "ALLOWED_TRANSITIONS: dict[OrderStatus, set[OrderStatus]] = {\n    OrderStatus.PENDING: {OrderStatus.PAID, OrderStatus.CAN",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "PricingPolicy",
+        "kind": "class",
+        "file": "shopcart/pricing.py",
+        "line": 13,
+        "signature": "class PricingPolicy",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "tax_rate_for",
+        "kind": "method",
+        "file": "shopcart/pricing.py",
+        "line": 21,
+        "signature": "def tax_rate_for(self, category: str) -> Decimal",
+        "parent": "PricingPolicy",
+        "is_test": false
+      },
+      {
+        "name": "Totals",
+        "kind": "class",
+        "file": "shopcart/pricing.py",
+        "line": 26,
+        "signature": "class Totals",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "compute_tax",
+        "kind": "function",
+        "file": "shopcart/pricing.py",
+        "line": 33,
+        "signature": "def compute_tax(cart: Cart, policy: PricingPolicy) -> Decimal",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "compute_shipping",
+        "kind": "function",
+        "file": "shopcart/pricing.py",
+        "line": 40,
+        "signature": "def compute_shipping(cart: Cart, policy: PricingPolicy) -> Decimal",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "compute_totals",
+        "kind": "function",
+        "file": "shopcart/pricing.py",
+        "line": 48,
+        "signature": "def compute_totals(cart: Cart, policy: PricingPolicy | None = None) -> Totals",
+        "parent": null,
+        "is_test": false
+      },
+      {
+        "name": "catalog",
+        "kind": "function",
+        "file": "tests/conftest.py",
+        "line": 9,
+        "signature": "def catalog() -> Catalog",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "inventory",
+        "kind": "function",
+        "file": "tests/conftest.py",
+        "line": 19,
+        "signature": "def inventory() -> Inventory",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "cart",
+        "kind": "function",
+        "file": "tests/conftest.py",
+        "line": 27,
+        "signature": "def cart(catalog: Catalog) -> Cart",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_add_and_subtotal",
+        "kind": "function",
+        "file": "tests/test_cart.py",
+        "line": 9,
+        "signature": "def test_add_and_subtotal(cart: Cart)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_adding_same_sku_merges_lines",
+        "kind": "function",
+        "file": "tests/test_cart.py",
+        "line": 16,
+        "signature": "def test_adding_same_sku_merges_lines(cart: Cart)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_quantity_must_be_positive",
+        "kind": "function",
+        "file": "tests/test_cart.py",
+        "line": 22,
+        "signature": "def test_quantity_must_be_positive(cart: Cart)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_quantity_limit",
+        "kind": "function",
+        "file": "tests/test_cart.py",
+        "line": 27,
+        "signature": "def test_quantity_limit(cart: Cart)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_update_and_remove",
+        "kind": "function",
+        "file": "tests/test_cart.py",
+        "line": 33,
+        "signature": "def test_update_and_remove(cart: Cart)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_lines_sorted_by_sku",
+        "kind": "function",
+        "file": "tests/test_cart.py",
+        "line": 43,
+        "signature": "def test_lines_sorted_by_sku(cart: Cart)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_product_price_is_rounded",
+        "kind": "function",
+        "file": "tests/test_catalog.py",
+        "line": 8,
+        "signature": "def test_product_price_is_rounded()",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_negative_price_rejected",
+        "kind": "function",
+        "file": "tests/test_catalog.py",
+        "line": 12,
+        "signature": "def test_negative_price_rejected()",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_duplicate_sku_rejected",
+        "kind": "function",
+        "file": "tests/test_catalog.py",
+        "line": 17,
+        "signature": "def test_duplicate_sku_rejected(catalog: Catalog)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_lookup_and_category",
+        "kind": "function",
+        "file": "tests/test_catalog.py",
+        "line": 22,
+        "signature": "def test_lookup_and_category(catalog: Catalog)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_unknown_sku",
+        "kind": "function",
+        "file": "tests/test_catalog.py",
+        "line": 28,
+        "signature": "def test_unknown_sku(catalog: Catalog)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_search_is_case_insensitive",
+        "kind": "function",
+        "file": "tests/test_catalog.py",
+        "line": 33,
+        "signature": "def test_search_is_case_insensitive(catalog: Catalog)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_restock_and_reserve",
+        "kind": "function",
+        "file": "tests/test_inventory.py",
+        "line": 6,
+        "signature": "def test_restock_and_reserve()",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_over_reserve_fails",
+        "kind": "function",
+        "file": "tests/test_inventory.py",
+        "line": 13,
+        "signature": "def test_over_reserve_fails()",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_release_more_than_held_fails",
+        "kind": "function",
+        "file": "tests/test_inventory.py",
+        "line": 20,
+        "signature": "def test_release_more_than_held_fails()",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_commit_reduces_on_hand",
+        "kind": "function",
+        "file": "tests/test_inventory.py",
+        "line": 28,
+        "signature": "def test_commit_reduces_on_hand()",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_restock_requires_positive_quantity",
+        "kind": "function",
+        "file": "tests/test_inventory.py",
+        "line": 36,
+        "signature": "def test_restock_requires_positive_quantity()",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_place_reserves_stock",
+        "kind": "function",
+        "file": "tests/test_orders.py",
+        "line": 6,
+        "signature": "def test_place_reserves_stock(cart: Cart, inventory: Inventory)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_place_empty_cart_fails",
+        "kind": "function",
+        "file": "tests/test_orders.py",
+        "line": 13,
+        "signature": "def test_place_empty_cart_fails(cart: Cart, inventory: Inventory)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_failed_reservation_rolls_back",
+        "kind": "function",
+        "file": "tests/test_orders.py",
+        "line": 18,
+        "signature": "def test_failed_reservation_rolls_back(cart: Cart, inventory: Inventory)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_pay_ship_flow",
+        "kind": "function",
+        "file": "tests/test_orders.py",
+        "line": 26,
+        "signature": "def test_pay_ship_flow(cart: Cart, inventory: Inventory)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_wrong_payment_amount",
+        "kind": "function",
+        "file": "tests/test_orders.py",
+        "line": 35,
+        "signature": "def test_wrong_payment_amount(cart: Cart, inventory: Inventory)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_cancel_releases_stock",
+        "kind": "function",
+        "file": "tests/test_orders.py",
+        "line": 42,
+        "signature": "def test_cancel_releases_stock(cart: Cart, inventory: Inventory)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_default_tax_and_flat_shipping",
+        "kind": "function",
+        "file": "tests/test_pricing.py",
+        "line": 6,
+        "signature": "def test_default_tax_and_flat_shipping(cart: Cart)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_free_shipping_at_threshold",
+        "kind": "function",
+        "file": "tests/test_pricing.py",
+        "line": 15,
+        "signature": "def test_free_shipping_at_threshold(cart: Cart)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_category_tax_rates",
+        "kind": "function",
+        "file": "tests/test_pricing.py",
+        "line": 21,
+        "signature": "def test_category_tax_rates(cart: Cart)",
+        "parent": null,
+        "is_test": true
+      },
+      {
+        "name": "test_empty_cart_totals",
+        "kind": "function",
+        "file": "tests/test_pricing.py",
+        "line": 28,
+        "signature": "def test_empty_cart_totals(cart: Cart)",
+        "parent": null,
+        "is_test": true
+      }
+    ],
+    "imports": [
+      {
+        "file": "shopcart/__init__.py",
+        "module": "shopcart.cart",
+        "line": 3
+      },
+      {
+        "file": "shopcart/__init__.py",
+        "module": "shopcart.catalog",
+        "line": 4
+      },
+      {
+        "file": "shopcart/__init__.py",
+        "module": "shopcart.inventory",
+        "line": 5
+      },
+      {
+        "file": "shopcart/__init__.py",
+        "module": "shopcart.orders",
+        "line": 6
+      },
+      {
+        "file": "shopcart/__init__.py",
+        "module": "shopcart.pricing",
+        "line": 7
+      },
+      {
+        "file": "shopcart/cart.py",
+        "module": "dataclasses",
+        "line": 5
+      },
+      {
+        "file": "shopcart/cart.py",
+        "module": "decimal",
+        "line": 6
+      },
+      {
+        "file": "shopcart/cart.py",
+        "module": "shopcart.catalog",
+        "line": 8
+      },
+      {
+        "file": "shopcart/cart.py",
+        "module": "shopcart.money",
+        "line": 9
+      },
+      {
+        "file": "shopcart/catalog.py",
+        "module": "dataclasses",
+        "line": 5
+      },
+      {
+        "file": "shopcart/catalog.py",
+        "module": "decimal",
+        "line": 6
+      },
+      {
+        "file": "shopcart/catalog.py",
+        "module": "shopcart.money",
+        "line": 8
+      },
+      {
+        "file": "shopcart/money.py",
+        "module": "decimal",
+        "line": 5
+      },
+      {
+        "file": "shopcart/orders.py",
+        "module": "import itertools",
+        "line": 5
+      },
+      {
+        "file": "shopcart/orders.py",
+        "module": "dataclasses",
+        "line": 6
+      },
+      {
+        "file": "shopcart/orders.py",
+        "module": "decimal",
+        "line": 7
+      },
+      {
+        "file": "shopcart/orders.py",
+        "module": "enum",
+        "line": 8
+      },
+      {
+        "file": "shopcart/orders.py",
+        "module": "shopcart.cart",
+        "line": 10
+      },
+      {
+        "file": "shopcart/orders.py",
+        "module": "shopcart.inventory",
+        "line": 11
+      },
+      {
+        "file": "shopcart/orders.py",
+        "module": "shopcart.pricing",
+        "line": 12
+      },
+      {
+        "file": "shopcart/pricing.py",
+        "module": "dataclasses",
+        "line": 5
+      },
+      {
+        "file": "shopcart/pricing.py",
+        "module": "decimal",
+        "line": 6
+      },
+      {
+        "file": "shopcart/pricing.py",
+        "module": "shopcart.cart",
+        "line": 8
+      },
+      {
+        "file": "shopcart/pricing.py",
+        "module": "shopcart.money",
+        "line": 9
+      },
+      {
+        "file": "tests/conftest.py",
+        "module": "decimal",
+        "line": 1
+      },
+      {
+        "file": "tests/conftest.py",
+        "module": "import pytest",
+        "line": 3
+      },
+      {
+        "file": "tests/conftest.py",
+        "module": "shopcart",
+        "line": 5
+      },
+      {
+        "file": "tests/test_cart.py",
+        "module": "decimal",
+        "line": 1
+      },
+      {
+        "file": "tests/test_cart.py",
+        "module": "import pytest",
+        "line": 3
+      },
+      {
+        "file": "tests/test_cart.py",
+        "module": "shopcart",
+        "line": 5
+      },
+      {
+        "file": "tests/test_cart.py",
+        "module": "shopcart.cart",
+        "line": 6
+      },
+      {
+        "file": "tests/test_catalog.py",
+        "module": "decimal",
+        "line": 1
+      },
+      {
+        "file": "tests/test_catalog.py",
+        "module": "import pytest",
+        "line": 3
+      },
+      {
+        "file": "tests/test_catalog.py",
+        "module": "shopcart",
+        "line": 5
+      },
+      {
+        "file": "tests/test_inventory.py",
+        "module": "import pytest",
+        "line": 1
+      },
+      {
+        "file": "tests/test_inventory.py",
+        "module": "shopcart",
+        "line": 3
+      },
+      {
+        "file": "tests/test_orders.py",
+        "module": "import pytest",
+        "line": 1
+      },
+      {
+        "file": "tests/test_orders.py",
+        "module": "shopcart",
+        "line": 3
+      },
+      {
+        "file": "tests/test_pricing.py",
+        "module": "decimal",
+        "line": 1
+      },
+      {
+        "file": "tests/test_pricing.py",
+        "module": "shopcart",
+        "line": 3
+      }
+    ],
+    "file_rank": {
+      "shopcart/money.py": 0.286343,
+      "shopcart/catalog.py": 0.162985,
+      "shopcart/cart.py": 0.121965,
+      "shopcart/inventory.py": 0.078573,
+      "shopcart/pricing.py": 0.072417,
+      "shopcart/orders.py": 0.048171,
+      "tests/conftest.py": 0.04798,
+      "shopcart/__init__.py": 0.030261,
+      "tests/test_cart.py": 0.030261,
+      "tests/test_catalog.py": 0.030261,
+      "tests/test_inventory.py": 0.030261,
+      "tests/test_orders.py": 0.030261,
+      "tests/test_pricing.py": 0.030261
+    },
+    "ranked_symbols": [
+      {
+        "name": "to_money",
+        "kind": "function",
+        "file": "shopcart/money.py",
+        "line": 10,
+        "signature": "def to_money(value: Decimal | int | float | str) -> Decimal",
+        "score": 0.299369
+      },
+      {
+        "name": "get",
+        "kind": "method",
+        "file": "shopcart/catalog.py",
+        "line": 39,
+        "signature": "def get(self, sku: str) -> Product",
+        "score": 0.099374
+      },
+      {
+        "name": "add_item",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 37,
+        "signature": "def add_item(self, sku: str, quantity: int = 1) -> LineItem",
+        "score": 0.037115
+      },
+      {
+        "name": "is_empty",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 77,
+        "signature": "def is_empty(self) -> bool",
+        "score": 0.03529
+      },
+      {
+        "name": "compute_totals",
+        "kind": "function",
+        "file": "shopcart/pricing.py",
+        "line": 48,
+        "signature": "def compute_totals(cart: Cart, policy: PricingPolicy | None = None) -> Totals",
+        "score": 0.032171
+      },
+      {
+        "name": "percent_of",
+        "kind": "function",
+        "file": "shopcart/money.py",
+        "line": 17,
+        "signature": "def percent_of(amount: Decimal, percent: Decimal | int | str) -> Decimal",
+        "score": 0.030538
+      },
+      {
+        "name": "Product",
+        "kind": "class",
+        "file": "shopcart/catalog.py",
+        "line": 12,
+        "signature": "class Product",
+        "score": 0.027684
+      },
+      {
+        "name": "InventoryError",
+        "kind": "class",
+        "file": "shopcart/inventory.py",
+        "line": 6,
+        "signature": "class InventoryError(Exception)",
+        "score": 0.027303
+      },
+      {
+        "name": "by_category",
+        "kind": "method",
+        "file": "shopcart/catalog.py",
+        "line": 45,
+        "signature": "def by_category(self, category: str) -> list[Product]",
+        "score": 0.024555
+      },
+      {
+        "name": "PricingPolicy",
+        "kind": "class",
+        "file": "shopcart/pricing.py",
+        "line": 13,
+        "signature": "class PricingPolicy",
+        "score": 0.023295
+      },
+      {
+        "name": "Catalog",
+        "kind": "class",
+        "file": "shopcart/catalog.py",
+        "line": 28,
+        "signature": "class Catalog",
+        "score": 0.023279
+      },
+      {
+        "name": "add",
+        "kind": "method",
+        "file": "shopcart/catalog.py",
+        "line": 34,
+        "signature": "def add(self, product: Product) -> None",
+        "score": 0.020361
+      },
+      {
+        "name": "Cart",
+        "kind": "class",
+        "file": "shopcart/cart.py",
+        "line": 28,
+        "signature": "class Cart",
+        "score": 0.017662
+      },
+      {
+        "name": "Inventory",
+        "kind": "class",
+        "file": "shopcart/inventory.py",
+        "line": 10,
+        "signature": "class Inventory",
+        "score": 0.0164
+      },
+      {
+        "name": "CENT",
+        "kind": "constant",
+        "file": "shopcart/money.py",
+        "line": 7,
+        "signature": "CENT = Decimal(\"0.01\")",
+        "score": 0.014317
+      },
+      {
+        "name": "line_total",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 24,
+        "signature": "def line_total(self) -> Decimal",
+        "score": 0.014209
+      },
+      {
+        "name": "CartError",
+        "kind": "class",
+        "file": "shopcart/cart.py",
+        "line": 14,
+        "signature": "class CartError(Exception)",
+        "score": 0.013432
+      },
+      {
+        "name": "restock",
+        "kind": "method",
+        "file": "shopcart/inventory.py",
+        "line": 15,
+        "signature": "def restock(self, sku: str, quantity: int) -> None",
+        "score": 0.01236
+      },
+      {
+        "name": "OrderStatus",
+        "kind": "class",
+        "file": "shopcart/orders.py",
+        "line": 21,
+        "signature": "class OrderStatus(Enum)",
+        "score": 0.011452
+      },
+      {
+        "name": "OrderError",
+        "kind": "class",
+        "file": "shopcart/orders.py",
+        "line": 17,
+        "signature": "class OrderError(Exception)",
+        "score": 0.010902
+      },
+      {
+        "name": "update_quantity",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 52,
+        "signature": "def update_quantity(self, sku: str, quantity: int) -> None",
+        "score": 0.010389
+      },
+      {
+        "name": "LineItem",
+        "kind": "class",
+        "file": "shopcart/cart.py",
+        "line": 19,
+        "signature": "class LineItem",
+        "score": 0.009929
+      },
+      {
+        "name": "search",
+        "kind": "method",
+        "file": "shopcart/catalog.py",
+        "line": 50,
+        "signature": "def search(self, text: str) -> list[Product]",
+        "score": 0.00979
+      },
+      {
+        "name": "remove_item",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 62,
+        "signature": "def remove_item(self, sku: str) -> None",
+        "score": 0.009132
+      },
+      {
+        "name": "MAX_QUANTITY_PER_LINE",
+        "kind": "constant",
+        "file": "shopcart/cart.py",
+        "line": 11,
+        "signature": "MAX_QUANTITY_PER_LINE = 99",
+        "score": 0.008575
+      },
+      {
+        "name": "total_items",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 74,
+        "signature": "def total_items(self) -> int",
+        "score": 0.008575
+      },
+      {
+        "name": "subtotal",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 70,
+        "signature": "def subtotal(self) -> Decimal",
+        "score": 0.008558
+      },
+      {
+        "name": "lines",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 34,
+        "signature": "def lines(self) -> list[LineItem]",
+        "score": 0.008202
+      },
+      {
+        "name": "__post_init__",
+        "kind": "method",
+        "file": "shopcart/catalog.py",
+        "line": 19,
+        "signature": "def __post_init__(self) -> None",
+        "score": 0.008149
+      },
+      {
+        "name": "__init__",
+        "kind": "method",
+        "file": "shopcart/catalog.py",
+        "line": 31,
+        "signature": "def __init__(self) -> None",
+        "score": 0.008149
+      },
+      {
+        "name": "__len__",
+        "kind": "method",
+        "file": "shopcart/catalog.py",
+        "line": 56,
+        "signature": "def __len__(self) -> int",
+        "score": 0.008149
+      },
+      {
+        "name": "__contains__",
+        "kind": "method",
+        "file": "shopcart/catalog.py",
+        "line": 59,
+        "signature": "def __contains__(self, sku: object) -> bool",
+        "score": 0.008149
+      },
+      {
+        "name": "reserve",
+        "kind": "method",
+        "file": "shopcart/inventory.py",
+        "line": 23,
+        "signature": "def reserve(self, sku: str, quantity: int) -> None",
+        "score": 0.007954
+      },
+      {
+        "name": "release",
+        "kind": "method",
+        "file": "shopcart/inventory.py",
+        "line": 30,
+        "signature": "def release(self, sku: str, quantity: int) -> None",
+        "score": 0.007048
+      },
+      {
+        "name": "available",
+        "kind": "method",
+        "file": "shopcart/inventory.py",
+        "line": 20,
+        "signature": "def available(self, sku: str) -> int",
+        "score": 0.006726
+      },
+      {
+        "name": "commit",
+        "kind": "method",
+        "file": "shopcart/inventory.py",
+        "line": 36,
+        "signature": "def commit(self, sku: str, quantity: int) -> None",
+        "score": 0.006547
+      },
+      {
+        "name": "__init__",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 29,
+        "signature": "def __init__(self, catalog: Catalog) -> None",
+        "score": 0.006098
+      },
+      {
+        "name": "clear",
+        "kind": "method",
+        "file": "shopcart/cart.py",
+        "line": 66,
+        "signature": "def clear(self) -> None",
+        "score": 0.006098
+      },
+      {
+        "name": "Totals",
+        "kind": "class",
+        "file": "shopcart/pricing.py",
+        "line": 26,
+        "signature": "class Totals",
+        "score": 0.004993
+      },
+      {
+        "name": "__init__",
+        "kind": "method",
+        "file": "shopcart/inventory.py",
+        "line": 11,
+        "signature": "def __init__(self) -> None",
+        "score": 0.003929
+      },
+      {
+        "name": "tax_rate_for",
+        "kind": "method",
+        "file": "shopcart/pricing.py",
+        "line": 21,
+        "signature": "def tax_rate_for(self, category: str) -> Decimal",
+        "score": 0.003621
+      },
+      {
+        "name": "compute_tax",
+        "kind": "function",
+        "file": "shopcart/pricing.py",
+        "line": 33,
+        "signature": "def compute_tax(cart: Cart, policy: PricingPolicy) -> Decimal",
+        "score": 0.003621
+      },
+      {
+        "name": "compute_shipping",
+        "kind": "function",
+        "file": "shopcart/pricing.py",
+        "line": 40,
+        "signature": "def compute_shipping(cart: Cart, policy: PricingPolicy) -> Decimal",
+        "score": 0.003621
+      },
+      {
+        "name": "Order",
+        "kind": "class",
+        "file": "shopcart/orders.py",
+        "line": 37,
+        "signature": "class Order",
+        "score": 0.003408
+      },
+      {
+        "name": "place",
+        "kind": "method",
+        "file": "shopcart/orders.py",
+        "line": 46,
+        "signature": "def place(cls, cart: Cart, inventory: Inventory, policy: PricingPolicy | None = None) -> Order",
+        "score": 0.003398
+      },
+      {
+        "name": "pay",
+        "kind": "method",
+        "file": "shopcart/orders.py",
+        "line": 69,
+        "signature": "def pay(self, amount: Decimal) -> None",
+        "score": 0.00298
+      },
+      {
+        "name": "ship",
+        "kind": "method",
+        "file": "shopcart/orders.py",
+        "line": 75,
+        "signature": "def ship(self, inventory: Inventory) -> None",
+        "score": 0.00298
+      },
+      {
+        "name": "cancel",
+        "kind": "method",
+        "file": "shopcart/orders.py",
+        "line": 80,
+        "signature": "def cancel(self, inventory: Inventory) -> None",
+        "score": 0.002812
+      },
+      {
+        "name": "catalog",
+        "kind": "function",
+        "file": "tests/conftest.py",
+        "line": 9,
+        "signature": "def catalog() -> Catalog",
+        "score": 0.002447
+      },
+      {
+        "name": "ALLOWED_TRANSITIONS",
+        "kind": "constant",
+        "file": "shopcart/orders.py",
+        "line": 28,
+        "signature": "ALLOWED_TRANSITIONS: dict[OrderStatus, set[OrderStatus]] = {\n    OrderStatus.PENDING: {OrderStatus.PAID, OrderStatus.CAN",
+        "score": 0.002409
+      },
+      {
+        "name": "_transition",
+        "kind": "method",
+        "file": "shopcart/orders.py",
+        "line": 63,
+        "signature": "def _transition(self, new_status: OrderStatus) -> None",
+        "score": 0.002409
+      },
+      {
+        "name": "cart",
+        "kind": "function",
+        "file": "tests/conftest.py",
+        "line": 27,
+        "signature": "def cart(catalog: Catalog) -> Cart",
+        "score": 0.002006
+      },
+      {
+        "name": "inventory",
+        "kind": "function",
+        "file": "tests/conftest.py",
+        "line": 19,
+        "signature": "def inventory() -> Inventory",
+        "score": 0.001155
+      },
+      {
+        "name": "test_add_and_subtotal",
+        "kind": "function",
+        "file": "tests/test_cart.py",
+        "line": 9,
+        "signature": "def test_add_and_subtotal(cart: Cart)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_adding_same_sku_merges_lines",
+        "kind": "function",
+        "file": "tests/test_cart.py",
+        "line": 16,
+        "signature": "def test_adding_same_sku_merges_lines(cart: Cart)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_quantity_must_be_positive",
+        "kind": "function",
+        "file": "tests/test_cart.py",
+        "line": 22,
+        "signature": "def test_quantity_must_be_positive(cart: Cart)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_quantity_limit",
+        "kind": "function",
+        "file": "tests/test_cart.py",
+        "line": 27,
+        "signature": "def test_quantity_limit(cart: Cart)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_update_and_remove",
+        "kind": "function",
+        "file": "tests/test_cart.py",
+        "line": 33,
+        "signature": "def test_update_and_remove(cart: Cart)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_lines_sorted_by_sku",
+        "kind": "function",
+        "file": "tests/test_cart.py",
+        "line": 43,
+        "signature": "def test_lines_sorted_by_sku(cart: Cart)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_product_price_is_rounded",
+        "kind": "function",
+        "file": "tests/test_catalog.py",
+        "line": 8,
+        "signature": "def test_product_price_is_rounded()",
+        "score": 0.000303
+      },
+      {
+        "name": "test_negative_price_rejected",
+        "kind": "function",
+        "file": "tests/test_catalog.py",
+        "line": 12,
+        "signature": "def test_negative_price_rejected()",
+        "score": 0.000303
+      },
+      {
+        "name": "test_duplicate_sku_rejected",
+        "kind": "function",
+        "file": "tests/test_catalog.py",
+        "line": 17,
+        "signature": "def test_duplicate_sku_rejected(catalog: Catalog)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_lookup_and_category",
+        "kind": "function",
+        "file": "tests/test_catalog.py",
+        "line": 22,
+        "signature": "def test_lookup_and_category(catalog: Catalog)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_unknown_sku",
+        "kind": "function",
+        "file": "tests/test_catalog.py",
+        "line": 28,
+        "signature": "def test_unknown_sku(catalog: Catalog)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_search_is_case_insensitive",
+        "kind": "function",
+        "file": "tests/test_catalog.py",
+        "line": 33,
+        "signature": "def test_search_is_case_insensitive(catalog: Catalog)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_restock_and_reserve",
+        "kind": "function",
+        "file": "tests/test_inventory.py",
+        "line": 6,
+        "signature": "def test_restock_and_reserve()",
+        "score": 0.000303
+      },
+      {
+        "name": "test_over_reserve_fails",
+        "kind": "function",
+        "file": "tests/test_inventory.py",
+        "line": 13,
+        "signature": "def test_over_reserve_fails()",
+        "score": 0.000303
+      },
+      {
+        "name": "test_release_more_than_held_fails",
+        "kind": "function",
+        "file": "tests/test_inventory.py",
+        "line": 20,
+        "signature": "def test_release_more_than_held_fails()",
+        "score": 0.000303
+      },
+      {
+        "name": "test_commit_reduces_on_hand",
+        "kind": "function",
+        "file": "tests/test_inventory.py",
+        "line": 28,
+        "signature": "def test_commit_reduces_on_hand()",
+        "score": 0.000303
+      },
+      {
+        "name": "test_restock_requires_positive_quantity",
+        "kind": "function",
+        "file": "tests/test_inventory.py",
+        "line": 36,
+        "signature": "def test_restock_requires_positive_quantity()",
+        "score": 0.000303
+      },
+      {
+        "name": "test_place_reserves_stock",
+        "kind": "function",
+        "file": "tests/test_orders.py",
+        "line": 6,
+        "signature": "def test_place_reserves_stock(cart: Cart, inventory: Inventory)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_place_empty_cart_fails",
+        "kind": "function",
+        "file": "tests/test_orders.py",
+        "line": 13,
+        "signature": "def test_place_empty_cart_fails(cart: Cart, inventory: Inventory)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_failed_reservation_rolls_back",
+        "kind": "function",
+        "file": "tests/test_orders.py",
+        "line": 18,
+        "signature": "def test_failed_reservation_rolls_back(cart: Cart, inventory: Inventory)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_pay_ship_flow",
+        "kind": "function",
+        "file": "tests/test_orders.py",
+        "line": 26,
+        "signature": "def test_pay_ship_flow(cart: Cart, inventory: Inventory)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_wrong_payment_amount",
+        "kind": "function",
+        "file": "tests/test_orders.py",
+        "line": 35,
+        "signature": "def test_wrong_payment_amount(cart: Cart, inventory: Inventory)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_cancel_releases_stock",
+        "kind": "function",
+        "file": "tests/test_orders.py",
+        "line": 42,
+        "signature": "def test_cancel_releases_stock(cart: Cart, inventory: Inventory)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_default_tax_and_flat_shipping",
+        "kind": "function",
+        "file": "tests/test_pricing.py",
+        "line": 6,
+        "signature": "def test_default_tax_and_flat_shipping(cart: Cart)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_free_shipping_at_threshold",
+        "kind": "function",
+        "file": "tests/test_pricing.py",
+        "line": 15,
+        "signature": "def test_free_shipping_at_threshold(cart: Cart)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_category_tax_rates",
+        "kind": "function",
+        "file": "tests/test_pricing.py",
+        "line": 21,
+        "signature": "def test_category_tax_rates(cart: Cart)",
+        "score": 0.000303
+      },
+      {
+        "name": "test_empty_cart_totals",
+        "kind": "function",
+        "file": "tests/test_pricing.py",
+        "line": 28,
+        "signature": "def test_empty_cart_totals(cart: Cart)",
+        "score": 0.000303
+      }
+    ],
+    "dependency_edges": [
+      [
+        "shopcart/__init__.py",
+        "shopcart/cart.py"
+      ],
+      [
+        "shopcart/__init__.py",
+        "shopcart/catalog.py"
+      ],
+      [
+        "shopcart/__init__.py",
+        "shopcart/inventory.py"
+      ],
+      [
+        "shopcart/__init__.py",
+        "shopcart/orders.py"
+      ],
+      [
+        "shopcart/__init__.py",
+        "shopcart/pricing.py"
+      ],
+      [
+        "shopcart/__init__.py",
+        "tests/conftest.py"
+      ],
+      [
+        "shopcart/cart.py",
+        "shopcart/catalog.py"
+      ],
+      [
+        "shopcart/cart.py",
+        "shopcart/money.py"
+      ],
+      [
+        "shopcart/cart.py",
+        "tests/conftest.py"
+      ],
+      [
+        "shopcart/catalog.py",
+        "shopcart/money.py"
+      ],
+      [
+        "shopcart/inventory.py",
+        "shopcart/catalog.py"
+      ],
+      [
+        "shopcart/orders.py",
+        "shopcart/cart.py"
+      ],
+      [
+        "shopcart/orders.py",
+        "shopcart/inventory.py"
+      ],
+      [
+        "shopcart/orders.py",
+        "shopcart/pricing.py"
+      ],
+      [
+        "shopcart/orders.py",
+        "tests/conftest.py"
+      ],
+      [
+        "shopcart/pricing.py",
+        "shopcart/cart.py"
+      ],
+      [
+        "shopcart/pricing.py",
+        "shopcart/catalog.py"
+      ],
+      [
+        "shopcart/pricing.py",
+        "shopcart/money.py"
+      ],
+      [
+        "shopcart/pricing.py",
+        "tests/conftest.py"
+      ],
+      [
+        "tests/conftest.py",
+        "shopcart/cart.py"
+      ],
+      [
+        "tests/conftest.py",
+        "shopcart/catalog.py"
+      ],
+      [
+        "tests/conftest.py",
+        "shopcart/inventory.py"
+      ],
+      [
+        "tests/test_cart.py",
+        "shopcart/cart.py"
+      ],
+      [
+        "tests/test_cart.py",
+        "tests/conftest.py"
+      ],
+      [
+        "tests/test_catalog.py",
+        "shopcart/catalog.py"
+      ],
+      [
+        "tests/test_catalog.py",
+        "tests/conftest.py"
+      ],
+      [
+        "tests/test_inventory.py",
+        "shopcart/inventory.py"
+      ],
+      [
+        "tests/test_orders.py",
+        "shopcart/cart.py"
+      ],
+      [
+        "tests/test_orders.py",
+        "shopcart/inventory.py"
+      ],
+      [
+        "tests/test_orders.py",
+        "shopcart/orders.py"
+      ],
+      [
+        "tests/test_orders.py",
+        "tests/conftest.py"
+      ],
+      [
+        "tests/test_pricing.py",
+        "shopcart/cart.py"
+      ],
+      [
+        "tests/test_pricing.py",
+        "shopcart/pricing.py"
+      ],
+      [
+        "tests/test_pricing.py",
+        "tests/conftest.py"
+      ]
+    ],
+    "language_distribution": {
+      "python": 592
+    },
+    "extension_points": [
+      "shopcart/pricing.py:13 class PricingPolicy",
+      "shopcart/orders.py:28 constant ALLOWED_TRANSITIONS",
+      "shopcart/money.py:7 constant CENT",
+      "shopcart/catalog.py:12 class Product",
+      "shopcart/catalog.py:28 class Catalog",
+      "shopcart/cart.py:14 class CartError",
+      "shopcart/cart.py:19 class LineItem",
+      "shopcart/cart.py:28 class Cart",
+      "shopcart/cart.py:11 constant MAX_QUANTITY_PER_LINE",
+      "shopcart/inventory.py:6 class InventoryError",
+      "shopcart/inventory.py:10 class Inventory",
+      "shopcart/pricing.py:26 class Totals",
+      "shopcart/orders.py:17 class OrderError",
+      "shopcart/orders.py:21 class OrderStatus",
+      "shopcart/orders.py:37 class Order"
+    ],
+    "rendered": "shopcart/money.py:\n     7| CENT = Decimal(\"0.01\")\n    10| def to_money(value: Decimal | int | float | str) -> Decimal\n    17| def percent_of(amount: Decimal, percent: Decimal | int | str) -> Decimal\nshopcart/catalog.py:\n    12| class Product\n      19| def __post_init__(self) -> None\n    28| class Catalog\n      31| def __init__(self) -> None\n      34| def add(self, product: Product) -> None\n      39| def get(self, sku: str) -> Product\n      45| def by_category(self, category: str) -> list[Product]\n      50| def search(self, text: str) -> list[Product]\n      56| def __len__(self) -> int\n      59| def __contains__(self, sku: object) -> bool\nshopcart/cart.py:\n    11| MAX_QUANTITY_PER_LINE = 99\n    14| class CartError(Exception)\n    19| class LineItem\n      24| def line_total(self) -> Decimal\n    28| class Cart\n      29| def __init__(self, catalog: Catalog) -> None\n      34| def lines(self) -> list[LineItem]\n      37| def add_item(self, sku: str, quantity: int = 1) -> LineItem\n      52| def update_quantity(self, sku: str, quantity: int) -> None\n      62| def remove_item(self, sku: str) -> None\n      66| def clear(self) -> None\n      70| def subtotal(self) -> Decimal\n      74| def total_items(self) -> int\n      77| def is_empty(self) -> bool\nshopcart/inventory.py:\n     6| class InventoryError(Exception)\n    10| class Inventory\n      11| def __init__(self) -> None\n      15| def restock(self, sku: str, quantity: int) -> None\n      20| def available(self, sku: str) -> int\n      23| def reserve(self, sku: str, quantity: int) -> None\n      30| def release(self, sku: str, quantity: int) -> None\n      36| def commit(self, sku: str, quantity: int) -> None\nshopcart/pricing.py:\n    13| class PricingPolicy\n      21| def tax_rate_for(self, category: str) -> Decimal\n    26| class Totals\n    33| def compute_tax(cart: Cart, policy: PricingPolicy) -> Decimal\n    40| def compute_shipping(cart: Cart, policy: PricingPolicy) -> Decimal\n    48| def compute_totals(cart: Cart, policy: PricingPolicy | None = None) -> Totals\nshopcart/orders.py:\n    17| class OrderError(Exception)\n    21| class OrderStatus(Enum)\n    28| ALLOWED_TRANSITIONS: dict[OrderStatus, set[OrderStatus]] = {\n    OrderStatus.PENDING: {OrderStatus.PAID, OrderStatus.CAN\n    37| class Order\n      46| def place(cls, cart: Cart, inventory: Inventory, policy: PricingPolicy | None = None) -> Order\n      63| def _transition(self, new_status: OrderStatus) -> None\n      69| def pay(self, amount: Decimal) -> None\n      75| def ship(self, inventory: Inventory) -> None\n      80| def cancel(self, inventory: Inventory) -> None\ntests/conftest.py:\n     9| def catalog() -> Catalog\n    19| def inventory() -> Inventory\n    27| def cart(catalog: Catalog) -> Cart\ntests/test_cart.py:\n     9| def test_add_and_subtotal(cart: Cart)\n    16| def test_adding_same_sku_merges_lines(cart: Cart)\n    22| def test_quantity_must_be_positive(cart: Cart)\n    27| def test_quantity_limit(cart: Cart)\n    33| def test_update_and_remove(cart: Cart)\n    43| def test_lines_sorted_by_sku(cart: Cart)\ntests/test_catalog.py:\n     8| def test_product_price_is_rounded()\n    12| def test_negative_price_rejected()\n    17| def test_duplicate_sku_rejected(catalog: Catalog)\n    22| def test_lookup_and_category(catalog: Catalog)\n    28| def test_unknown_sku(catalog: Catalog)\n    33| def test_search_is_case_insensitive(catalog: Catalog)\ntests/test_inventory.py:\n     6| def test_restock_and_reserve()\n    13| def test_over_reserve_fails()\n    20| def test_release_more_than_held_fails()\n    28| def test_commit_reduces_on_hand()\n    36| def test_restock_requires_positive_quantity()\ntests/test_orders.py:\n     6| def test_place_reserves_stock(cart: Cart, inventory: Inventory)\n    13| def test_place_empty_cart_fails(cart: Cart, inventory: Inventory)\n    18| def test_failed_reservation_rolls_back(cart: Cart, inventory: Inventory)\n    26| def test_pay_ship_flow(cart: Cart, inventory: Inventory)\n    35| def test_wrong_payment_amount(cart: Cart, inventory: Inventory)\n    42| def test_cancel_releases_stock(cart: Cart, inventory: Inventory)\ntests/test_pricing.py:\n     6| def test_default_tax_and_flat_shipping(cart: Cart)\n    15| def test_free_shipping_at_threshold(cart: Cart)\n    21| def test_category_tax_rates(cart: Cart)\n    28| def test_empty_cart_totals(cart: Cart)",
+    "token_budget": 2500,
+    "cache_key": "d3c1deae4888dd4af6cd86b1"
+  },
+  "baseline_test_status": {
+    "runs": 3,
+    "command": [
+      "tests"
+    ],
+    "passed": [
+      "tests.test_cart::test_add_and_subtotal",
+      "tests.test_cart::test_adding_same_sku_merges_lines",
+      "tests.test_cart::test_lines_sorted_by_sku",
+      "tests.test_cart::test_quantity_limit",
+      "tests.test_cart::test_quantity_must_be_positive",
+      "tests.test_cart::test_update_and_remove",
+      "tests.test_catalog::test_duplicate_sku_rejected",
+      "tests.test_catalog::test_lookup_and_category",
+      "tests.test_catalog::test_negative_price_rejected",
+      "tests.test_catalog::test_product_price_is_rounded",
+      "tests.test_catalog::test_search_is_case_insensitive",
+      "tests.test_catalog::test_unknown_sku",
+      "tests.test_inventory::test_commit_reduces_on_hand",
+      "tests.test_inventory::test_over_reserve_fails",
+      "tests.test_inventory::test_release_more_than_held_fails",
+      "tests.test_inventory::test_restock_and_reserve",
+      "tests.test_inventory::test_restock_requires_positive_quantity",
+      "tests.test_orders::test_cancel_releases_stock",
+      "tests.test_orders::test_failed_reservation_rolls_back",
+      "tests.test_orders::test_pay_ship_flow",
+      "tests.test_orders::test_place_empty_cart_fails",
+      "tests.test_orders::test_place_reserves_stock",
+      "tests.test_orders::test_wrong_payment_amount",
+      "tests.test_pricing::test_category_tax_rates",
+      "tests.test_pricing::test_default_tax_and_flat_shipping",
+      "tests.test_pricing::test_empty_cart_totals",
+      "tests.test_pricing::test_free_shipping_at_threshold"
+    ],
+    "failed": [],
+    "flaky": [],
+    "duration_sec": 0.0,
+    "healthy": true,
+    "notes": []
+  },
+  "adapter": "python-pytest",
+  "supported": true,
+  "unsupported_reason": null
+}

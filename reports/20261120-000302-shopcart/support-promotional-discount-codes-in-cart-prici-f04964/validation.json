@@ -1,0 +1,402 @@
+{
+  "task_id": "support-promotional-discount-codes-in-cart-prici-f04964",
+  "baseline_result": null,
+  "feature_negative_control": {
+    "label": "feature_original",
+    "command": [
+      "tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py"
+    ],
+    "passed": [],
+    "failed": [],
+    "errors": [
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964"
+    ],
+    "skipped": [],
+    "exit_code": 1,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-000302-shopcart\\support-promotional-discount-codes-in-cart-prici-f04964\\attempt-3\\negative\\feature_original.log",
+    "timed_out": false
+  },
+  "reference_positive_control": {
+    "label": "feature_reference_1",
+    "command": [
+      "tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py"
+    ],
+    "passed": [],
+    "failed": [
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac1_coupon_min_subtotal_error",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac1_coupon_min_subtotal_boundary",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac2_percentage_coupon_discount",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac3_exceeding_discount_clamping",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac4_totals_formula_and_positional_defaults",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac5_none_coupon_preserves_behavior",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_tax_proportion_across_multiple_categories"
+    ],
+    "errors": [],
+    "skipped": [],
+    "exit_code": 1,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-000302-shopcart\\support-promotional-discount-codes-in-cart-prici-f04964\\attempt-3\\positive\\feature_reference_1.log",
+    "timed_out": false
+  },
+  "regression_result": {
+    "label": "regression_reference",
+    "command": [
+      "tests"
+    ],
+    "passed": [
+      "tests.test_cart::test_add_and_subtotal",
+      "tests.test_cart::test_adding_same_sku_merges_lines",
+      "tests.test_cart::test_quantity_must_be_positive",
+      "tests.test_cart::test_quantity_limit",
+      "tests.test_cart::test_update_and_remove",
+      "tests.test_cart::test_lines_sorted_by_sku",
+      "tests.test_catalog::test_product_price_is_rounded",
+      "tests.test_catalog::test_negative_price_rejected",
+      "tests.test_catalog::test_duplicate_sku_rejected",
+      "tests.test_catalog::test_lookup_and_category",
+      "tests.test_catalog::test_unknown_sku",
+      "tests.test_catalog::test_search_is_case_insensitive",
+      "tests.test_inventory::test_restock_and_reserve",
+      "tests.test_inventory::test_over_reserve_fails",
+      "tests.test_inventory::test_release_more_than_held_fails",
+      "tests.test_inventory::test_commit_reduces_on_hand",
+      "tests.test_inventory::test_restock_requires_positive_quantity",
+      "tests.test_orders::test_place_reserves_stock",
+      "tests.test_orders::test_place_empty_cart_fails",
+      "tests.test_orders::test_failed_reservation_rolls_back",
+      "tests.test_orders::test_pay_ship_flow",
+      "tests.test_orders::test_wrong_payment_amount",
+      "tests.test_orders::test_cancel_releases_stock",
+      "tests.test_pricing::test_default_tax_and_flat_shipping",
+      "tests.test_pricing::test_free_shipping_at_threshold",
+      "tests.test_pricing::test_category_tax_rates",
+      "tests.test_pricing::test_empty_cart_totals"
+    ],
+    "failed": [
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac1_coupon_min_subtotal_error",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac1_coupon_min_subtotal_boundary",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac2_percentage_coupon_discount",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac3_exceeding_discount_clamping",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac4_totals_formula_and_positional_defaults",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac5_none_coupon_preserves_behavior",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_tax_proportion_across_multiple_categories"
+    ],
+    "errors": [],
+    "skipped": [],
+    "exit_code": 1,
+    "duration_sec": 0.0,
+    "log_path": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-000302-shopcart\\support-promotional-discount-codes-in-cart-prici-f04964\\attempt-3\\positive\\regression_reference.log",
+    "timed_out": false
+  },
+  "mutation_result": null,
+  "semantic_mutation_result": null,
+  "coverage_result": {
+    "changed_statements": 35,
+    "covered": 17,
+    "percent": 48.6,
+    "files": {
+      "shopcart/pricing.py": {
+        "statements": 35,
+        "covered": 17,
+        "missing_lines": [
+          25,
+          26,
+          27,
+          75,
+          76,
+          77,
+          78,
+          79,
+          81,
+          85,
+          86,
+          88,
+          89,
+          90,
+          91,
+          92,
+          93,
+          95
+        ],
+        "percent": 48.6
+      }
+    },
+    "tool": "coverage==7.17.3"
+  },
+  "harbor_validation": {},
+  "gates": [
+    {
+      "gate": "baseline",
+      "status": "passed",
+      "summary": "27 original tests pass consistently across 3 runs",
+      "details": {
+        "runs": 3,
+        "command": [
+          "tests"
+        ],
+        "passed": [
+          "tests.test_cart::test_add_and_subtotal",
+          "tests.test_cart::test_adding_same_sku_merges_lines",
+          "tests.test_cart::test_lines_sorted_by_sku",
+          "tests.test_cart::test_quantity_limit",
+          "tests.test_cart::test_quantity_must_be_positive",
+          "tests.test_cart::test_update_and_remove",
+          "tests.test_catalog::test_duplicate_sku_rejected",
+          "tests.test_catalog::test_lookup_and_category",
+          "tests.test_catalog::test_negative_price_rejected",
+          "tests.test_catalog::test_product_price_is_rounded",
+          "tests.test_catalog::test_search_is_case_insensitive",
+          "tests.test_catalog::test_unknown_sku",
+          "tests.test_inventory::test_commit_reduces_on_hand",
+          "tests.test_inventory::test_over_reserve_fails",
+          "tests.test_inventory::test_release_more_than_held_fails",
+          "tests.test_inventory::test_restock_and_reserve",
+          "tests.test_inventory::test_restock_requires_positive_quantity",
+          "tests.test_orders::test_cancel_releases_stock",
+          "tests.test_orders::test_failed_reservation_rolls_back",
+          "tests.test_orders::test_pay_ship_flow",
+          "tests.test_orders::test_place_empty_cart_fails",
+          "tests.test_orders::test_place_reserves_stock",
+          "tests.test_orders::test_wrong_payment_amount",
+          "tests.test_pricing::test_category_tax_rates",
+          "tests.test_pricing::test_default_tax_and_flat_shipping",
+          "tests.test_pricing::test_empty_cart_totals",
+          "tests.test_pricing::test_free_shipping_at_threshold"
+        ],
+        "failed": [],
+        "flaky": [],
+        "duration_sec": 0.0,
+        "healthy": true,
+        "notes": []
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "positive_control",
+      "status": "failed",
+      "summary": "0/7 feature tests pass with the reference",
+      "details": {
+        "passed": [],
+        "failed": [
+          "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac1_coupon_min_subtotal_error",
+          "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac1_coupon_min_subtotal_boundary",
+          "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac2_percentage_coupon_discount",
+          "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac3_exceeding_discount_clamping",
+          "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac4_totals_formula_and_positional_defaults",
+          "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac5_none_coupon_preserves_behavior",
+          "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_tax_proportion_across_multiple_categories"
+        ],
+        "errors": [],
+        "skipped": []
+      },
+      "log_paths": [
+        "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-000302-shopcart\\support-promotional-discount-codes-in-cart-prici-f04964\\attempt-3\\positive\\feature_reference_1.log"
+      ]
+    },
+    {
+      "gate": "negative_control",
+      "status": "passed",
+      "summary": "7/7 feature tests fail on the original code (module import fails: the contract does not exist yet)",
+      "details": {
+        "passing_on_original": [],
+        "failed": [],
+        "errors": [
+          "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964"
+        ],
+        "collection_error": true
+      },
+      "log_paths": [
+        "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-000302-shopcart\\support-promotional-discount-codes-in-cart-prici-f04964\\attempt-3\\negative\\feature_original.log"
+      ]
+    },
+    {
+      "gate": "regression",
+      "status": "passed",
+      "summary": "27/27 original tests still pass with the reference",
+      "details": {
+        "broken": [],
+        "broken_by_adding_tests": [],
+        "pass_to_pass": [
+          "tests.test_cart::test_add_and_subtotal",
+          "tests.test_cart::test_adding_same_sku_merges_lines",
+          "tests.test_cart::test_lines_sorted_by_sku",
+          "tests.test_cart::test_quantity_limit",
+          "tests.test_cart::test_quantity_must_be_positive",
+          "tests.test_cart::test_update_and_remove",
+          "tests.test_catalog::test_duplicate_sku_rejected",
+          "tests.test_catalog::test_lookup_and_category",
+          "tests.test_catalog::test_negative_price_rejected",
+          "tests.test_catalog::test_product_price_is_rounded",
+          "tests.test_catalog::test_search_is_case_insensitive",
+          "tests.test_catalog::test_unknown_sku",
+          "tests.test_inventory::test_commit_reduces_on_hand",
+          "tests.test_inventory::test_over_reserve_fails",
+          "tests.test_inventory::test_release_more_than_held_fails",
+          "tests.test_inventory::test_restock_and_reserve",
+          "tests.test_inventory::test_restock_requires_positive_quantity",
+          "tests.test_orders::test_cancel_releases_stock",
+          "tests.test_orders::test_failed_reservation_rolls_back",
+          "tests.test_orders::test_pay_ship_flow",
+          "tests.test_orders::test_place_empty_cart_fails",
+          "tests.test_orders::test_place_reserves_stock",
+          "tests.test_orders::test_wrong_payment_amount",
+          "tests.test_pricing::test_category_tax_rates",
+          "tests.test_pricing::test_default_tax_and_flat_shipping",
+          "tests.test_pricing::test_empty_cart_totals",
+          "tests.test_pricing::test_free_shipping_at_threshold"
+        ]
+      },
+      "log_paths": [
+        "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\20261120-000302-shopcart\\support-promotional-discount-codes-in-cart-prici-f04964\\attempt-3\\positive\\regression_reference.log"
+      ]
+    },
+    {
+      "gate": "stability",
+      "status": "failed",
+      "summary": "3/3 reference runs identical",
+      "details": {
+        "runs": [
+          [],
+          [],
+          []
+        ]
+      },
+      "log_paths": []
+    },
+    {
+      "gate": "independence",
+      "status": "passed",
+      "summary": "5/5 acceptance criteria traced to tests; 0 error(s), 0 warning(s)",
+      "details": {
+        "errors": [],
+        "warnings": [],
+        "ac_coverage": {
+          "AC1": [
+            "test_ac1_coupon_min_subtotal_boundary",
+            "test_ac1_coupon_min_subtotal_error"
+          ],
+          "AC2": [
+            "test_ac2_percentage_coupon_discount",
+            "test_tax_proportion_across_multiple_categories"
+          ],
+          "AC3": [
+            "test_ac3_exceeding_discount_clamping"
+          ],
+          "AC4": [
+            "test_ac4_totals_formula_and_positional_defaults",
+            "test_tax_proportion_across_multiple_categories"
+          ],
+          "AC5": [
+            "test_ac5_none_coupon_preserves_behavior"
+          ]
+        },
+        "tests": [
+          "test_ac1_coupon_min_subtotal_error",
+          "test_ac1_coupon_min_subtotal_boundary",
+          "test_ac2_percentage_coupon_discount",
+          "test_ac3_exceeding_discount_clamping",
+          "test_ac4_totals_formula_and_positional_defaults",
+          "test_ac5_none_coupon_preserves_behavior",
+          "test_tax_proportion_across_multiple_categories"
+        ]
+      },
+      "log_paths": []
+    }
+  ],
+  "score": {
+    "total": 60.0,
+    "components": [
+      {
+        "name": "Requirement clarity",
+        "weight": 0.1,
+        "score": 1.0,
+        "rule": "min(1, #criteria/4) x share of criteria traced to >=1 test"
+      },
+      {
+        "name": "Requirement test coverage",
+        "weight": 0.1,
+        "score": 1.0,
+        "rule": "share of acceptance criteria with at least one hidden test"
+      },
+      {
+        "name": "Repository compatibility",
+        "weight": 0.1,
+        "score": 1.0,
+        "rule": "baseline suite healthy and stable in the task environment"
+      },
+      {
+        "name": "Negative control",
+        "weight": 0.15,
+        "score": 1.0,
+        "rule": "every hidden feature test fails on the original code"
+      },
+      {
+        "name": "Reference success",
+        "weight": 0.15,
+        "score": 0.0,
+        "rule": "every hidden feature test passes with the reference"
+      },
+      {
+        "name": "Regression safety",
+        "weight": 0.15,
+        "score": 1.0,
+        "rule": "all baseline-passing original tests still pass with the reference"
+      },
+      {
+        "name": "Mutation evidence",
+        "weight": 0.15,
+        "score": 0.0,
+        "rule": "mean kill rate of diff-scoped AST mutants and semantic mutants"
+      },
+      {
+        "name": "Reproducibility",
+        "weight": 0.1,
+        "score": 0.0,
+        "rule": "identical results across repeated reference runs"
+      }
+    ],
+    "disclaimer": "Heuristic quality score. Proof of validity comes from the executed gates, not this number."
+  },
+  "final_validity_status": "rejected",
+  "rejection_reasons": [
+    "positive_control: 0/7 feature tests pass with the reference",
+    "stability: 3/3 reference runs identical",
+    "mutation: not run",
+    "semantic_mutants: not run"
+  ],
+  "attempts": [
+    {
+      "attempt": 1,
+      "gates": {
+        "positive_control": "failed",
+        "negative_control": "passed",
+        "regression": "passed",
+        "stability": "failed"
+      },
+      "independence_errors": []
+    },
+    {
+      "attempt": 2,
+      "gates": {
+        "positive_control": "failed",
+        "negative_control": "passed",
+        "regression": "passed",
+        "stability": "failed"
+      },
+      "independence_errors": []
+    },
+    {
+      "attempt": 3,
+      "gates": {
+        "positive_control": "failed",
+        "negative_control": "passed",
+        "regression": "passed",
+        "stability": "failed"
+      },
+      "independence_errors": []
+    }
+  ],
+  "validation_logs": [],
+  "timestamp": "2026-11-20T00:03:09.027012+00:00"
+}

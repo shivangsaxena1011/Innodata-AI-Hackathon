@@ -1,0 +1,32 @@
+..F
+=================================== FAILURES ===================================
+_________________________ test_sku_breakdown_accuracy __________________________
+
+    def test_sku_breakdown_accuracy():
+        """AC2: The sku_breakdown map includes entries for every SKU in inventory with accurate metrics."""
+        inventory = Inventory()
+        catalog = Catalog()
+    
+        price = Decimal("12.50")
+        catalog.add(Product("SKU-A", "Widget", price, "parts"))
+        inventory.restock("SKU-A", 20)
+        inventory.reserve("SKU-A", 4)
+    
+        report = generate_inventory_report(inventory, catalog)
+    
+        assert "SKU-A" in report.sku_breakdown
+        data = report.sku_breakdown["SKU-A"]
+        assert data["on_hand"] == 20
+        assert data["reserved"] == 4
+        assert data["available"] == 16
+>       assert data["valuation"] == to_money(Decimal("12.50") * 20)
+E       AssertionError: assert Decimal('200.00') == Decimal('250.00')
+E        +  where Decimal('250.00') = to_money((Decimal('12.50') * 20))
+E        +    where Decimal('12.50') = Decimal('12.50')
+
+tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py:56: AssertionError
+------------------ generated xml file: /cf/out/mutant-s1.xml -------------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py::test_sku_breakdown_accuracy
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 2 passed in 0.03s

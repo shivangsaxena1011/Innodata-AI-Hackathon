@@ -1,0 +1,289 @@
+{
+  "codeforge_version": "0.1.0",
+  "team": {
+    "name": "TECH TITAN",
+    "developers": [
+      "Shivang Saxena",
+      "Rani Malviya"
+    ]
+  },
+  "generated_at": "2026-11-20T00:17:50.835931+00:00",
+  "task_id": "support-promotional-discount-codes-in-cart-prici-f04964",
+  "title": "Support promotional discount codes in cart pricing",
+  "archetype": "business_rule",
+  "repository": {
+    "name": "shopcart",
+    "url": "file:///C:/Users/Project/Innodata%20AI%20Hackathon/workspace/samples/shopcart",
+    "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+    "branch_at_generation": "main",
+    "language": "python",
+    "framework": null,
+    "runtime_version": ">=3.10",
+    "test_framework": "pytest",
+    "dependency_manifest_sha256": {
+      "pyproject.toml": "9bcd2a6325a40014faa227e4c6cf57547dab41d8875bce4b9d409320ae01f6ab",
+      "requirements-dev.txt": "a0e201ecda2bc871726ea3bb5db9cfe6b2109f60d8da88eecf910b790794b03d"
+    },
+    "baseline": {
+      "runs": 3,
+      "command": [
+        "tests"
+      ],
+      "passed": [
+        "tests.test_cart::test_add_and_subtotal",
+        "tests.test_cart::test_adding_same_sku_merges_lines",
+        "tests.test_cart::test_lines_sorted_by_sku",
+        "tests.test_cart::test_quantity_limit",
+        "tests.test_cart::test_quantity_must_be_positive",
+        "tests.test_cart::test_update_and_remove",
+        "tests.test_catalog::test_duplicate_sku_rejected",
+        "tests.test_catalog::test_lookup_and_category",
+        "tests.test_catalog::test_negative_price_rejected",
+        "tests.test_catalog::test_product_price_is_rounded",
+        "tests.test_catalog::test_search_is_case_insensitive",
+        "tests.test_catalog::test_unknown_sku",
+        "tests.test_inventory::test_commit_reduces_on_hand",
+        "tests.test_inventory::test_over_reserve_fails",
+        "tests.test_inventory::test_release_more_than_held_fails",
+        "tests.test_inventory::test_restock_and_reserve",
+        "tests.test_inventory::test_restock_requires_positive_quantity",
+        "tests.test_orders::test_cancel_releases_stock",
+        "tests.test_orders::test_failed_reservation_rolls_back",
+        "tests.test_orders::test_pay_ship_flow",
+        "tests.test_orders::test_place_empty_cart_fails",
+        "tests.test_orders::test_place_reserves_stock",
+        "tests.test_orders::test_wrong_payment_amount",
+        "tests.test_pricing::test_category_tax_rates",
+        "tests.test_pricing::test_default_tax_and_flat_shipping",
+        "tests.test_pricing::test_empty_cart_totals",
+        "tests.test_pricing::test_free_shipping_at_threshold"
+      ],
+      "failed": [],
+      "flaky": [],
+      "duration_sec": 0.0,
+      "healthy": true,
+      "notes": []
+    }
+  },
+  "environment": {
+    "base_image": "python:3.13-slim@sha256:e48f59cdba69a3cbd9ed2cf0f348d90d45a8d350d98134cf1070bc106ee9ed90"
+  },
+  "tests": {
+    "feature": [
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac1_min_subtotal_below_threshold_raises_pricing_error",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac1_min_subtotal_exact_match_succeeds",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac2_valid_percentage_coupon",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac3_clamped_discount_exceeding_subtotal",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac4_totals_equation_and_ordering",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_ac5_coupon_none_preserves_behavior",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_edge_case_proportional_tax_rounding",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_requirement_2_dataclass_coercion",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_requirement_7_shipping_on_original_subtotal",
+      "tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964::test_totals_immutability_and_validation"
+    ],
+    "regression": [
+      "tests.test_cart::test_add_and_subtotal",
+      "tests.test_cart::test_adding_same_sku_merges_lines",
+      "tests.test_cart::test_lines_sorted_by_sku",
+      "tests.test_cart::test_quantity_limit",
+      "tests.test_cart::test_quantity_must_be_positive",
+      "tests.test_cart::test_update_and_remove",
+      "tests.test_catalog::test_duplicate_sku_rejected",
+      "tests.test_catalog::test_lookup_and_category",
+      "tests.test_catalog::test_negative_price_rejected",
+      "tests.test_catalog::test_product_price_is_rounded",
+      "tests.test_catalog::test_search_is_case_insensitive",
+      "tests.test_catalog::test_unknown_sku",
+      "tests.test_inventory::test_commit_reduces_on_hand",
+      "tests.test_inventory::test_over_reserve_fails",
+      "tests.test_inventory::test_release_more_than_held_fails",
+      "tests.test_inventory::test_restock_and_reserve",
+      "tests.test_inventory::test_restock_requires_positive_quantity",
+      "tests.test_orders::test_cancel_releases_stock",
+      "tests.test_orders::test_failed_reservation_rolls_back",
+      "tests.test_orders::test_pay_ship_flow",
+      "tests.test_orders::test_place_empty_cart_fails",
+      "tests.test_orders::test_place_reserves_stock",
+      "tests.test_orders::test_wrong_payment_amount",
+      "tests.test_pricing::test_category_tax_rates",
+      "tests.test_pricing::test_default_tax_and_flat_shipping",
+      "tests.test_pricing::test_empty_cart_totals",
+      "tests.test_pricing::test_free_shipping_at_threshold"
+    ],
+    "files": [
+      "tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py"
+    ]
+  },
+  "traceability": [
+    {
+      "test_name": "test_ac1_min_subtotal_below_threshold_raises_pricing_error",
+      "criteria": [
+        "AC1"
+      ]
+    },
+    {
+      "test_name": "test_ac1_min_subtotal_exact_match_succeeds",
+      "criteria": [
+        "AC1"
+      ]
+    },
+    {
+      "test_name": "test_ac2_valid_percentage_coupon",
+      "criteria": [
+        "AC2"
+      ]
+    },
+    {
+      "test_name": "test_ac3_clamped_discount_exceeding_subtotal",
+      "criteria": [
+        "AC3"
+      ]
+    },
+    {
+      "test_name": "test_ac4_totals_equation_and_ordering",
+      "criteria": [
+        "AC4"
+      ]
+    },
+    {
+      "test_name": "test_ac5_coupon_none_preserves_behavior",
+      "criteria": [
+        "AC5"
+      ]
+    },
+    {
+      "test_name": "test_requirement_7_shipping_on_original_subtotal",
+      "criteria": [
+        "AC2"
+      ]
+    },
+    {
+      "test_name": "test_requirement_2_dataclass_coercion",
+      "criteria": [
+        "AC1"
+      ]
+    },
+    {
+      "test_name": "test_edge_case_proportional_tax_rounding",
+      "criteria": [
+        "AC2",
+        "AC4"
+      ]
+    },
+    {
+      "test_name": "test_totals_immutability_and_validation",
+      "criteria": [
+        "AC4"
+      ]
+    }
+  ],
+  "reference": {
+    "files": [
+      "shopcart/__init__.py",
+      "shopcart/pricing.py"
+    ],
+    "explanation": "Implemented PricingError and DiscountCoupon in shopcart.pricing, updated Totals dataclass to include a discount field (with default 0.00), updated compute_totals to validate and apply coupons (including clamped percentage/fixed discount calculations and proportional tax scaling), and exported the new classes in shopcart/__init__.py."
+  },
+  "validation": {
+    "status": "valid",
+    "validity_score": 98.5,
+    "gates": [
+      {
+        "gate": "baseline",
+        "status": "passed",
+        "summary": "27 original tests pass consistently across 3 runs"
+      },
+      {
+        "gate": "positive_control",
+        "status": "passed",
+        "summary": "10/10 feature tests pass with the reference"
+      },
+      {
+        "gate": "negative_control",
+        "status": "passed",
+        "summary": "10/10 feature tests fail on the original code (module import fails: the contract does not exist yet)"
+      },
+      {
+        "gate": "regression",
+        "status": "passed",
+        "summary": "27/27 original tests still pass with the reference"
+      },
+      {
+        "gate": "stability",
+        "status": "passed",
+        "summary": "3/3 reference runs identical"
+      },
+      {
+        "gate": "independence",
+        "status": "passed",
+        "summary": "5/5 acceptance criteria traced to tests; 0 error(s), 0 warning(s)"
+      },
+      {
+        "gate": "mutation",
+        "status": "passed",
+        "summary": "mutation score 80% (12/15 killed, threshold 60%)"
+      },
+      {
+        "gate": "semantic_mutants",
+        "status": "passed",
+        "summary": "4/4 plausible wrong implementations caught"
+      },
+      {
+        "gate": "leakage",
+        "status": "passed",
+        "summary": "no leakage or shortcut found"
+      },
+      {
+        "gate": "harbor_lint",
+        "status": "passed",
+        "summary": "harbor lint: no findings"
+      },
+      {
+        "gate": "harbor_oracle",
+        "status": "passed",
+        "summary": "oracle reward 1.0"
+      },
+      {
+        "gate": "harbor_nop",
+        "status": "passed",
+        "summary": "nop (no changes) reward 0.0"
+      }
+    ],
+    "mutation_score": 0.8,
+    "semantic_mutant_score": 1.0,
+    "coverage": {
+      "changed_statements": 38,
+      "covered": 38,
+      "percent": 100.0,
+      "files": {
+        "shopcart/__init__.py": {
+          "statements": 1,
+          "covered": 1,
+          "missing_lines": [],
+          "percent": 100.0
+        },
+        "shopcart/pricing.py": {
+          "statements": 37,
+          "covered": 37,
+          "missing_lines": [],
+          "percent": 100.0
+        }
+      },
+      "tool": "coverage==7.17.3"
+    }
+  },
+  "generation": {
+    "model": "gemini/gemini-flash-latest",
+    "attempts": [
+      {
+        "stage": "apply_edits",
+        "ok": true,
+        "files": [
+          "shopcart/__init__.py",
+          "shopcart/pricing.py"
+        ]
+      }
+    ],
+    "seed": 1337
+  }
+}

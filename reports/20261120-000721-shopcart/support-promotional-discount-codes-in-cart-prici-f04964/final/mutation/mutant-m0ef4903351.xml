@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="0.032" timestamp="2026-11-20T00:09:05.675075+00:00" hostname="3c25d9002641"><testcase classname="tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964" name="test_ac1_min_subtotal_below_threshold_raises_pricing_error" time="0.000" /><testcase classname="tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964" name="test_ac1_min_subtotal_exact_match_succeeds" time="0.000" /><testcase classname="tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964" name="test_ac2_valid_percentage_coupon" time="0.000"><failure message="AssertionError: assert Decimal('102.32') == Decimal('78.92')&#10; +  where Decimal('102.32') = Totals(subtotal=Decimal('78.00'), discount=Decimal('11.70'), tax=Decimal('6.63'), shipping=Decimal('5.99'), total=Decimal('102.32')).total&#10; +  and   Decimal('78.92') = Decimal('78.92')">def test_ac2_valid_percentage_coupon():
+        catalog = _make_catalog()
+        cart = Cart(catalog)
+        cart.add_item("BOOK-2", 2)  # subtotal = 78.00
+    
+        policy = PricingPolicy(default_tax_rate=Decimal("10"), flat_shipping=Decimal("5.99"), free_shipping_threshold=Decimal("100.00"))
+        coupon = DiscountCoupon("PERCENT15", discount_percent=Decimal("15"))
+    
+        # subtotal = 78.00
+        # raw discount = percent_of(78.00, 15) = 11.70
+        # discount = 11.70
+        # discounted_line_base = 78.00 * (1 - 11.70 / 78.00) = 66.30
+        # tax = percent_of(66.30, 10) = 6.63
+        # shipping = 5.99 (78.00 &lt; 100.00)
+        # total = 78.00 - 11.70 + 6.63 + 5.99 = 78.92
+        totals = compute_totals(cart, policy, coupon=coupon)
+        assert totals.subtotal == Decimal("78.00")
+        assert totals.discount == Decimal("11.70")
+        assert totals.tax == Decimal("6.63")
+        assert totals.shipping == Decimal("5.99")
+&gt;       assert totals.total == Decimal("78.92")
+E       AssertionError: assert Decimal('102.32') == Decimal('78.92')
+E        +  where Decimal('102.32') = Totals(subtotal=Decimal('78.00'), discount=Decimal('11.70'), tax=Decimal('6.63'), shipping=Decimal('5.99'), total=Decimal('102.32')).total
+E        +  and   Decimal('78.92') = Decimal('78.92')
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:68: AssertionError</failure></testcase></testsuite></testsuites>

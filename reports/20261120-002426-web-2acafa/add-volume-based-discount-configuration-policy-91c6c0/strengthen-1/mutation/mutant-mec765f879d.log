@@ -1,0 +1,29 @@
+F
+=================================== FAILURES ===================================
+__________________________ test_ac1_exact_tier_match ___________________________
+
+    def test_ac1_exact_tier_match():
+        """Given a VolumeDiscountPolicy with a tier (10 units, 10% discount), 10 units of a $10.00 item results in a subtotal of $90.00."""
+        cart, policy, _ = setup_cart_and_policy()
+>       policy.add_tier(10, 10)
+
+tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = VolumeDiscountPolicy(default_tax_rate=Decimal('8'), category_tax_rates={}, flat_shipping=Decimal('5.99'), free_shipping_threshold=Decimal('50.00'))
+min_quantity = 10, discount_percent = 10
+
+    def add_tier(self, min_quantity: int, discount_percent: Decimal | int | str) -> None:
+        if min_quantity < 1:
+            raise ValueError("min_quantity must be at least 1")
+        percent = Decimal(discount_percent)
+        if not (percent < 0 or percent > 100):
+>           raise ValueError("discount_percent must be between 0 and 100")
+E           ValueError: discount_percent must be between 0 and 100
+
+shopcart/pricing.py:36: ValueError
+-------------- generated xml file: /cf/out/mutant-mec765f879d.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py::test_ac1_exact_tier_match
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 0.04s

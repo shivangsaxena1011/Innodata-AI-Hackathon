@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="0.036" timestamp="2026-11-20T00:15:07.335136+00:00" hostname="a3fbae13b11a"><testcase classname="tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964" name="test_ac1_min_subtotal_below_threshold_raises_pricing_error" time="0.000" /><testcase classname="tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964" name="test_ac1_min_subtotal_exact_match_succeeds" time="0.001"><failure message="AssertionError: assert Decimal('-10.00') == Decimal('10.00')&#10; +  where Decimal('-10.00') = Totals(subtotal=Decimal('61.00'), discount=Decimal('-10.00'), tax=Decimal('5.68'), shipping=Decimal('0.00'), total=Decimal('76.68')).discount&#10; +  and   Decimal('10.00') = Decimal('10.00')">def test_ac1_min_subtotal_exact_match_succeeds():
+        catalog = _make_catalog()
+        cart = Cart(catalog)
+        cart.add_item("BOOK-1", 2)  # subtotal = 49.00
+        cart.add_item("FOOD-1", 1)  # subtotal = 61.00
+    
+        coupon = DiscountCoupon("MIN61", fixed_amount=Decimal("10.00"), min_subtotal=Decimal("61.00"))
+        totals = compute_totals(cart, coupon=coupon)
+&gt;       assert totals.discount == Decimal("10.00")
+E       AssertionError: assert Decimal('-10.00') == Decimal('10.00')
+E        +  where Decimal('-10.00') = Totals(subtotal=Decimal('61.00'), discount=Decimal('-10.00'), tax=Decimal('5.68'), shipping=Decimal('0.00'), total=Decimal('76.68')).discount
+E        +  and   Decimal('10.00') = Decimal('10.00')
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:44: AssertionError</failure></testcase></testsuite></testsuites>

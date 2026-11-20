@@ -1,0 +1,18 @@
+.......F
+=================================== FAILURES ===================================
+____________________ test_requirement_2_dataclass_coercion _____________________
+
+    def test_requirement_2_dataclass_coercion():
+        # Using float and string to check if __post_init__ or field conversion handles it
+        coupon = DiscountCoupon(code="FLOAT", discount_percent=10.5, fixed_amount="5.00", min_subtotal=20)
+>       assert isinstance(coupon.discount_percent, Decimal)
+E       AssertionError: assert False
+E        +  where False = isinstance(10.5, Decimal)
+E        +    where 10.5 = DiscountCoupon(code='FLOAT', discount_percent=10.5, fixed_amount='5.00', min_subtotal=20).discount_percent
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:108: AssertionError
+------------------ generated xml file: /cf/out/mutant-s4.xml -------------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py::test_requirement_2_dataclass_coercion
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 7 passed in 0.03s

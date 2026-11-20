@@ -1,0 +1,25 @@
+....F
+=================================== FAILURES ===================================
+___________________ test_ac5_shipping_on_discounted_subtotal ___________________
+
+    def test_ac5_shipping_on_discounted_subtotal():
+        """Free shipping thresholds are evaluated against the discounted subtotal."""
+        # Threshold 50.00. 5 units * 10.00 = 50.00. 10% discount = 45.00.
+        # 45.00 < 50.00, so shipping is applied.
+        cart, policy, _ = setup_cart_and_policy()
+        policy.add_tier(5, 10)
+        cart.add_item("SKU-1", 5)
+    
+        totals = compute_totals(cart, policy)
+        assert totals.subtotal == Decimal("45.00")
+>       assert totals.shipping == Decimal("5.99")
+E       AssertionError: assert Decimal('0.00') == Decimal('5.99')
+E        +  where Decimal('0.00') = Totals(subtotal=Decimal('45.00'), tax=Decimal('3.60'), shipping=Decimal('0.00'), total=Decimal('48.60')).shipping
+E        +  and   Decimal('5.99') = Decimal('5.99')
+
+tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py:72: AssertionError
+------------------ generated xml file: /cf/out/mutant-s2.xml -------------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py::test_ac5_shipping_on_discounted_subtotal
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 4 passed in 0.03s

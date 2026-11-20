@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="7" time="0.044" timestamp="2026-11-20T00:04:16.781408+00:00" hostname="b65bb5b9bd4d"><testcase classname="tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964" name="test_ac1_coupon_min_subtotal_error" time="0.000"><failure message="TypeError: Cart.__init__() missing 1 required positional argument: 'catalog'">def test_ac1_coupon_min_subtotal_error():
+&gt;       cart = _make_cart(("A", "10.00", 2, "general"))  # subtotal = 20.00
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+items = (('A', '10.00', 2, 'general'),)
+
+    def _make_cart(*items):
+        """Helper to create a Cart populated with products: (sku, price, qty, category)."""
+&gt;       cart = Cart()
+E       TypeError: Cart.__init__() missing 1 required positional argument: 'catalog'
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:17: TypeError</failure></testcase><testcase classname="tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964" name="test_ac1_coupon_min_subtotal_boundary" time="0.000"><failure message="TypeError: Cart.__init__() missing 1 required positional argument: 'catalog'">def test_ac1_coupon_min_subtotal_boundary():
+        # Just below min_subtotal raises PricingError
+&gt;       cart_below = _make_cart(("A", "29.99", 1, "general"))
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+items = (('A', '29.99', 1, 'general'),)
+
+    def _make_cart(*items):
+        """Helper to create a Cart populated with products: (sku, price, qty, category)."""
+&gt;       cart = Cart()
+E       TypeError: Cart.__init__() missing 1 required positional argument: 'catalog'
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:17: TypeError</failure></testcase><testcase classname="tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964" name="test_ac2_percentage_coupon_discount" time="0.000"><failure message="TypeError: Cart.__init__() missing 1 required positional argument: 'catalog'">def test_ac2_percentage_coupon_discount():
+&gt;       cart = _make_cart(("A", "100.00", 1, "general"))
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+items = (('A', '100.00', 1, 'general'),)
+
+    def _make_cart(*items):
+        """Helper to create a Cart populated with products: (sku, price, qty, category)."""
+&gt;       cart = Cart()
+E       TypeError: Cart.__init__() missing 1 required positional argument: 'catalog'
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:17: TypeError</failure></testcase><testcase classname="tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964" name="test_ac3_exceeding_discount_clamping" time="0.000"><failure message="TypeError: Cart.__init__() missing 1 required positional argument: 'catalog'">def test_ac3_exceeding_discount_clamping():
+&gt;       cart = _make_cart(("A", "15.00", 1, "general"))
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+items = (('A', '15.00', 1, 'general'),)
+
+    def _make_cart(*items):
+        """Helper to create a Cart populated with products: (sku, price, qty, category)."""
+&gt;       cart = Cart()
+E       TypeError: Cart.__init__() missing 1 required positional argument: 'catalog'
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:17: TypeError</failure></testcase><testcase classname="tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964" name="test_ac4_totals_formula_and_positional_defaults" time="0.000"><failure message="TypeError: Cart.__init__() missing 1 required positional argument: 'catalog'">def test_ac4_totals_formula_and_positional_defaults():
+        # Test Totals default discount and explicit formula
+        t = Totals(subtotal=Decimal("100.00"), discount=Decimal("20.00"), tax=Decimal("8.00"), shipping=Decimal("5.00"), total=Decimal("93.00"))
+        assert t.subtotal - t.discount + t.tax + t.shipping == t.total
+    
+&gt;       cart = _make_cart(("A", "50.00", 1, "electronics"), ("B", "25.00", 2, "books"))
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+items = (('A', '50.00', 1, 'electronics'), ('B', '25.00', 2, 'books'))
+
+    def _make_cart(*items):
+        """Helper to create a Cart populated with products: (sku, price, qty, category)."""
+&gt;       cart = Cart()
+E       TypeError: Cart.__init__() missing 1 required positional argument: 'catalog'
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:17: TypeError</failure></testcase><testcase classname="tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964" name="test_ac5_none_coupon_preserves_behavior" time="0.000"><failure message="TypeError: Cart.__init__() missing 1 required positional argument: 'catalog'">def test_ac5_none_coupon_preserves_behavior():
+&gt;       cart = _make_cart(("A", "20.00", 2, "general"))  # subtotal = 40.00
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+items = (('A', '20.00', 2, 'general'),)
+
+    def _make_cart(*items):
+        """Helper to create a Cart populated with products: (sku, price, qty, category)."""
+&gt;       cart = Cart()
+E       TypeError: Cart.__init__() missing 1 required positional argument: 'catalog'
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:17: TypeError</failure></testcase><testcase classname="tests.test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964" name="test_tax_proportion_across_multiple_categories" time="0.000"><failure message="TypeError: Cart.__init__() missing 1 required positional argument: 'catalog'">def test_tax_proportion_across_multiple_categories():
+        # Line 1: electronics 60.00 (tax 10%)
+        # Line 2: books 40.00 (tax 5%)
+        # Cart subtotal = 100.00, discount = 20.00 (ratio = 0.8)
+        # Discounted line 1 base = 48.00 -&gt; tax = 4.80
+        # Discounted line 2 base = 32.00 -&gt; tax = 1.60
+        # Total tax = 6.40
+&gt;       cart = _make_cart(("E1", "60.00", 1, "electronics"), ("B1", "40.00", 1, "books"))
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+items = (('E1', '60.00', 1, 'electronics'), ('B1', '40.00', 1, 'books'))
+
+    def _make_cart(*items):
+        """Helper to create a Cart populated with products: (sku, price, qty, category)."""
+&gt;       cart = Cart()
+E       TypeError: Cart.__init__() missing 1 required positional argument: 'catalog'
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:17: TypeError</failure></testcase></testsuite></testsuites>

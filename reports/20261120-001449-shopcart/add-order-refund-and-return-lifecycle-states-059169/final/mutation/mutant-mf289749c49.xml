@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="0.025" timestamp="2026-11-20T00:18:06.841756+00:00" hostname="e03f2eead8b5"><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_order_status_enum_members" time="0.000" /><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_return_items_flow" time="0.000"><failure message="AssertionError: assert 8 == 10&#10; +  where 8 = available('SKU-1')&#10; +    where available = &lt;shopcart.inventory.Inventory object at 0x7850a1626f90&gt;.available">def test_return_items_flow():
+        """AC2: Verify return_items transitions state and restocks inventory."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 2)
+        cart.add_item("SKU-2", 1)
+    
+        order = Order.place(cart, inventory)
+        order.pay(order.totals.total)
+        order.ship(inventory)  # Transitions to SHIPPED
+    
+        # Before return check inventory (20 starting total on-hand in fixture-like setup)
+        # Logic: start with 10. Order reserves 2 and 1. Ship commits (on-hand becomes 8 and 9).
+        assert inventory.available("SKU-1") == 8
+        assert inventory.available("SKU-2") == 9
+    
+        order.return_items(inventory)
+    
+        assert order.status == OrderStatus.RETURNED
+        assert OrderStatus.RETURNED in order.history
+&gt;       assert inventory.available("SKU-1") == 10
+E       AssertionError: assert 8 == 10
+E        +  where 8 = available('SKU-1')
+E        +    where available = &lt;shopcart.inventory.Inventory object at 0x7850a1626f90&gt;.available
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:43: AssertionError</failure></testcase></testsuite></testsuites>

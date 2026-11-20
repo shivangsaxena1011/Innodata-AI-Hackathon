@@ -1,0 +1,9 @@
+{
+  "rewards": {
+    "reward": 1.0,
+    "feature_pass_rate": 1.0,
+    "regression_pass_rate": 1.0
+  },
+  "feature_not_passed": [],
+  "regression_not_passed": []
+}

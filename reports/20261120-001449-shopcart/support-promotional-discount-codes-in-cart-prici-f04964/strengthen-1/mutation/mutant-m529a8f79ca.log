@@ -1,0 +1,19 @@
+.........F
+=================================== FAILURES ===================================
+___________________ test_totals_immutability_and_validation ____________________
+
+    def test_totals_immutability_and_validation():
+        # Ensure Totals validation/re-quantization of total works as specified in Requirement 3
+        # Requirement says total must equal to_money(subtotal - discount + tax + shipping)
+        t = Totals(subtotal=Decimal("10.00"), discount=Decimal("2.00"), tax=Decimal("0.80"), shipping=Decimal("5.00"), total=Decimal("0"))
+>       assert t.total == Decimal("13.80")
+E       AssertionError: assert Decimal('0') == Decimal('13.80')
+E        +  where Decimal('0') = Totals(subtotal=Decimal('10.00'), discount=Decimal('2.00'), tax=Decimal('0.80'), shipping=Decimal('5.00'), total=Decimal('0')).total
+E        +  and   Decimal('13.80') = Decimal('13.80')
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:134: AssertionError
+-------------- generated xml file: /cf/out/mutant-m529a8f79ca.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py::test_totals_immutability_and_validation
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 9 passed in 0.03s

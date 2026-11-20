@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 from enum import StrEnum
+from typing import ClassVar
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
@@ -115,16 +116,22 @@ class ReferenceResponse(BaseModel):
 
 
 class TestCaseTrace(BaseModel):
+    __test__: ClassVar[bool] = False  # not a pytest test class
+
     test_name: str
     criteria: list[str] = Field(min_length=1)
 
 
 class TestFile(BaseModel):
+    __test__: ClassVar[bool] = False  # not a pytest test class
+
     path: str
     content: str
 
 
 class TestBundleResponse(BaseModel):
+    __test__: ClassVar[bool] = False  # not a pytest test class
+
     files: list[TestFile] = Field(min_length=1)
     traceability: list[TestCaseTrace] = Field(min_length=1)
 

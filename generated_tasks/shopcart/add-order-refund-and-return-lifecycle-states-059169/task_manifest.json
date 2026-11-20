@@ -1,0 +1,259 @@
+{
+  "codeforge_version": "0.1.0",
+  "team": {
+    "name": "TECH TITAN",
+    "developers": [
+      "Shivang Saxena",
+      "Rani Malviya"
+    ]
+  },
+  "generated_at": "2026-11-20T00:20:04.254990+00:00",
+  "task_id": "add-order-refund-and-return-lifecycle-states-059169",
+  "title": "Add order refund and return lifecycle states",
+  "archetype": "state_machine",
+  "repository": {
+    "name": "shopcart",
+    "url": "file:///C:/Users/Project/Innodata%20AI%20Hackathon/workspace/samples/shopcart",
+    "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+    "branch_at_generation": "main",
+    "language": "python",
+    "framework": null,
+    "runtime_version": ">=3.10",
+    "test_framework": "pytest",
+    "dependency_manifest_sha256": {
+      "pyproject.toml": "9bcd2a6325a40014faa227e4c6cf57547dab41d8875bce4b9d409320ae01f6ab",
+      "requirements-dev.txt": "a0e201ecda2bc871726ea3bb5db9cfe6b2109f60d8da88eecf910b790794b03d"
+    },
+    "baseline": {
+      "runs": 3,
+      "command": [
+        "tests"
+      ],
+      "passed": [
+        "tests.test_cart::test_add_and_subtotal",
+        "tests.test_cart::test_adding_same_sku_merges_lines",
+        "tests.test_cart::test_lines_sorted_by_sku",
+        "tests.test_cart::test_quantity_limit",
+        "tests.test_cart::test_quantity_must_be_positive",
+        "tests.test_cart::test_update_and_remove",
+        "tests.test_catalog::test_duplicate_sku_rejected",
+        "tests.test_catalog::test_lookup_and_category",
+        "tests.test_catalog::test_negative_price_rejected",
+        "tests.test_catalog::test_product_price_is_rounded",
+        "tests.test_catalog::test_search_is_case_insensitive",
+        "tests.test_catalog::test_unknown_sku",
+        "tests.test_inventory::test_commit_reduces_on_hand",
+        "tests.test_inventory::test_over_reserve_fails",
+        "tests.test_inventory::test_release_more_than_held_fails",
+        "tests.test_inventory::test_restock_and_reserve",
+        "tests.test_inventory::test_restock_requires_positive_quantity",
+        "tests.test_orders::test_cancel_releases_stock",
+        "tests.test_orders::test_failed_reservation_rolls_back",
+        "tests.test_orders::test_pay_ship_flow",
+        "tests.test_orders::test_place_empty_cart_fails",
+        "tests.test_orders::test_place_reserves_stock",
+        "tests.test_orders::test_wrong_payment_amount",
+        "tests.test_pricing::test_category_tax_rates",
+        "tests.test_pricing::test_default_tax_and_flat_shipping",
+        "tests.test_pricing::test_empty_cart_totals",
+        "tests.test_pricing::test_free_shipping_at_threshold"
+      ],
+      "failed": [],
+      "flaky": [],
+      "duration_sec": 0.0,
+      "healthy": true,
+      "notes": []
+    }
+  },
+  "environment": {
+    "base_image": "python:3.13-slim@sha256:e48f59cdba69a3cbd9ed2cf0f348d90d45a8d350d98134cf1070bc106ee9ed90"
+  },
+  "tests": {
+    "feature": [
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_refund_transitions",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_invalid_return_transitions",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_order_status_enum_members",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_paid",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_refund_from_returned",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_empty_order_restocks_nothing",
+      "tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169::test_return_items_flow"
+    ],
+    "regression": [
+      "tests.test_cart::test_add_and_subtotal",
+      "tests.test_cart::test_adding_same_sku_merges_lines",
+      "tests.test_cart::test_lines_sorted_by_sku",
+      "tests.test_cart::test_quantity_limit",
+      "tests.test_cart::test_quantity_must_be_positive",
+      "tests.test_cart::test_update_and_remove",
+      "tests.test_catalog::test_duplicate_sku_rejected",
+      "tests.test_catalog::test_lookup_and_category",
+      "tests.test_catalog::test_negative_price_rejected",
+      "tests.test_catalog::test_product_price_is_rounded",
+      "tests.test_catalog::test_search_is_case_insensitive",
+      "tests.test_catalog::test_unknown_sku",
+      "tests.test_inventory::test_commit_reduces_on_hand",
+      "tests.test_inventory::test_over_reserve_fails",
+      "tests.test_inventory::test_release_more_than_held_fails",
+      "tests.test_inventory::test_restock_and_reserve",
+      "tests.test_inventory::test_restock_requires_positive_quantity",
+      "tests.test_orders::test_cancel_releases_stock",
+      "tests.test_orders::test_failed_reservation_rolls_back",
+      "tests.test_orders::test_pay_ship_flow",
+      "tests.test_orders::test_place_empty_cart_fails",
+      "tests.test_orders::test_place_reserves_stock",
+      "tests.test_orders::test_wrong_payment_amount",
+      "tests.test_pricing::test_category_tax_rates",
+      "tests.test_pricing::test_default_tax_and_flat_shipping",
+      "tests.test_pricing::test_empty_cart_totals",
+      "tests.test_pricing::test_free_shipping_at_threshold"
+    ],
+    "files": [
+      "tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py"
+    ]
+  },
+  "traceability": [
+    {
+      "test_name": "test_order_status_enum_members",
+      "criteria": [
+        "AC1"
+      ]
+    },
+    {
+      "test_name": "test_return_items_flow",
+      "criteria": [
+        "AC2"
+      ]
+    },
+    {
+      "test_name": "test_refund_from_paid",
+      "criteria": [
+        "AC3"
+      ]
+    },
+    {
+      "test_name": "test_refund_from_returned",
+      "criteria": [
+        "AC4"
+      ]
+    },
+    {
+      "test_name": "test_invalid_refund_transitions",
+      "criteria": [
+        "AC5"
+      ]
+    },
+    {
+      "test_name": "test_invalid_return_transitions",
+      "criteria": [
+        "AC6"
+      ]
+    },
+    {
+      "test_name": "test_return_items_empty_order_restocks_nothing",
+      "criteria": [
+        "AC2"
+      ]
+    }
+  ],
+  "reference": {
+    "files": [
+      "shopcart/orders.py"
+    ],
+    "explanation": "I have extended the order state machine to support refund and return lifecycles. This involved adding `REFUNDED` and `RETURNED` to the `OrderStatus` enum, updating the `ALLOWED_TRANSITIONS` mapping to define valid state flows (including permitting refunds from `PAID` or `RETURNED` states, and returns from `SHIPPED`), and implementing the `refund` and `return_items` methods on the `Order` class. The `return_items` method correctly restocks the inventory before finalizing the state transition."
+  },
+  "validation": {
+    "status": "valid",
+    "validity_score": 99.2,
+    "gates": [
+      {
+        "gate": "baseline",
+        "status": "passed",
+        "summary": "27 original tests pass consistently across 3 runs"
+      },
+      {
+        "gate": "positive_control",
+        "status": "passed",
+        "summary": "7/7 feature tests pass with the reference"
+      },
+      {
+        "gate": "negative_control",
+        "status": "passed",
+        "summary": "7/7 feature tests fail on the original code"
+      },
+      {
+        "gate": "regression",
+        "status": "passed",
+        "summary": "27/27 original tests still pass with the reference"
+      },
+      {
+        "gate": "stability",
+        "status": "passed",
+        "summary": "3/3 reference runs identical"
+      },
+      {
+        "gate": "independence",
+        "status": "passed",
+        "summary": "6/6 acceptance criteria traced to tests; 0 error(s), 0 warning(s)"
+      },
+      {
+        "gate": "mutation",
+        "status": "passed",
+        "summary": "mutation score 90% (17/19 killed, threshold 60%)"
+      },
+      {
+        "gate": "semantic_mutants",
+        "status": "passed",
+        "summary": "4/4 plausible wrong implementations caught"
+      },
+      {
+        "gate": "leakage",
+        "status": "passed",
+        "summary": "no leakage or shortcut found"
+      },
+      {
+        "gate": "harbor_lint",
+        "status": "passed",
+        "summary": "harbor lint: no findings"
+      },
+      {
+        "gate": "harbor_oracle",
+        "status": "passed",
+        "summary": "oracle reward 1.0"
+      },
+      {
+        "gate": "harbor_nop",
+        "status": "passed",
+        "summary": "nop (no changes) reward 0.0"
+      }
+    ],
+    "mutation_score": 0.895,
+    "semantic_mutant_score": 1.0,
+    "coverage": {
+      "changed_statements": 8,
+      "covered": 8,
+      "percent": 100.0,
+      "files": {
+        "shopcart/orders.py": {
+          "statements": 8,
+          "covered": 8,
+          "missing_lines": [],
+          "percent": 100.0
+        }
+      },
+      "tool": "coverage==7.17.3"
+    }
+  },
+  "generation": {
+    "model": "gemini/gemini-flash-latest",
+    "attempts": [
+      {
+        "stage": "apply_edits",
+        "ok": true,
+        "files": [
+          "shopcart/orders.py"
+        ]
+      }
+    ],
+    "seed": 1337
+  }
+}

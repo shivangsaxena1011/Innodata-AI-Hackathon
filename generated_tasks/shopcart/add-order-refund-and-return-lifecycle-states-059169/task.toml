@@ -1,0 +1,43 @@
+schema_version = "1.4"
+source = "codeforge-ai 0.1.0"
+artifacts = [{ source = "/app", exclude = ["__pycache__", ".pytest_cache", "*.pyc"] }]
+
+[task]
+name = "codeforge/add-order-refund-and-return-lifecycle-states-059169"
+version = "1.0.0"
+description = "Extend the order state machine in `shopcart.orders` to support product returns and order refunds. Add `REFUNDED` and `RETURNED` enum members to `OrderStatus`, update state transition permissions in `ALLOWED_TRANSITIONS`, and add `refund()` and `return_items(inventory)` methods to the `Order` dataclass."
+authors = [{ name = "Team TECH TITAN: Shivang Saxena, Rani Malviya" }]
+keywords = ["codeforge", "feature-development", "state_machine", "python"]
+
+[metadata]
+author_name = "Team TECH TITAN"
+author_email = "unknown"
+difficulty = "easy"
+category = "software_engineering"
+tags = ["feature-development", "state_machine", "python"]
+expert_time_estimate_min = 20.0
+junior_time_estimate_min = 40.0
+repository_name = "shopcart"
+repository_url = "file:///C:/Users/Project/Innodata%20AI%20Hackathon/workspace/samples/shopcart"
+starting_commit_sha = "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2"
+language = "python"
+test_framework = "pytest"
+archetype = "state_machine"
+codeforge_version = "0.1.0"
+validity_score = 99.2
+validation_status = "valid"
+
+[verifier]
+timeout_sec = 1800.0
+environment_mode = "separate"
+network_mode = "no-network"
+
+[agent]
+timeout_sec = 3600.0
+
+[environment]
+network_mode = "public"
+build_timeout_sec = 900.0
+os = "linux"
+cpus = 2
+memory_mb = 4096

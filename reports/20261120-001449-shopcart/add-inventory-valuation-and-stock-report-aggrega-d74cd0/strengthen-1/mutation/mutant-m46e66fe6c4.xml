@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="7" time="0.046" timestamp="2026-11-20T00:21:41.388152+00:00" hostname="3a156b4504a6"><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_report_empty_inventory" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_report_aggregated_totals" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_sku_breakdown_accuracy" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_missing_catalog_skus" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_total_valuation_quantization" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_sku_with_only_reserved_stock" time="0.000" /><testcase classname="tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0" name="test_valuation_summation_consistency" time="0.000"><failure message="KeyError: 'A'">def test_valuation_summation_consistency():
+        """Ensures that the total valuation is the sum of rounded SKU valuations, not a sum of floats rounded at the end."""
+        inventory = Inventory()
+        catalog = Catalog()
+    
+        # 1.105 rounds to 1.11
+        catalog.add(Product("A", "A", Decimal("1.105"), "cat"))
+        inventory.restock("A", 1)
+    
+        # 2.205 rounds to 2.21
+        catalog.add(Product("B", "B", Decimal("2.205"), "cat"))
+        inventory.restock("B", 1)
+    
+        report = generate_inventory_report(inventory, catalog)
+    
+        # SKU A: 1.11 * 1 = 1.11
+        # SKU B: 2.21 * 1 = 2.21
+        # Total: 3.32
+&gt;       assert report.sku_breakdown["A"]["valuation"] == Decimal("1.11")
+E       KeyError: 'A'
+
+tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py:132: KeyError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,93 @@
+{
+  "codeforge_version": "0.1.0",
+  "started_at": "2026-11-20T00:03:02.640058+00:00",
+  "status": "completed",
+  "tasks": [
+    {
+      "task_id": "support-promotional-discount-codes-in-cart-prici-f04964",
+      "title": "Support promotional discount codes in cart pricing",
+      "archetype": "business_rule",
+      "status": "rejected",
+      "score": 60.0,
+      "gates": [
+        {
+          "gate": "baseline",
+          "status": "passed",
+          "summary": "27 original tests pass consistently across 3 runs"
+        },
+        {
+          "gate": "positive_control",
+          "status": "failed",
+          "summary": "0/7 feature tests pass with the reference"
+        },
+        {
+          "gate": "negative_control",
+          "status": "passed",
+          "summary": "7/7 feature tests fail on the original code (module import fails: the contract does not exist yet)"
+        },
+        {
+          "gate": "regression",
+          "status": "passed",
+          "summary": "27/27 original tests still pass with the reference"
+        },
+        {
+          "gate": "stability",
+          "status": "failed",
+          "summary": "3/3 reference runs identical"
+        },
+        {
+          "gate": "independence",
+          "status": "passed",
+          "summary": "5/5 acceptance criteria traced to tests; 0 error(s), 0 warning(s)"
+        }
+      ],
+      "reasons": [
+        "positive_control: 0/7 feature tests pass with the reference",
+        "stability: 3/3 reference runs identical",
+        "mutation: not run",
+        "semantic_mutants: not run"
+      ],
+      "task_dir": null,
+      "error": null
+    }
+  ],
+  "accepted": 0,
+  "rejected": 1,
+  "run_id": "20261120-000302-shopcart",
+  "repository": {
+    "name": "shopcart",
+    "url": "file:///C:/Users/Project/Innodata%20AI%20Hackathon/workspace/samples/shopcart",
+    "commit": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+    "language": "python",
+    "framework": null,
+    "test_framework": "pytest"
+  },
+  "variation": {
+    "tasks": 0,
+    "distinct_archetypes": 0,
+    "archetypes": [],
+    "mean_pairwise_similarity": 0.0,
+    "max_pairwise_similarity": 0.0,
+    "diversity_score": null,
+    "pairs": []
+  },
+  "finished_at": "2026-11-20T00:05:11.308047+00:00",
+  "llm_usage": {
+    "calls": 6,
+    "cached_calls": 2,
+    "prompt_tokens": 27836,
+    "completion_tokens": 15250,
+    "by_purpose": {
+      "feature_discovery": 1,
+      "task_spec": 1,
+      "feature_tests": 1,
+      "reference": 1,
+      "reference_repair": 1,
+      "feature_tests_repair": 1
+    },
+    "models": [
+      "gemini/gemini-3.5-flash",
+      "gemini/gemini-flash-latest"
+    ]
+  }
+}

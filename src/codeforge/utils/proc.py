@@ -34,7 +34,8 @@ class ProcResult:
 class CommandError(RuntimeError):
     def __init__(self, result: ProcResult, message: str = "command failed"):
         tail = redact(result.output[-2000:])
-        super().__init__(f"{message}: {' '.join(result.args[:6])} (exit {result.returncode})\n{tail}")
+        cmd = " ".join(result.args[:6])
+        super().__init__(f"{message}: {cmd} (exit {result.returncode})\n{tail}")
         self.result = result
 
 

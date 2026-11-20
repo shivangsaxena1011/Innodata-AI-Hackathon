@@ -1,0 +1,27 @@
+...F
+=================================== FAILURES ===================================
+_________________ test_ac4_tax_calculated_on_discounted_price __________________
+
+    def test_ac4_tax_calculated_on_discounted_price():
+        """Tax is calculated based on the discounted price. If a $100.00 line item is discounted to $90.00 and the tax rate is 10%, the tax is $9.00."""
+        catalog = Catalog()
+        product = Product("SKU-100", "Big Item", Decimal("100.00"), "misc")
+        catalog.add(product)
+        cart = Cart(catalog)
+        cart.add_item("SKU-100", 1)
+    
+        policy = VolumeDiscountPolicy(default_tax_rate=Decimal("10"))
+        policy.add_tier(1, 10)
+    
+        tax = compute_tax(cart, policy)
+        # Discounted total = 90.00. 10% of 90.00 = 9.00
+>       assert tax == Decimal("9.00")
+E       AssertionError: assert Decimal('10.00') == Decimal('9.00')
+E        +  where Decimal('9.00') = Decimal('9.00')
+
+tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py:60: AssertionError
+------------------ generated xml file: /cf/out/mutant-s4.xml -------------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py::test_ac4_tax_calculated_on_discounted_price
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 3 passed in 0.03s

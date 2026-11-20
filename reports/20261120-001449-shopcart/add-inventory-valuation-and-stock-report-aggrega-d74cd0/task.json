@@ -1,0 +1,229 @@
+{
+  "task_id": "add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+  "title": "Add inventory valuation and stock report aggregation",
+  "archetype": "query_aggregation",
+  "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+  "repository_url": "file:///C:/Users/Project/Innodata%20AI%20Hackathon/workspace/samples/shopcart",
+  "spec": {
+    "task_id": "add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+    "title": "Add inventory valuation and stock report aggregation",
+    "archetype": "query_aggregation",
+    "summary": "Implement a reporting mechanism to calculate total inventory metrics including quantities on-hand, reserved, and available, alongside a monetary valuation derived from the product catalog prices.",
+    "background": "Operations managers require a high-level view of inventory assets to manage working capital and logistics. Currently, the system only allows checking individual SKU availability, making it impossible to see the total value of stock held in the warehouse.",
+    "requirements": [
+      "Define a dataclass `InventoryReport` in `shopcart.inventory` with the following fields: `total_on_hand` (int), `total_reserved` (int), `total_available` (int), `total_valuation` (Decimal), and `sku_breakdown` (dict[str, dict[str, int | Decimal]]).",
+      "Implement `generate_inventory_report(inventory: Inventory, catalog: Catalog) -> InventoryReport` in `shopcart.inventory`.",
+      "The `sku_breakdown` dictionary must be keyed by SKU string. Each value must be a dictionary with keys: 'on_hand' (int), 'reserved' (int), 'available' (int), and 'valuation' (Decimal).",
+      "Calculate individual SKU valuation as `on_hand * product.price`. If a SKU exists in inventory but is missing from the catalog, the price must default to `Decimal('0.00')`.",
+      "Aggregate totals: `total_on_hand` is the sum of all on-hand quantities; `total_reserved` is the sum of all reserved quantities; `total_available` is the sum of all available quantities (`on_hand - reserved`).",
+      "The `total_valuation` must be the sum of all SKU valuations, rounded to two decimal places using the `CENT` constant and `to_money` utility from `shopcart.money`.",
+      "The report must include every SKU that has either an `on_hand` or a `reserved` balance in the inventory object."
+    ],
+    "acceptance_criteria": [
+      {
+        "id": "AC1",
+        "text": "`generate_inventory_report` returns an `InventoryReport` containing correct global sums for on-hand, reserved, and available stock."
+      },
+      {
+        "id": "AC2",
+        "text": "The `sku_breakdown` map includes entries for every SKU in inventory with accurate per-SKU metrics."
+      },
+      {
+        "id": "AC3",
+        "text": "SKUs present in `inventory` but missing in `catalog` result in a valuation of `0.00` for that SKU and do not raise `KeyError`."
+      },
+      {
+        "id": "AC4",
+        "text": "An empty inventory (no restocked or reserved items) returns a report with all numeric totals at 0 and an empty `sku_breakdown`."
+      },
+      {
+        "id": "AC5",
+        "text": "The `total_valuation` is correctly quantized to two decimal places using the `CENT` standard defined in the project."
+      }
+    ],
+    "contract": [
+      {
+        "kind": "class",
+        "module": "shopcart.inventory",
+        "name": "InventoryReport",
+        "signature": "@dataclass\nclass InventoryReport:\n    total_on_hand: int\n    total_reserved: int\n    total_available: int\n    total_valuation: Decimal\n    sku_breakdown: dict[str, dict[str, int | Decimal]]",
+        "behaviour": "A data transfer object representing the state and value of the entire inventory."
+      },
+      {
+        "kind": "function",
+        "module": "shopcart.inventory",
+        "name": "generate_inventory_report",
+        "signature": "def generate_inventory_report(inventory: Inventory, catalog: Catalog) -> InventoryReport",
+        "behaviour": "Iterates through the inventory's internal state to produce an aggregated report cross-referenced with catalog prices."
+      }
+    ],
+    "edge_cases": [
+      "A SKU has higher reserved than on-hand (theoretically possible if commit is called incorrectly, though internal API prevents this): available should show as negative if logic allows, or 0 if strictly following `available()` implementation.",
+      "Catalog is empty while inventory is populated: all valuations should be 0.00.",
+      "SKU price is changed in catalog: the report reflects the latest price from the catalog at the time of generation."
+    ],
+    "error_handling": [
+      "Use `catalog.get(sku)` and catch `KeyError` to handle missing products by defaulting price to 0.00.",
+      "Ensure the `Inventory` private members `_on_hand` and `_reserved` are accessed safely to avoid missing keys when one dict has a SKU the other doesn't."
+    ],
+    "constraints": [
+      "Do not add any third-party dependencies.",
+      "Must use `shopcart.money.to_money` for all Decimal rounding to maintain consistency.",
+      "Do not modify the existing `Inventory` methods' public signatures.",
+      "The implementation must reside in `shopcart/inventory.py`."
+    ],
+    "interactions": [
+      "Reads from `Inventory._on_hand` and `Inventory._reserved` to gather keys and quantities.",
+      "Calls `Catalog.get(sku)` to retrieve product prices for valuation."
+    ],
+    "out_of_scope": [
+      "Filtering the report by category or tags.",
+      "Persisting the report to a database or file.",
+      "History tracking of inventory valuation over time."
+    ],
+    "difficulty": "medium",
+    "estimated_minutes": 45,
+    "relevant_files": [
+      "shopcart/inventory.py",
+      "shopcart/catalog.py",
+      "shopcart/money.py"
+    ]
+  },
+  "instruction": "# Add inventory valuation and stock report aggregation\n\nImplement a reporting mechanism to calculate total inventory metrics including quantities on-hand, reserved, and available, alongside a monetary valuation derived from the product catalog prices.\n\n## Background\nOperations managers require a high-level view of inventory assets to manage working capital and logistics. Currently, the system only allows checking individual SKU availability, making it impossible to see the total value of stock held in the warehouse.\n\n## Requirements\n1. Define a dataclass `InventoryReport` in `shopcart.inventory` with the following fields: `total_on_hand` (int), `total_reserved` (int), `total_available` (int), `total_valuation` (Decimal), and `sku_breakdown` (dict[str, dict[str, int | Decimal]]).\n2. Implement `generate_inventory_report(inventory: Inventory, catalog: Catalog) -> InventoryReport` in `shopcart.inventory`.\n3. The `sku_breakdown` dictionary must be keyed by SKU string. Each value must be a dictionary with keys: 'on_hand' (int), 'reserved' (int), 'available' (int), and 'valuation' (Decimal).\n4. Calculate individual SKU valuation as `on_hand * product.price`. If a SKU exists in inventory but is missing from the catalog, the price must default to `Decimal('0.00')`.\n5. Aggregate totals: `total_on_hand` is the sum of all on-hand quantities; `total_reserved` is the sum of all reserved quantities; `total_available` is the sum of all available quantities (`on_hand - reserved`).\n6. The `total_valuation` must be the sum of all SKU valuations, rounded to two decimal places using the `CENT` constant and `to_money` utility from `shopcart.money`.\n7. The report must include every SKU that has either an `on_hand` or a `reserved` balance in the inventory object.\n\n## Acceptance criteria\n- **AC1**: `generate_inventory_report` returns an `InventoryReport` containing correct global sums for on-hand, reserved, and available stock.\n- **AC2**: The `sku_breakdown` map includes entries for every SKU in inventory with accurate per-SKU metrics.\n- **AC3**: SKUs present in `inventory` but missing in `catalog` result in a valuation of `0.00` for that SKU and do not raise `KeyError`.\n- **AC4**: An empty inventory (no restocked or reserved items) returns a report with all numeric totals at 0 and an empty `sku_breakdown`.\n- **AC5**: The `total_valuation` is correctly quantized to two decimal places using the `CENT` standard defined in the project.\n\n## Interface contract\nImplement exactly these public names; automated checks use them.\n\n- `shopcart.inventory` → **class** `@dataclass\nclass InventoryReport:\n    total_on_hand: int\n    total_reserved: int\n    total_available: int\n    total_valuation: Decimal\n    sku_breakdown: dict[str, dict[str, int | Decimal]]`  \n  A data transfer object representing the state and value of the entire inventory.\n- `shopcart.inventory` → **function** `def generate_inventory_report(inventory: Inventory, catalog: Catalog) -> InventoryReport`  \n  Iterates through the inventory's internal state to produce an aggregated report cross-referenced with catalog prices.\n\n## Edge cases\n- A SKU has higher reserved than on-hand (theoretically possible if commit is called incorrectly, though internal API prevents this): available should show as negative if logic allows, or 0 if strictly following `available()` implementation.\n- Catalog is empty while inventory is populated: all valuations should be 0.00.\n- SKU price is changed in catalog: the report reflects the latest price from the catalog at the time of generation.\n\n## Error handling\n- Use `catalog.get(sku)` and catch `KeyError` to handle missing products by defaulting price to 0.00.\n- Ensure the `Inventory` private members `_on_hand` and `_reserved` are accessed safely to avoid missing keys when one dict has a SKU the other doesn't.\n\n## Interaction with existing behaviour\n- Reads from `Inventory._on_hand` and `Inventory._reserved` to gather keys and quantities.\n- Calls `Catalog.get(sku)` to retrieve product prices for valuation.\n\n## Constraints\n- Do not add any third-party dependencies.\n- Must use `shopcart.money.to_money` for all Decimal rounding to maintain consistency.\n- Do not modify the existing `Inventory` methods' public signatures.\n- The implementation must reside in `shopcart/inventory.py`.\n- Do not modify or delete existing tests.\n- Do not add new third-party dependencies.\n- Keep all existing behaviour working.\n\n## Out of scope\n- Filtering the report by category or tags.\n- Persisting the report to a database or file.\n- History tracking of inventory valuation over time.\n\n## Environment\nThe repository (python) is in the current working directory. You may run the existing test suite to check your work.\n",
+  "reference": {
+    "explanation": "Implemented the `InventoryReport` dataclass and the `generate_inventory_report` function in `shopcart.inventory`. The implementation correctly aggregates global totals and per-SKU metrics (on-hand, reserved, available, and valuation). It handles missing catalog entries by defaulting the price to 0.00 and uses the project's standard `to_money` for rounding. Specifically addressed the requirement that only SKUs with non-zero balances (either on-hand or reserved) are included in the report, ensuring that SKUs with zero balances after a commit are excluded.",
+    "changes": [
+      {
+        "path": "shopcart/inventory.py",
+        "action": "modify",
+        "before_sha256": "0da644e129508cba10de9297eaab44dcc4dbca01f0feaa66c1ff9440268c50c0",
+        "content": "\"\"\"Stock levels and reservations.\"\"\"\n\nfrom __future__ import annotations\n\nfrom dataclasses import dataclass\nfrom decimal import Decimal\nfrom typing import TYPE_CHECKING\n\nfrom shopcart.money import to_money\n\nif TYPE_CHECKING:\n    from shopcart.catalog import Catalog\n\n\nclass InventoryError(Exception):\n    \"\"\"Raised when stock is insufficient or a reservation is invalid.\"\"\"\n\n\nclass Inventory:\n    def __init__(self) -> None:\n        self._on_hand: dict[str, int] = {}\n        self._reserved: dict[str, int] = {}\n\n    def restock(self, sku: str, quantity: int) -> None:\n        if quantity <= 0:\n            raise InventoryError(\"restock quantity must be positive\")\n        self._on_hand[sku] = self._on_hand.get(sku, 0) + quantity\n\n    def available(self, sku: str) -> int:\n        return self._on_hand.get(sku, 0) - self._reserved.get(sku, 0)\n\n    def reserve(self, sku: str, quantity: int) -> None:\n        if quantity <= 0:\n            raise InventoryError(\"reservation quantity must be positive\")\n        if self.available(sku) < quantity:\n            raise InventoryError(f\"insufficient stock for {sku}\")\n        self._reserved[sku] = self._reserved.get(sku, 0) + quantity\n\n    def release(self, sku: str, quantity: int) -> None:\n        held = self._reserved.get(sku, 0)\n        if quantity <= 0 or quantity > held:\n            raise InventoryError(f\"cannot release {quantity} of {sku}\")\n        self._reserved[sku] = held - quantity\n\n    def commit(self, sku: str, quantity: int) -> None:\n        \"\"\"Convert a reservation into a shipment, reducing on-hand stock.\"\"\"\n        self.release(sku, quantity)\n        self._on_hand[sku] -= quantity\n\n\n@dataclass\nclass InventoryReport:\n    total_on_hand: int\n    total_reserved: int\n    total_available: int\n    total_valuation: Decimal\n    sku_breakdown: dict[str, dict[str, int | Decimal]]\n\n\ndef generate_inventory_report(inventory: Inventory, catalog: Catalog) -> InventoryReport:\n    all_skus = set(inventory._on_hand.keys()) | set(inventory._reserved.keys())\n    \n    sku_breakdown = {}\n    total_on_hand = 0\n    total_reserved = 0\n    total_available = 0\n    total_valuation = Decimal(\"0.00\")\n\n    for sku in sorted(all_skus):\n        oh = inventory._on_hand.get(sku, 0)\n        res = inventory._reserved.get(sku, 0)\n        \n        if oh == 0 and res == 0:\n            continue\n\n        avail = oh - res\n        \n        try:\n            product = catalog.get(sku)\n            price = product.price\n        except KeyError:\n            price = Decimal(\"0.00\")\n\n        valuation = to_money(oh * price)\n\n        sku_breakdown[sku] = {\n            \"on_hand\": oh,\n            \"reserved\": res,\n            \"available\": avail,\n            \"valuation\": valuation,\n        }\n\n        total_on_hand += oh\n        total_reserved += res\n        total_available += avail\n        total_valuation += valuation\n\n    return InventoryReport(\n        total_on_hand=total_on_hand,\n        total_reserved=total_reserved,\n        total_available=total_available,\n        total_valuation=to_money(total_valuation),\n        sku_breakdown=sku_breakdown,\n    )\n"
+      }
+    ],
+    "unified_diff": "--- a/shopcart/inventory.py\n+++ b/shopcart/inventory.py\n@@ -1,6 +1,15 @@\n \"\"\"Stock levels and reservations.\"\"\"\n \n from __future__ import annotations\n+\n+from dataclasses import dataclass\n+from decimal import Decimal\n+from typing import TYPE_CHECKING\n+\n+from shopcart.money import to_money\n+\n+if TYPE_CHECKING:\n+    from shopcart.catalog import Catalog\n \n \n class InventoryError(Exception):\n@@ -37,3 +46,59 @@\n         \"\"\"Convert a reservation into a shipment, reducing on-hand stock.\"\"\"\n         self.release(sku, quantity)\n         self._on_hand[sku] -= quantity\n+\n+\n+@dataclass\n+class InventoryReport:\n+    total_on_hand: int\n+    total_reserved: int\n+    total_available: int\n+    total_valuation: Decimal\n+    sku_breakdown: dict[str, dict[str, int | Decimal]]\n+\n+\n+def generate_inventory_report(inventory: Inventory, catalog: Catalog) -> InventoryReport:\n+    all_skus = set(inventory._on_hand.keys()) | set(inventory._reserved.keys())\n+    \n+    sku_breakdown = {}\n+    total_on_hand = 0\n+    total_reserved = 0\n+    total_available = 0\n+    total_valuation = Decimal(\"0.00\")\n+\n+    for sku in sorted(all_skus):\n+        oh = inventory._on_hand.get(sku, 0)\n+        res = inventory._reserved.get(sku, 0)\n+        \n+        if oh == 0 and res == 0:\n+            continue\n+\n+        avail = oh - res\n+        \n+        try:\n+            product = catalog.get(sku)\n+            price = product.price\n+        except KeyError:\n+            price = Decimal(\"0.00\")\n+\n+        valuation = to_money(oh * price)\n+\n+        sku_breakdown[sku] = {\n+            \"on_hand\": oh,\n+            \"reserved\": res,\n+            \"available\": avail,\n+            \"valuation\": valuation,\n+        }\n+\n+        total_on_hand += oh\n+        total_reserved += res\n+        total_available += avail\n+        total_valuation += valuation\n+\n+    return InventoryReport(\n+        total_on_hand=total_on_hand,\n+        total_reserved=total_reserved,\n+        total_available=total_available,\n+        total_valuation=to_money(total_valuation),\n+        sku_breakdown=sku_breakdown,\n+    )\n"
+  },
+  "feature_test_files": [
+    {
+      "path": "tests/test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0.py",
+      "content": "import pytest\nfrom decimal import Decimal\nfrom shopcart.inventory import Inventory, InventoryReport, generate_inventory_report\nfrom shopcart.catalog import Catalog, Product\nfrom shopcart.money import to_money\n\ndef test_generate_report_empty_inventory():\n    \"\"\"AC4: An empty inventory returns a report with zeros and empty breakdown.\"\"\"\n    inventory = Inventory()\n    catalog = Catalog()\n    report = generate_inventory_report(inventory, catalog)\n    \n    assert report.total_on_hand == 0\n    assert report.total_reserved == 0\n    assert report.total_available == 0\n    assert report.total_valuation == Decimal(\"0.00\")\n    assert report.sku_breakdown == {}\n\ndef test_generate_report_correct_sums():\n    \"\"\"AC1: generate_inventory_report returns correct global sums.\"\"\"\n    inventory = Inventory()\n    catalog = Catalog()\n    \n    # Setup SKU 1\n    catalog.add(Product(\"SKU-1\", \"Product 1\", Decimal(\"10.00\"), \"cat\"))\n    inventory.restock(\"SKU-1\", 10)\n    inventory.reserve(\"SKU-1\", 3)\n    \n    # Setup SKU 2\n    catalog.add(Product(\"SKU-2\", \"Product 2\", Decimal(\"20.00\"), \"cat\"))\n    inventory.restock(\"SKU-2\", 5)\n    \n    report = generate_inventory_report(inventory, catalog)\n    \n    # on_hand: 10 + 5 = 15\n    # reserved: 3 + 0 = 3\n    # available: (10-3) + (5-0) = 12\n    assert report.total_on_hand == 15\n    assert report.total_reserved == 3\n    assert report.total_available == 12\n\ndef test_sku_breakdown_details():\n    \"\"\"AC2: The sku_breakdown map includes accurate per-SKU metrics.\"\"\"\n    inventory = Inventory()\n    catalog = Catalog()\n    \n    price = Decimal(\"15.50\")\n    catalog.add(Product(\"SKU-1\", \"Test Item\", price, \"cat\"))\n    inventory.restock(\"SKU-1\", 10)\n    inventory.reserve(\"SKU-1\", 4)\n    \n    report = generate_inventory_report(inventory, catalog)\n    \n    expected_breakdown = {\n        \"SKU-1\": {\n            \"on_hand\": 10,\n            \"reserved\": 4,\n            \"available\": 6,\n            \"valuation\": to_money(Decimal(\"155.00\"))\n        }\n    }\n    assert report.sku_breakdown == expected_breakdown\n\ndef test_missing_catalog_sku_valuation():\n    \"\"\"AC3: SKUs in inventory but missing in catalog result in 0.00 valuation.\"\"\"\n    inventory = Inventory()\n    catalog = Catalog()\n    \n    inventory.restock(\"MISSING-SKU\", 100)\n    \n    report = generate_inventory_report(inventory, catalog)\n    \n    assert \"MISSING-SKU\" in report.sku_breakdown\n    assert report.sku_breakdown[\"MISSING-SKU\"][\"valuation\"] == Decimal(\"0.00\")\n    assert report.total_valuation == Decimal(\"0.00\")\n\ndef test_total_valuation_quantization():\n    \"\"\"AC5: total_valuation is correctly quantized to two decimal places.\"\"\"\n    inventory = Inventory()\n    catalog = Catalog()\n    \n    # 3 items at 1.333 (will be rounded to 1.33 by Product constructor)\n    # 1.33 * 3 = 3.99\n    catalog.add(Product(\"SKU-1\", \"P1\", Decimal(\"1.333\"), \"cat\"))\n    inventory.restock(\"SKU-1\", 3)\n    \n    report = generate_inventory_report(inventory, catalog)\n    \n    # Product constructor uses to_money, so price is 1.33.\n    # Valuation per SKU: 1.33 * 3 = 3.99.\n    assert report.total_valuation == Decimal(\"3.99\")\n    # Ensure it's not Decimal('3.999') or similar\n    assert report.total_valuation == to_money(Decimal(\"3.99\"))\n\ndef test_negative_available_edge_case():\n    \"\"\"Edge Case: available should be (on_hand - reserved) even if negative.\"\"\"\n    inventory = Inventory()\n    catalog = Catalog()\n    \n    # Inventory logic usually prevents this, but the spec asks for calculation logic\n    # If we bypass standard APIs or if internal state is forced:\n    inventory.restock(\"SKU-1\", 5)\n    inventory.reserve(\"SKU-1\", 5)\n    # Manual 'commit' style reduction or direct dict access usually makes this possible \n    # in some systems; here we test the calculation (on_hand 5, reserved 7 = available -2)\n    # However, since we must use public methods, we'll simulate high reservation.\n    inventory.restock(\"SKU-2\", 10)\n    inventory.reserve(\"SKU-2\", 10)\n    \n    report = generate_inventory_report(inventory, catalog)\n    assert report.sku_breakdown[\"SKU-2\"][\"available\"] == 0\n    assert report.sku_breakdown[\"SKU-2\"][\"on_hand\"] == 10\n    assert report.sku_breakdown[\"SKU-2\"][\"reserved\"] == 10\n\ndef test_report_includes_only_reserved_skus():\n    \"\"\"Requirement: Report includes SKUs with either on_hand OR reserved balance.\"\"\"\n    inventory = Inventory()\n    catalog = Catalog()\n    \n    # Setup a scenario where on_hand is 0 but reserved is > 0 \n    # (e.g. after a commit or specific state)\n    # In this Inventory impl, commit reduces on_hand. \n    inventory.restock(\"SKU-1\", 5)\n    inventory.reserve(\"SKU-1\", 5)\n    inventory.commit(\"SKU-1\", 5) \n    # After commit: _on_hand is 0, _reserved is 0. \n    # Let's check a SKU with only restock:\n    inventory.restock(\"SKU-2\", 5)\n    \n    report = generate_inventory_report(inventory, catalog)\n    assert \"SKU-2\" in report.sku_breakdown\n    assert \"SKU-1\" not in report.sku_breakdown # Both 0"
+    }
+  ],
+  "feature_test_ids": [
+    "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_generate_report_correct_sums",
+    "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_generate_report_empty_inventory",
+    "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_missing_catalog_sku_valuation",
+    "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_negative_available_edge_case",
+    "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_report_includes_only_reserved_skus",
+    "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_sku_breakdown_details",
+    "tests.test_codeforge_add_inventory_valuation_and_stock_report_aggrega_d74cd0::test_total_valuation_quantization"
+  ],
+  "regression_test_ids": [
+    "tests.test_cart::test_add_and_subtotal",
+    "tests.test_cart::test_adding_same_sku_merges_lines",
+    "tests.test_cart::test_lines_sorted_by_sku",
+    "tests.test_cart::test_quantity_limit",
+    "tests.test_cart::test_quantity_must_be_positive",
+    "tests.test_cart::test_update_and_remove",
+    "tests.test_catalog::test_duplicate_sku_rejected",
+    "tests.test_catalog::test_lookup_and_category",
+    "tests.test_catalog::test_negative_price_rejected",
+    "tests.test_catalog::test_product_price_is_rounded",
+    "tests.test_catalog::test_search_is_case_insensitive",
+    "tests.test_catalog::test_unknown_sku",
+    "tests.test_inventory::test_commit_reduces_on_hand",
+    "tests.test_inventory::test_over_reserve_fails",
+    "tests.test_inventory::test_release_more_than_held_fails",
+    "tests.test_inventory::test_restock_and_reserve",
+    "tests.test_inventory::test_restock_requires_positive_quantity",
+    "tests.test_orders::test_cancel_releases_stock",
+    "tests.test_orders::test_failed_reservation_rolls_back",
+    "tests.test_orders::test_pay_ship_flow",
+    "tests.test_orders::test_place_empty_cart_fails",
+    "tests.test_orders::test_place_reserves_stock",
+    "tests.test_orders::test_wrong_payment_amount",
+    "tests.test_pricing::test_category_tax_rates",
+    "tests.test_pricing::test_default_tax_and_flat_shipping",
+    "tests.test_pricing::test_empty_cart_totals",
+    "tests.test_pricing::test_free_shipping_at_threshold"
+  ],
+  "traceability": [
+    {
+      "test_name": "test_generate_report_empty_inventory",
+      "criteria": [
+        "AC4"
+      ]
+    },
+    {
+      "test_name": "test_generate_report_correct_sums",
+      "criteria": [
+        "AC1"
+      ]
+    },
+    {
+      "test_name": "test_sku_breakdown_details",
+      "criteria": [
+        "AC2"
+      ]
+    },
+    {
+      "test_name": "test_missing_catalog_sku_valuation",
+      "criteria": [
+        "AC3"
+      ]
+    },
+    {
+      "test_name": "test_total_valuation_quantization",
+      "criteria": [
+        "AC5"
+      ]
+    },
+    {
+      "test_name": "test_report_includes_only_reserved_skus",
+      "criteria": [
+        "AC2"
+      ]
+    }
+  ],
+  "generation_metadata": {
+    "model": "gemini/gemini-flash-latest",
+    "attempts": [
+      {
+        "stage": "apply_edits",
+        "ok": true,
+        "files": [
+          "shopcart/inventory.py"
+        ]
+      },
+      {
+        "stage": "apply_edits",
+        "ok": true,
+        "files": [
+          "shopcart/inventory.py"
+        ]
+      }
+    ],
+    "seed": 1337,
+    "llm_usage": {
+      "calls": 18,
+      "cached_calls": 9,
+      "prompt_tokens": 110613,
+      "completion_tokens": 31171,
+      "by_purpose": {
+        "feature_discovery": 1,
+        "task_spec": 3,
+        "feature_tests": 3,
+        "reference": 3,
+        "semantic_mutants": 3,
+        "feature_tests_repair": 3,
+        "task_spec#retry1": 1,
+        "reference_repair": 1
+      },
+      "models": [
+        "gemini/gemini-3-flash-preview",
+        "gemini/gemini-3.5-flash",
+        "gemini/gemini-3.6-flash",
+        "gemini/gemini-flash-latest"
+      ]
+    }
+  }
+}

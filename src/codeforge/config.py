@@ -25,10 +25,17 @@ class Settings(BaseSettings):
 
     # Model provider (free by default: Gemini free tier, Ollama as a fully local fallback).
     model: str = "gemini/gemini-flash-latest"
+    # Gemini's free tier limits requests per model per day, so CodeForge rotates through
+    # several free Flash models before falling back to a local Ollama model.
     fallback_models: list[str] = Field(
-        default_factory=lambda: ["gemini/gemini-2.5-flash", "ollama/llama3.2"]
+        default_factory=lambda: [
+            "gemini/gemini-3.5-flash", "gemini/gemini-2.5-flash", "gemini/gemini-3.6-flash",
+            "gemini/gemini-3.7-flash", "gemini/gemini-3-flash-preview",
+            "gemini/gemini-3.1-flash-lite", "gemini/gemini-2.5-flash-lite", "ollama/llama3.2",
+        ]
     )
     temperature: float = 0.2
+    reasoning_effort: str | None = "low"  # Gemini thinking budget: low | medium | high
     max_output_tokens: int = 16000
     llm_timeout_sec: int = 240
     llm_cache: bool = True
@@ -53,6 +60,7 @@ class Settings(BaseSettings):
     seed: int = 1337
     candidates_per_round: int = 6
     max_repair_attempts: int = 2
+    strengthen_rounds: int = 1  # surviving mutants -> extra hidden tests (adopted if better)
     max_mutants: int = 30
     min_mutation_score: float = 0.6
     baseline_runs: int = 3

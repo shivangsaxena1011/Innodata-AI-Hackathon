@@ -1,0 +1,21 @@
+.F
+=================================== FAILURES ===================================
+__________________ test_ac1_min_subtotal_exact_match_succeeds __________________
+
+    def test_ac1_min_subtotal_exact_match_succeeds():
+        catalog = _make_catalog()
+        cart = Cart(catalog)
+        cart.add_item("BOOK-1", 2)  # subtotal = 49.00
+        cart.add_item("FOOD-1", 1)  # subtotal = 61.00
+    
+        coupon = DiscountCoupon("MIN61", fixed_amount=Decimal("10.00"), min_subtotal=Decimal("61.00"))
+        totals = compute_totals(cart, coupon=coupon)
+>       assert totals.discount == Decimal("10.00")
+E       AttributeError: 'NoneType' object has no attribute 'discount'
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:44: AttributeError
+-------------- generated xml file: /cf/out/mutant-mae86726248.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py::test_ac1_min_subtotal_exact_match_succeeds
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 1 passed in 0.03s

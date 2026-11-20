@@ -1,0 +1,110 @@
+{
+  "generated_at": "2026-11-20T03:05:20.862603+00:00",
+  "agent": "nop",
+  "tasks": 4,
+  "trials": 4,
+  "solved": 0,
+  "unsolved": 0,
+  "quota_errors": 0,
+  "errors": 4,
+  "pass_rate": null,
+  "note": "pass_rate counts only trials the verifier graded; quota and infrastructure errors are listed separately. Oracle validation is in each task_manifest.json.",
+  "results": [
+    {
+      "task_id": "add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+      "title": "Add inventory valuation and stock report aggregation",
+      "archetype": "query_aggregation",
+      "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+      "agent": "nop",
+      "model": null,
+      "attempts": 1,
+      "solved": 0,
+      "valid_trials": 0,
+      "pass_rate": null,
+      "trials": [
+        {
+          "attempt": 1,
+          "model": null,
+          "outcome": "error",
+          "reward": null,
+          "rewards": {},
+          "exception": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\Project\\\\Innodata AI Hackathon\\\\reports\\\\benchmark-20261120-030244-nop\\\\jobs\\\\add-inventory-valuation-and-stock-report-nop-20261120030244-0\\\\add-inventory-valuation-and-stoc__aoEXnko\\\\.verifier-artifacts-hbcsjs6e\\\\1\\\\app\\\\.\\\\shopcart.egg-info\\\\dependency_links.txt'",
+          "duration_sec": 40.2,
+          "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\benchmark-20261120-030244-nop\\jobs\\add-inventory-valuation-and-stock-report-nop-20261120030244-0"
+        }
+      ]
+    },
+    {
+      "task_id": "add-order-refund-and-return-lifecycle-states-059169",
+      "title": "Add order refund and return lifecycle states",
+      "archetype": "state_machine",
+      "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+      "agent": "nop",
+      "model": null,
+      "attempts": 1,
+      "solved": 0,
+      "valid_trials": 0,
+      "pass_rate": null,
+      "trials": [
+        {
+          "attempt": 1,
+          "model": null,
+          "outcome": "error",
+          "reward": null,
+          "rewards": {},
+          "exception": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\Project\\\\Innodata AI Hackathon\\\\reports\\\\benchmark-20261120-030244-nop\\\\jobs\\\\add-order-refund-and-return-lifecycle-st-nop-20261120030324-0\\\\add-order-refund-and-return-life__4pN5v2B\\\\.verifier-artifacts-se52gn3_\\\\1\\\\app\\\\.\\\\shopcart.egg-info\\\\dependency_links.txt'",
+          "duration_sec": 38.5,
+          "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\benchmark-20261120-030244-nop\\jobs\\add-order-refund-and-return-lifecycle-st-nop-20261120030324-0"
+        }
+      ]
+    },
+    {
+      "task_id": "add-volume-based-discount-configuration-policy-91c6c0",
+      "title": "Add volume-based discount configuration policy",
+      "archetype": "configuration_policy",
+      "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+      "agent": "nop",
+      "model": null,
+      "attempts": 1,
+      "solved": 0,
+      "valid_trials": 0,
+      "pass_rate": null,
+      "trials": [
+        {
+          "attempt": 1,
+          "model": null,
+          "outcome": "error",
+          "reward": null,
+          "rewards": {},
+          "exception": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\Project\\\\Innodata AI Hackathon\\\\reports\\\\benchmark-20261120-030244-nop\\\\jobs\\\\add-volume-based-discount-configuration--nop-20261120030403-0\\\\add-volume-based-discount-config__jBxsBBb\\\\.verifier-artifacts-ds2fjm0y\\\\1\\\\app\\\\.\\\\shopcart.egg-info\\\\dependency_links.txt'",
+          "duration_sec": 37.2,
+          "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\benchmark-20261120-030244-nop\\jobs\\add-volume-based-discount-configuration--nop-20261120030403-0"
+        }
+      ]
+    },
+    {
+      "task_id": "support-promotional-discount-codes-in-cart-prici-f04964",
+      "title": "Support promotional discount codes in cart pricing",
+      "archetype": "business_rule",
+      "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+      "agent": "nop",
+      "model": null,
+      "attempts": 1,
+      "solved": 0,
+      "valid_trials": 0,
+      "pass_rate": null,
+      "trials": [
+        {
+          "attempt": 1,
+          "model": null,
+          "outcome": "error",
+          "reward": null,
+          "rewards": {},
+          "exception": "FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\Project\\\\Innodata AI Hackathon\\\\reports\\\\benchmark-20261120-030244-nop\\\\jobs\\\\support-promotional-discount-codes-in-ca-nop-20261120030440-0\\\\support-promotional-discount-cod__bzg3KWF\\\\.verifier-artifacts-fdlue2rg\\\\1\\\\app\\\\.\\\\shopcart.egg-info\\\\dependency_links.txt'",
+          "duration_sec": 40.3,
+          "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\reports\\benchmark-20261120-030244-nop\\jobs\\support-promotional-discount-codes-in-ca-nop-20261120030440-0"
+        }
+      ]
+    }
+  ]
+}

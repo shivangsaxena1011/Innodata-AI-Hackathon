@@ -1,0 +1,184 @@
+FFFFFFF                                                                  [100%]
+=================================== FAILURES ===================================
+______________________ test_ac1_coupon_min_subtotal_error ______________________
+
+    def test_ac1_coupon_min_subtotal_error():
+        # Subtotal 29.99 < min_subtotal 30.00 -> raise PricingError
+>       cart_below = _make_cart(("A", "29.99", 1, "general"))
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:28: in _make_cart
+    cart.add_item(sku, qty)
+shopcart/cart.py:40: in add_item
+    product = self._catalog.get(sku)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <shopcart.catalog.Catalog object at 0x78504eedeba0>, sku = 'A'
+
+    def get(self, sku: str) -> Product:
+        try:
+            return self._products[sku]
+        except KeyError:
+>           raise KeyError(f"unknown sku: {sku}") from None
+E           KeyError: 'unknown sku: A'
+
+shopcart/catalog.py:43: KeyError
+____________________ test_ac1_coupon_min_subtotal_boundary _____________________
+
+    def test_ac1_coupon_min_subtotal_boundary():
+        # Subtotal 30.00 == min_subtotal 30.00 -> valid
+>       cart_exact = _make_cart(("A", "30.00", 1, "general"))
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:28: in _make_cart
+    cart.add_item(sku, qty)
+shopcart/cart.py:40: in add_item
+    product = self._catalog.get(sku)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <shopcart.catalog.Catalog object at 0x78504ee58050>, sku = 'A'
+
+    def get(self, sku: str) -> Product:
+        try:
+            return self._products[sku]
+        except KeyError:
+>           raise KeyError(f"unknown sku: {sku}") from None
+E           KeyError: 'unknown sku: A'
+
+shopcart/catalog.py:43: KeyError
+_____________________ test_ac2_percentage_coupon_discount ______________________
+
+    def test_ac2_percentage_coupon_discount():
+        # 10% off on 100.00 cart subtotal = 10.00 discount
+>       cart = _make_cart(("A", "100.00", 1, "general"))
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:52: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:28: in _make_cart
+    cart.add_item(sku, qty)
+shopcart/cart.py:40: in add_item
+    product = self._catalog.get(sku)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <shopcart.catalog.Catalog object at 0x78504ee596d0>, sku = 'A'
+
+    def get(self, sku: str) -> Product:
+        try:
+            return self._products[sku]
+        except KeyError:
+>           raise KeyError(f"unknown sku: {sku}") from None
+E           KeyError: 'unknown sku: A'
+
+shopcart/catalog.py:43: KeyError
+_____________________ test_ac3_exceeding_discount_clamping _____________________
+
+    def test_ac3_exceeding_discount_clamping():
+        # Subtotal 15.00, coupon fixed discount 20.00 -> discount clamped to 15.00, tax 0.00, total == shipping
+>       cart = _make_cart(("A", "15.00", 1, "general"))
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:28: in _make_cart
+    cart.add_item(sku, qty)
+shopcart/cart.py:40: in add_item
+    product = self._catalog.get(sku)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <shopcart.catalog.Catalog object at 0x78504ee83820>, sku = 'A'
+
+    def get(self, sku: str) -> Product:
+        try:
+            return self._products[sku]
+        except KeyError:
+>           raise KeyError(f"unknown sku: {sku}") from None
+E           KeyError: 'unknown sku: A'
+
+shopcart/catalog.py:43: KeyError
+_______________ test_ac4_totals_formula_and_positional_defaults ________________
+
+    def test_ac4_totals_formula_and_positional_defaults():
+        # Test Totals default discount and explicit formula
+        t = Totals(subtotal=Decimal("100.00"), discount=Decimal("20.00"), tax=Decimal("8.00"), shipping=Decimal("5.00"), total=Decimal("93.00"))
+        assert t.subtotal - t.discount + t.tax + t.shipping == t.total
+    
+>       cart = _make_cart(("A", "50.00", 1, "electronics"), ("B", "25.00", 2, "books"))
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:28: in _make_cart
+    cart.add_item(sku, qty)
+shopcart/cart.py:40: in add_item
+    product = self._catalog.get(sku)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <shopcart.catalog.Catalog object at 0x78504ed6c2b0>, sku = 'A'
+
+    def get(self, sku: str) -> Product:
+        try:
+            return self._products[sku]
+        except KeyError:
+>           raise KeyError(f"unknown sku: {sku}") from None
+E           KeyError: 'unknown sku: A'
+
+shopcart/catalog.py:43: KeyError
+___________________ test_ac5_none_coupon_preserves_behavior ____________________
+
+    def test_ac5_none_coupon_preserves_behavior():
+>       cart = _make_cart(("A", "20.00", 2, "general"))  # subtotal = 40.00
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:28: in _make_cart
+    cart.add_item(sku, qty)
+shopcart/cart.py:40: in add_item
+    product = self._catalog.get(sku)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <shopcart.catalog.Catalog object at 0x78504ee6b770>, sku = 'A'
+
+    def get(self, sku: str) -> Product:
+        try:
+            return self._products[sku]
+        except KeyError:
+>           raise KeyError(f"unknown sku: {sku}") from None
+E           KeyError: 'unknown sku: A'
+
+shopcart/catalog.py:43: KeyError
+________________ test_tax_proportion_across_multiple_categories ________________
+
+    def test_tax_proportion_across_multiple_categories():
+        policy = PricingPolicy(
+            category_tax_rates={"electronics": Decimal("10"), "books": Decimal("5")}
+        )
+>       cart = _make_cart(("E1", "60.00", 1, "electronics"), ("B1", "40.00", 1, "books"))
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:106: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:28: in _make_cart
+    cart.add_item(sku, qty)
+shopcart/cart.py:40: in add_item
+    product = self._catalog.get(sku)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <shopcart.catalog.Catalog object at 0x78504ed48c00>, sku = 'E1'
+
+    def get(self, sku: str) -> Product:
+        try:
+            return self._products[sku]
+        except KeyError:
+>           raise KeyError(f"unknown sku: {sku}") from None
+E           KeyError: 'unknown sku: E1'
+
+shopcart/catalog.py:43: KeyError
+------------- generated xml file: /cf/out/feature_reference_2.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py::test_ac1_coupon_min_subtotal_error
+FAILED tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py::test_ac1_coupon_min_subtotal_boundary
+FAILED tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py::test_ac2_percentage_coupon_discount
+FAILED tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py::test_ac3_exceeding_discount_clamping
+FAILED tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py::test_ac4_totals_formula_and_positional_defaults
+FAILED tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py::test_ac5_none_coupon_preserves_behavior
+FAILED tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py::test_tax_proportion_across_multiple_categories
+7 failed in 0.05s

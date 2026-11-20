@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.031" timestamp="2026-11-20T00:18:09.598575+00:00" hostname="e03f2eead8b5"><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_order_status_enum_members" time="0.001"><failure message="AssertionError: assert 'return' == 'returned'&#10;  &#10;  - returned&#10;  ?       --&#10;  + return">def test_order_status_enum_members():
+        """AC1: Verify OrderStatus has REFUNDED and RETURNED with correct values."""
+        assert OrderStatus.REFUNDED.value == "refunded"
+&gt;       assert OrderStatus.RETURNED.value == "returned"
+E       AssertionError: assert 'return' == 'returned'
+E         
+E         - returned
+E         ?       --
+E         + return
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:22: AssertionError</failure></testcase></testsuite></testsuites>

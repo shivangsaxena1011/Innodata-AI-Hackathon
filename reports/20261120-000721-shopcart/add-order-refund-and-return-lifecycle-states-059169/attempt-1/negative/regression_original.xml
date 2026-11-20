@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="34" time="0.078" timestamp="2026-11-20T00:11:32.572316+00:00" hostname="928b36b53e23"><testcase classname="tests.test_cart" name="test_add_and_subtotal" time="0.001" /><testcase classname="tests.test_cart" name="test_adding_same_sku_merges_lines" time="0.000" /><testcase classname="tests.test_cart" name="test_quantity_must_be_positive" time="0.000" /><testcase classname="tests.test_cart" name="test_quantity_limit" time="0.000" /><testcase classname="tests.test_cart" name="test_update_and_remove" time="0.000" /><testcase classname="tests.test_cart" name="test_lines_sorted_by_sku" time="0.000" /><testcase classname="tests.test_catalog" name="test_product_price_is_rounded" time="0.000" /><testcase classname="tests.test_catalog" name="test_negative_price_rejected" time="0.000" /><testcase classname="tests.test_catalog" name="test_duplicate_sku_rejected" time="0.000" /><testcase classname="tests.test_catalog" name="test_lookup_and_category" time="0.000" /><testcase classname="tests.test_catalog" name="test_unknown_sku" time="0.000" /><testcase classname="tests.test_catalog" name="test_search_is_case_insensitive" time="0.000" /><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_order_status_enum_members" time="0.000"><failure message="AttributeError: type object 'OrderStatus' has no attribute 'REFUNDED'">def test_order_status_enum_members():
+        """AC1: Verify OrderStatus has REFUNDED and RETURNED with correct values."""
+&gt;       assert OrderStatus.REFUNDED.value == "refunded"
+E       AttributeError: type object 'OrderStatus' has no attribute 'REFUNDED'
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:21: AttributeError</failure></testcase><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_return_items_flow" time="0.000"><failure message="AttributeError: 'Order' object has no attribute 'return_items'">def test_return_items_flow():
+        """AC2: Verify return_items transitions state and restocks inventory."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 2)
+        cart.add_item("SKU-2", 1)
+    
+        order = Order.place(cart, inventory)
+        order.pay(order.totals.total)
+        order.ship(inventory)  # Transitions to SHIPPED
+    
+        # Before return check inventory (20 starting total on-hand in fixture-like setup)
+        # Logic: start with 10. Order reserves 2 and 1. Ship commits (on-hand becomes 8 and 9).
+        assert inventory.available("SKU-1") == 8
+        assert inventory.available("SKU-2") == 9
+    
+&gt;       order.return_items(inventory)
+E       AttributeError: 'Order' object has no attribute 'return_items'
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:39: AttributeError</failure></testcase><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_refund_from_paid" time="0.000"><failure message="AttributeError: 'Order' object has no attribute 'refund'">def test_refund_from_paid():
+        """AC3: Verify refund from PAID status."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 1)
+        order = Order.place(cart, inventory)
+        order.pay(order.totals.total)
+    
+&gt;       order.refund()
+E       AttributeError: 'Order' object has no attribute 'refund'
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:53: AttributeError</failure></testcase><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_refund_from_returned" time="0.000"><failure message="AttributeError: 'Order' object has no attribute 'return_items'">def test_refund_from_returned():
+        """AC4: Verify refund from RETURNED status."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 1)
+        order = Order.place(cart, inventory)
+        order.pay(order.totals.total)
+        order.ship(inventory)
+&gt;       order.return_items(inventory)
+E       AttributeError: 'Order' object has no attribute 'return_items'
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:65: AttributeError</failure></testcase><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_invalid_refund_transitions" time="0.000"><failure message="AttributeError: 'Order' object has no attribute 'refund'">def test_invalid_refund_transitions():
+        """AC5: refund() should fail from PENDING, SHIPPED, CANCELLED, REFUNDED."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 1)
+    
+        # PENDING
+        order = Order.place(cart, inventory)
+        with pytest.raises(OrderError):
+&gt;           order.refund()
+E           AttributeError: 'Order' object has no attribute 'refund'
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:80: AttributeError</failure></testcase><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_invalid_return_transitions" time="0.000"><failure message="AttributeError: 'Order' object has no attribute 'return_items'">def test_invalid_return_transitions():
+        """AC6: return_items() should fail from PENDING, PAID, CANCELLED, RETURNED, REFUNDED."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 1)
+    
+        # PENDING
+        order = Order.place(cart, inventory)
+        initial_stock = inventory.available("SKU-1")
+        with pytest.raises(OrderError):
+&gt;           order.return_items(inventory)
+E           AttributeError: 'Order' object has no attribute 'return_items'
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:110: AttributeError</failure></testcase><testcase classname="tests.test_codeforge_add_order_refund_and_return_lifecycle_states_059169" name="test_return_items_empty_order_restocks_nothing" time="0.000"><failure message="AttributeError: 'Order' object has no attribute 'return_items'">def test_return_items_empty_order_restocks_nothing():
+        """Edge case: return_items on empty dict should still transition status."""
+        # Note: Order.place prevents empty cart, but we can verify status transition logic
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 1)
+        order = Order.place(cart, inventory)
+        order.pay(order.totals.total)
+        order.ship(inventory)
+    
+        # Manually clear items for edge case test if internal state allows,
+        # but here we just ensure normal operation
+&gt;       order.return_items(inventory)
+E       AttributeError: 'Order' object has no attribute 'return_items'
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:148: AttributeError</failure></testcase><testcase classname="tests.test_inventory" name="test_restock_and_reserve" time="0.000" /><testcase classname="tests.test_inventory" name="test_over_reserve_fails" time="0.000" /><testcase classname="tests.test_inventory" name="test_release_more_than_held_fails" time="0.000" /><testcase classname="tests.test_inventory" name="test_commit_reduces_on_hand" time="0.000" /><testcase classname="tests.test_inventory" name="test_restock_requires_positive_quantity" time="0.000" /><testcase classname="tests.test_orders" name="test_place_reserves_stock" time="0.000" /><testcase classname="tests.test_orders" name="test_place_empty_cart_fails" time="0.000" /><testcase classname="tests.test_orders" name="test_failed_reservation_rolls_back" time="0.000" /><testcase classname="tests.test_orders" name="test_pay_ship_flow" time="0.000" /><testcase classname="tests.test_orders" name="test_wrong_payment_amount" time="0.000" /><testcase classname="tests.test_orders" name="test_cancel_releases_stock" time="0.000" /><testcase classname="tests.test_pricing" name="test_default_tax_and_flat_shipping" time="0.000" /><testcase classname="tests.test_pricing" name="test_free_shipping_at_threshold" time="0.000" /><testcase classname="tests.test_pricing" name="test_category_tax_rates" time="0.000" /><testcase classname="tests.test_pricing" name="test_empty_cart_totals" time="0.000" /></testsuite></testsuites>

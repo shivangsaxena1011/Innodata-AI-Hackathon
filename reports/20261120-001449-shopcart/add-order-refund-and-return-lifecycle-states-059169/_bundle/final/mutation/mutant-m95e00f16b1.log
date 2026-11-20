@@ -1,0 +1,33 @@
+.F
+=================================== FAILURES ===================================
+____________________________ test_return_items_flow ____________________________
+
+    def test_return_items_flow():
+        """AC2: Verify return_items transitions state and restocks inventory."""
+        catalog, inventory, cart = setup_env()
+        cart.add_item("SKU-1", 2)
+        cart.add_item("SKU-2", 1)
+    
+        order = Order.place(cart, inventory)
+>       order.pay(order.totals.total)
+
+tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+shopcart/orders.py:76: in pay
+    self._transition(OrderStatus.PAID)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Order(order_id=1, items={'SKU-1': 2, 'SKU-2': 1}, totals=Totals(subtotal=Decimal('40.00'), tax=Decimal('3.20'), shippi...9')), status=<OrderStatus.PENDING: 'pending'>, history=[<OrderStatus.PENDING: 'pending'>], amount_paid=Decimal('0.00'))
+new_status = <OrderStatus.PAID: 'paid'>
+
+    def _transition(self, new_status: OrderStatus) -> None:
+        if new_status not in ALLOWED_TRANSITIONS[self.status]:
+>           raise OrderError(f"cannot move order from {self.status.value} to {new_status.value}")
+E           shopcart.orders.OrderError: cannot move order from pending to paid
+
+shopcart/orders.py:69: OrderError
+-------------- generated xml file: /cf/out/mutant-m95e00f16b1.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_order_refund_and_return_lifecycle_states_059169.py::test_return_items_flow
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 1 passed in 0.03s

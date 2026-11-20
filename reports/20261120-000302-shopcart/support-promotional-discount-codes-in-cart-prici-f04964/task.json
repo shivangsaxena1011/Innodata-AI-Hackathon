@@ -1,0 +1,239 @@
+{
+  "task_id": "support-promotional-discount-codes-in-cart-prici-f04964",
+  "title": "Support promotional discount codes in cart pricing",
+  "archetype": "business_rule",
+  "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+  "repository_url": "file:///C:/Users/Project/Innodata%20AI%20Hackathon/workspace/samples/shopcart",
+  "spec": {
+    "task_id": "support-promotional-discount-codes-in-cart-prici-f04964",
+    "title": "Support promotional discount codes in cart pricing",
+    "archetype": "business_rule",
+    "summary": "Introduce promotional coupon support to the pricing calculation module by defining `PricingError` and `DiscountCoupon`, adding a `discount` field to `Totals`, and updating `compute_totals` to validate coupons, apply clamped percentage and fixed discounts, and compute tax on the discounted subtotal proportionally distributed across cart line items.",
+    "background": "Marketing and sales promotions require applying coupon codes at checkout to reduce cart totals through fixed dollar savings or percentage discounts. Cart calculations must adjust taxable line bases and order totals without allowing invalid coupons or negative totals.",
+    "requirements": [
+      "Define exception `PricingError(Exception)` in `shopcart.pricing`.",
+      "Define dataclass `DiscountCoupon` in `shopcart.pricing` with fields: `code: str`, `discount_percent: Decimal = Decimal('0')`, `fixed_amount: Decimal = Decimal('0')`, and `min_subtotal: Decimal = Decimal('0')`. Convert any numeric inputs or default representations for monetary and percent fields such that calculations use `Decimal`.",
+      "Update `Totals` dataclass in `shopcart.pricing` to have fields `subtotal: Decimal`, `discount: Decimal`, `tax: Decimal`, `shipping: Decimal`, and `total: Decimal` in that exact positional order. If instantiated without `discount` positionally or if backwards compatibility is considered, `discount` must default to `Decimal('0.00')` (e.g., `discount: Decimal = Decimal('0.00')`), and `total` must equal `to_money(subtotal - discount + tax + shipping)`.",
+      "Update `compute_totals(cart: Cart, policy: PricingPolicy | None = None, coupon: DiscountCoupon | None = None) -> Totals` in `shopcart.pricing` to accept an optional `coupon` parameter defaulting to `None`.",
+      "If `coupon` is provided and `cart.subtotal` is strictly less than `coupon.min_subtotal`, raise `PricingError` with the message `f'cart subtotal {cart.subtotal} does not meet coupon minimum {coupon.min_subtotal}'`.",
+      "When a valid `coupon` is provided, calculate the raw discount amount as `percent_of(cart.subtotal, coupon.discount_percent) + to_money(coupon.fixed_amount)`. Clamp the final `discount` to `cart.subtotal` if the calculated raw discount exceeds `cart.subtotal`. If no coupon is provided, `discount` is `Decimal('0.00')`.",
+      "Shipping qualification (`cart.subtotal >= policy.free_shipping_threshold`) remains evaluated on original `cart.subtotal` as currently implemented in `compute_shipping(cart, policy)`.",
+      "Tax calculation with discounts: if `cart.subtotal` is `Decimal('0.00')` or `discount == cart.subtotal`, total tax is `Decimal('0.00')`. Otherwise, apportion the total discount across lines in proportion to each line's share of `cart.subtotal`: for each line, discounted line base is `line.line_total * (Decimal('1') - discount / cart.subtotal)`. Tax for the line is `percent_of(discounted_line_base, policy.tax_rate_for(line.product.category))`. Total tax is `to_money(sum(line_taxes))`.",
+      "When `coupon` is `None`, preserve existing pricing and tax calculation behavior where `discount` is `Decimal('0.00')`."
+    ],
+    "acceptance_criteria": [
+      {
+        "id": "AC1",
+        "text": "Calling `compute_totals(cart, coupon=coupon)` where `cart.subtotal < coupon.min_subtotal` raises `PricingError`."
+      },
+      {
+        "id": "AC2",
+        "text": "Calling `compute_totals(cart, coupon=coupon)` with a valid percentage coupon calculates `discount = percent_of(cart.subtotal, coupon.discount_percent)` and reflects this in `Totals.discount`."
+      },
+      {
+        "id": "AC3",
+        "text": "A fixed amount discount or combined discount that exceeds `cart.subtotal` clamps `Totals.discount` to `cart.subtotal`, results in `Totals.tax == Decimal('0.00')`, and leaves `Totals.total == Totals.shipping`."
+      },
+      {
+        "id": "AC4",
+        "text": "For any cart and valid coupon (or no coupon), `Totals.total` precisely equals `to_money(Totals.subtotal - Totals.discount + Totals.tax + Totals.shipping)`."
+      },
+      {
+        "id": "AC5",
+        "text": "When `coupon` is `None`, calling `compute_totals(cart, policy)` produces `Totals` with `discount == Decimal('0.00')` and unchanged `subtotal`, `tax`, `shipping`, and `total`."
+      }
+    ],
+    "contract": [
+      {
+        "kind": "exception",
+        "module": "shopcart.pricing",
+        "name": "PricingError",
+        "signature": "class PricingError(Exception)",
+        "behaviour": "Raised when pricing operations fail, such as when a coupon does not meet the minimum subtotal requirement."
+      },
+      {
+        "kind": "class",
+        "module": "shopcart.pricing",
+        "name": "DiscountCoupon",
+        "signature": "@dataclass(frozen=True)\nclass DiscountCoupon:\n    code: str\n    discount_percent: Decimal = Decimal('0')\n    fixed_amount: Decimal = Decimal('0')\n    min_subtotal: Decimal = Decimal('0')",
+        "behaviour": "Represents a promotional discount coupon containing code, percentage discount, fixed dollar savings, and a minimum required subtotal threshold."
+      },
+      {
+        "kind": "class",
+        "module": "shopcart.pricing",
+        "name": "Totals",
+        "signature": "@dataclass(frozen=True)\nclass Totals:\n    subtotal: Decimal\n    discount: Decimal = Decimal('0.00')\n    tax: Decimal = Decimal('0.00')\n    shipping: Decimal = Decimal('0.00')\n    total: Decimal = Decimal('0.00')",
+        "behaviour": "Immutable value object holding the calculated monetary breakdown of a cart."
+      },
+      {
+        "kind": "function",
+        "module": "shopcart.pricing",
+        "name": "compute_totals",
+        "signature": "def compute_totals(cart: Cart, policy: PricingPolicy | None = None, coupon: DiscountCoupon | None = None) -> Totals",
+        "behaviour": "Calculates subtotal, discount, tax, shipping, and total for a given cart, policy, and optional promotional coupon."
+      }
+    ],
+    "edge_cases": [
+      "Subtotal exactly equals `min_subtotal`: coupon is valid and applied without raising `PricingError`.",
+      "Empty cart with coupon: if `min_subtotal > Decimal('0')`, raises `PricingError`; if `min_subtotal == Decimal('0')`, discount is `Decimal('0.00')` and tax is `Decimal('0.00')`.",
+      "Coupon with both `discount_percent` and `fixed_amount`: discount is the sum of `percent_of(cart.subtotal, coupon.discount_percent)` and `to_money(coupon.fixed_amount)`, clamped to `cart.subtotal`.",
+      "Multiple items with different category tax rates: each line's tax is computed after scaling the line's total by `(1 - discount / cart.subtotal)`."
+    ],
+    "error_handling": [
+      "Raise `PricingError` when `cart.subtotal < coupon.min_subtotal`.",
+      "Maintain standard `CartError` or `ValueError` behavior for existing methods unchanged."
+    ],
+    "constraints": [
+      "No new third-party dependencies.",
+      "Do not modify existing tests.",
+      "All monetary amounts in `Totals` must be quantized using `shopcart.money.to_money`."
+    ],
+    "interactions": [
+      "Order creation via `Order.place(cart, inventory, policy)` calls `compute_totals(cart, policy)` without a coupon, which must continue to function seamlessly with `Totals`' updated attributes.",
+      "Order payment validation checks `amount == order.totals.total`, which now reflects `subtotal - discount + tax + shipping`."
+    ],
+    "out_of_scope": [
+      "Passing coupons to `Order.place` (only `compute_totals` needs the `coupon` argument).",
+      "Persisting coupons to a database or external registry.",
+      "Per-category or SKU-restricted coupons.",
+      "Coupon usage counts or expiration dates."
+    ],
+    "difficulty": "medium",
+    "estimated_minutes": 30,
+    "relevant_files": [
+      "shopcart/pricing.py"
+    ]
+  },
+  "instruction": "# Support promotional discount codes in cart pricing\n\nIntroduce promotional coupon support to the pricing calculation module by defining `PricingError` and `DiscountCoupon`, adding a `discount` field to `Totals`, and updating `compute_totals` to validate coupons, apply clamped percentage and fixed discounts, and compute tax on the discounted subtotal proportionally distributed across cart line items.\n\n## Background\nMarketing and sales promotions require applying coupon codes at checkout to reduce cart totals through fixed dollar savings or percentage discounts. Cart calculations must adjust taxable line bases and order totals without allowing invalid coupons or negative totals.\n\n## Requirements\n1. Define exception `PricingError(Exception)` in `shopcart.pricing`.\n2. Define dataclass `DiscountCoupon` in `shopcart.pricing` with fields: `code: str`, `discount_percent: Decimal = Decimal('0')`, `fixed_amount: Decimal = Decimal('0')`, and `min_subtotal: Decimal = Decimal('0')`. Convert any numeric inputs or default representations for monetary and percent fields such that calculations use `Decimal`.\n3. Update `Totals` dataclass in `shopcart.pricing` to have fields `subtotal: Decimal`, `discount: Decimal`, `tax: Decimal`, `shipping: Decimal`, and `total: Decimal` in that exact positional order. If instantiated without `discount` positionally or if backwards compatibility is considered, `discount` must default to `Decimal('0.00')` (e.g., `discount: Decimal = Decimal('0.00')`), and `total` must equal `to_money(subtotal - discount + tax + shipping)`.\n4. Update `compute_totals(cart: Cart, policy: PricingPolicy | None = None, coupon: DiscountCoupon | None = None) -> Totals` in `shopcart.pricing` to accept an optional `coupon` parameter defaulting to `None`.\n5. If `coupon` is provided and `cart.subtotal` is strictly less than `coupon.min_subtotal`, raise `PricingError` with the message `f'cart subtotal {cart.subtotal} does not meet coupon minimum {coupon.min_subtotal}'`.\n6. When a valid `coupon` is provided, calculate the raw discount amount as `percent_of(cart.subtotal, coupon.discount_percent) + to_money(coupon.fixed_amount)`. Clamp the final `discount` to `cart.subtotal` if the calculated raw discount exceeds `cart.subtotal`. If no coupon is provided, `discount` is `Decimal('0.00')`.\n7. Shipping qualification (`cart.subtotal >= policy.free_shipping_threshold`) remains evaluated on original `cart.subtotal` as currently implemented in `compute_shipping(cart, policy)`.\n8. Tax calculation with discounts: if `cart.subtotal` is `Decimal('0.00')` or `discount == cart.subtotal`, total tax is `Decimal('0.00')`. Otherwise, apportion the total discount across lines in proportion to each line's share of `cart.subtotal`: for each line, discounted line base is `line.line_total * (Decimal('1') - discount / cart.subtotal)`. Tax for the line is `percent_of(discounted_line_base, policy.tax_rate_for(line.product.category))`. Total tax is `to_money(sum(line_taxes))`.\n9. When `coupon` is `None`, preserve existing pricing and tax calculation behavior where `discount` is `Decimal('0.00')`.\n\n## Acceptance criteria\n- **AC1**: Calling `compute_totals(cart, coupon=coupon)` where `cart.subtotal < coupon.min_subtotal` raises `PricingError`.\n- **AC2**: Calling `compute_totals(cart, coupon=coupon)` with a valid percentage coupon calculates `discount = percent_of(cart.subtotal, coupon.discount_percent)` and reflects this in `Totals.discount`.\n- **AC3**: A fixed amount discount or combined discount that exceeds `cart.subtotal` clamps `Totals.discount` to `cart.subtotal`, results in `Totals.tax == Decimal('0.00')`, and leaves `Totals.total == Totals.shipping`.\n- **AC4**: For any cart and valid coupon (or no coupon), `Totals.total` precisely equals `to_money(Totals.subtotal - Totals.discount + Totals.tax + Totals.shipping)`.\n- **AC5**: When `coupon` is `None`, calling `compute_totals(cart, policy)` produces `Totals` with `discount == Decimal('0.00')` and unchanged `subtotal`, `tax`, `shipping`, and `total`.\n\n## Interface contract\nImplement exactly these public names; automated checks use them.\n\n- `shopcart.pricing` → **exception** `class PricingError(Exception)`  \n  Raised when pricing operations fail, such as when a coupon does not meet the minimum subtotal requirement.\n- `shopcart.pricing` → **class** `@dataclass(frozen=True)\nclass DiscountCoupon:\n    code: str\n    discount_percent: Decimal = Decimal('0')\n    fixed_amount: Decimal = Decimal('0')\n    min_subtotal: Decimal = Decimal('0')`  \n  Represents a promotional discount coupon containing code, percentage discount, fixed dollar savings, and a minimum required subtotal threshold.\n- `shopcart.pricing` → **class** `@dataclass(frozen=True)\nclass Totals:\n    subtotal: Decimal\n    discount: Decimal = Decimal('0.00')\n    tax: Decimal = Decimal('0.00')\n    shipping: Decimal = Decimal('0.00')\n    total: Decimal = Decimal('0.00')`  \n  Immutable value object holding the calculated monetary breakdown of a cart.\n- `shopcart.pricing` → **function** `def compute_totals(cart: Cart, policy: PricingPolicy | None = None, coupon: DiscountCoupon | None = None) -> Totals`  \n  Calculates subtotal, discount, tax, shipping, and total for a given cart, policy, and optional promotional coupon.\n\n## Edge cases\n- Subtotal exactly equals `min_subtotal`: coupon is valid and applied without raising `PricingError`.\n- Empty cart with coupon: if `min_subtotal > Decimal('0')`, raises `PricingError`; if `min_subtotal == Decimal('0')`, discount is `Decimal('0.00')` and tax is `Decimal('0.00')`.\n- Coupon with both `discount_percent` and `fixed_amount`: discount is the sum of `percent_of(cart.subtotal, coupon.discount_percent)` and `to_money(coupon.fixed_amount)`, clamped to `cart.subtotal`.\n- Multiple items with different category tax rates: each line's tax is computed after scaling the line's total by `(1 - discount / cart.subtotal)`.\n\n## Error handling\n- Raise `PricingError` when `cart.subtotal < coupon.min_subtotal`.\n- Maintain standard `CartError` or `ValueError` behavior for existing methods unchanged.\n\n## Interaction with existing behaviour\n- Order creation via `Order.place(cart, inventory, policy)` calls `compute_totals(cart, policy)` without a coupon, which must continue to function seamlessly with `Totals`' updated attributes.\n- Order payment validation checks `amount == order.totals.total`, which now reflects `subtotal - discount + tax + shipping`.\n\n## Constraints\n- No new third-party dependencies.\n- Do not modify existing tests.\n- All monetary amounts in `Totals` must be quantized using `shopcart.money.to_money`.\n- Do not modify or delete existing tests.\n- Do not add new third-party dependencies.\n- Keep all existing behaviour working.\n\n## Out of scope\n- Passing coupons to `Order.place` (only `compute_totals` needs the `coupon` argument).\n- Persisting coupons to a database or external registry.\n- Per-category or SKU-restricted coupons.\n- Coupon usage counts or expiration dates.\n\n## Environment\nThe repository (python) is in the current working directory. You may run the existing test suite to check your work.\n",
+  "reference": {
+    "explanation": "Implement PricingError, DiscountCoupon, updated Totals dataclass, and compute_totals function supporting coupon discount validation, clamped discount calculation, and proportional tax distribution in shopcart.pricing.",
+    "changes": [
+      {
+        "path": "shopcart/pricing.py",
+        "action": "modify",
+        "before_sha256": "d6692d7b2c64d06733d0b225492f72d06338849a96807c545c4f2a01f4f93b65",
+        "content": "\"\"\"Tax and shipping calculation for a cart.\"\"\"\n\nfrom __future__ import annotations\n\nfrom dataclasses import dataclass, field\nfrom decimal import Decimal\n\nfrom shopcart.cart import Cart\nfrom shopcart.money import percent_of, to_money\n\n\nclass PricingError(Exception):\n    \"\"\"Raised when pricing operations fail.\"\"\"\n    pass\n\n\n@dataclass(frozen=True)\nclass DiscountCoupon:\n    code: str\n    discount_percent: Decimal = Decimal('0')\n    fixed_amount: Decimal = Decimal('0')\n    min_subtotal: Decimal = Decimal('0')\n\n    def __post_init__(self) -> None:\n        object.__setattr__(self, \"discount_percent\", Decimal(str(self.discount_percent)))\n        object.__setattr__(self, \"fixed_amount\", Decimal(str(self.fixed_amount)))\n        object.__setattr__(self, \"min_subtotal\", Decimal(str(self.min_subtotal)))\n\n\n@dataclass(frozen=True)\nclass PricingPolicy:\n    \"\"\"Tax rates are percentages per product category; `default_tax_rate` covers the rest.\"\"\"\n\n    default_tax_rate: Decimal = Decimal(\"8\")\n    category_tax_rates: dict[str, Decimal] = field(default_factory=dict)\n    flat_shipping: Decimal = Decimal(\"5.99\")\n    free_shipping_threshold: Decimal = Decimal(\"50.00\")\n\n    def tax_rate_for(self, category: str) -> Decimal:\n        return Decimal(self.category_tax_rates.get(category, self.default_tax_rate))\n\n\n@dataclass(frozen=True)\nclass Totals:\n    subtotal: Decimal\n    discount: Decimal = Decimal(\"0.00\")\n    tax: Decimal = Decimal(\"0.00\")\n    shipping: Decimal = Decimal(\"0.00\")\n    total: Decimal = Decimal(\"0.00\")\n\n    def __post_init__(self) -> None:\n        calc_total = to_money(self.subtotal - self.discount + self.tax + self.shipping)\n        object.__setattr__(self, \"total\", calc_total)\n\n\ndef compute_tax(cart: Cart, policy: PricingPolicy) -> Decimal:\n    tax = Decimal(\"0\")\n    for line in cart.lines:\n        tax += percent_of(line.line_total, policy.tax_rate_for(line.product.category))\n    return to_money(tax)\n\n\ndef compute_shipping(cart: Cart, policy: PricingPolicy) -> Decimal:\n    if cart.is_empty():\n        return Decimal(\"0.00\")\n    if cart.subtotal >= policy.free_shipping_threshold:\n        return Decimal(\"0.00\")\n    return to_money(policy.flat_shipping)\n\n\ndef compute_totals(cart: Cart, policy: PricingPolicy | None = None, coupon: DiscountCoupon | None = None) -> Totals:\n    policy = policy or PricingPolicy()\n    subtotal = cart.subtotal\n\n    if coupon is not None:\n        if subtotal < coupon.min_subtotal:\n            raise PricingError(f\"cart subtotal {subtotal} does not meet coupon minimum {coupon.min_subtotal}\")\n        raw_discount = percent_of(subtotal, coupon.discount_percent) + to_money(coupon.fixed_amount)\n        discount = min(raw_discount, subtotal)\n    else:\n        discount = Decimal(\"0.00\")\n\n    shipping = compute_shipping(cart, policy)\n\n    if subtotal == Decimal(\"0.00\") or discount == subtotal:\n        tax = Decimal(\"0.00\")\n    else:\n        line_taxes = []\n        for line in cart.lines:\n            discounted_line_base = line.line_total * (Decimal(\"1\") - discount / subtotal)\n            line_tax = percent_of(discounted_line_base, policy.tax_rate_for(line.product.category))\n            line_taxes.append(line_tax)\n        tax = to_money(sum(line_taxes))\n\n    return Totals(\n        subtotal=subtotal,\n        discount=discount,\n        tax=tax,\n        shipping=shipping,\n        total=to_money(subtotal - discount + tax + shipping),\n    )\n"
+      }
+    ],
+    "unified_diff": "--- a/shopcart/pricing.py\n+++ b/shopcart/pricing.py\n@@ -7,6 +7,24 @@\n \n from shopcart.cart import Cart\n from shopcart.money import percent_of, to_money\n+\n+\n+class PricingError(Exception):\n+    \"\"\"Raised when pricing operations fail.\"\"\"\n+    pass\n+\n+\n+@dataclass(frozen=True)\n+class DiscountCoupon:\n+    code: str\n+    discount_percent: Decimal = Decimal('0')\n+    fixed_amount: Decimal = Decimal('0')\n+    min_subtotal: Decimal = Decimal('0')\n+\n+    def __post_init__(self) -> None:\n+        object.__setattr__(self, \"discount_percent\", Decimal(str(self.discount_percent)))\n+        object.__setattr__(self, \"fixed_amount\", Decimal(str(self.fixed_amount)))\n+        object.__setattr__(self, \"min_subtotal\", Decimal(str(self.min_subtotal)))\n \n \n @dataclass(frozen=True)\n@@ -25,9 +43,14 @@\n @dataclass(frozen=True)\n class Totals:\n     subtotal: Decimal\n-    tax: Decimal\n-    shipping: Decimal\n-    total: Decimal\n+    discount: Decimal = Decimal(\"0.00\")\n+    tax: Decimal = Decimal(\"0.00\")\n+    shipping: Decimal = Decimal(\"0.00\")\n+    total: Decimal = Decimal(\"0.00\")\n+\n+    def __post_init__(self) -> None:\n+        calc_total = to_money(self.subtotal - self.discount + self.tax + self.shipping)\n+        object.__setattr__(self, \"total\", calc_total)\n \n \n def compute_tax(cart: Cart, policy: PricingPolicy) -> Decimal:\n@@ -45,9 +68,34 @@\n     return to_money(policy.flat_shipping)\n \n \n-def compute_totals(cart: Cart, policy: PricingPolicy | None = None) -> Totals:\n+def compute_totals(cart: Cart, policy: PricingPolicy | None = None, coupon: DiscountCoupon | None = None) -> Totals:\n     policy = policy or PricingPolicy()\n     subtotal = cart.subtotal\n-    tax = compute_tax(cart, policy)\n+\n+    if coupon is not None:\n+        if subtotal < coupon.min_subtotal:\n+            raise PricingError(f\"cart subtotal {subtotal} does not meet coupon minimum {coupon.min_subtotal}\")\n+        raw_discount = percent_of(subtotal, coupon.discount_percent) + to_money(coupon.fixed_amount)\n+        discount = min(raw_discount, subtotal)\n+    else:\n+        discount = Decimal(\"0.00\")\n+\n     shipping = compute_shipping(cart, policy)\n-    return Totals(subtotal, tax, shipping, to_money(subtotal + tax + shipping))\n+\n+    if subtotal == Decimal(\"0.00\") or discount == subtotal:\n+        tax = Decimal(\"0.00\")\n+    else:\n+        line_taxes = []\n+        for line in cart.lines:\n+            discounted_line_base = line.line_total * (Decimal(\"1\") - discount / subtotal)\n+            line_tax = percent_of(discounted_line_base, policy.tax_rate_for(line.product.category))\n+            line_taxes.append(line_tax)\n+        tax = to_money(sum(line_taxes))\n+\n+    return Totals(\n+        subtotal=subtotal,\n+        discount=discount,\n+        tax=tax,\n+        shipping=shipping,\n+        total=to_money(subtotal - discount + tax + shipping),\n+    )\n"
+  },
+  "feature_test_files": [
+    {
+      "path": "tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py",
+      "content": "from decimal import Decimal\nimport pytest\n\nfrom shopcart import Cart, Catalog, Product\nfrom shopcart.pricing import (\n    DiscountCoupon,\n    PricingError,\n    PricingPolicy,\n    Totals,\n    compute_totals,\n)\n\n\ndef _make_cart(*items):\n    \"\"\"Helper to create a Cart populated with products: (sku, price, qty, category).\"\"\"\n    catalog = Catalog()\n    for sku, price_str, qty, category in items:\n        p = Product(sku=sku, name=sku, price=Decimal(price_str), category=category)\n        if hasattr(catalog, \"add_product\"):\n            catalog.add_product(p)\n        elif hasattr(catalog, \"products\") and isinstance(catalog.products, dict):\n            catalog.products[sku] = p\n        elif hasattr(catalog, \"register\"):\n            catalog.register(p)\n\n    cart = Cart(catalog)\n    for sku, price_str, qty, category in items:\n        cart.add_item(sku, qty)\n    return cart\n\n\ndef test_ac1_coupon_min_subtotal_error():\n    # Subtotal 29.99 < min_subtotal 30.00 -> raise PricingError\n    cart_below = _make_cart((\"A\", \"29.99\", 1, \"general\"))\n    coupon = DiscountCoupon(code=\"SAVE10\", min_subtotal=Decimal(\"30.00\"))\n\n    with pytest.raises(PricingError) as exc_info:\n        compute_totals(cart_below, coupon=coupon)\n    assert f\"cart subtotal {cart_below.subtotal} does not meet coupon minimum {coupon.min_subtotal}\" in str(exc_info.value)\n\n\ndef test_ac1_coupon_min_subtotal_boundary():\n    # Subtotal 30.00 == min_subtotal 30.00 -> valid\n    cart_exact = _make_cart((\"A\", \"30.00\", 1, \"general\"))\n    coupon = DiscountCoupon(code=\"SAVE10\", min_subtotal=Decimal(\"30.00\"), fixed_amount=Decimal(\"5.00\"))\n    totals = compute_totals(cart_exact, coupon=coupon)\n    assert totals.discount == Decimal(\"5.00\")\n\n\ndef test_ac2_percentage_coupon_discount():\n    # 10% off on 100.00 cart subtotal = 10.00 discount\n    cart = _make_cart((\"A\", \"100.00\", 1, \"general\"))\n    coupon = DiscountCoupon(code=\"PERCENT10\", discount_percent=Decimal(\"10\"))\n    totals = compute_totals(cart, coupon=coupon)\n    assert totals.discount == Decimal(\"10.00\")\n    assert totals.subtotal == Decimal(\"100.00\")\n\n\ndef test_ac3_exceeding_discount_clamping():\n    # Subtotal 15.00, coupon fixed discount 20.00 -> discount clamped to 15.00, tax 0.00, total == shipping\n    cart = _make_cart((\"A\", \"15.00\", 1, \"general\"))\n    policy = PricingPolicy(flat_shipping=Decimal(\"5.99\"), free_shipping_threshold=Decimal(\"50.00\"))\n    coupon = DiscountCoupon(code=\"BIGDISCOUNT\", fixed_amount=Decimal(\"20.00\"))\n\n    totals = compute_totals(cart, policy, coupon=coupon)\n    assert totals.subtotal == Decimal(\"15.00\")\n    assert totals.discount == Decimal(\"15.00\")\n    assert totals.tax == Decimal(\"0.00\")\n    assert totals.shipping == Decimal(\"5.99\")\n    assert totals.total == totals.shipping\n\n\ndef test_ac4_totals_formula_and_positional_defaults():\n    # Test Totals default discount and explicit formula\n    t = Totals(subtotal=Decimal(\"100.00\"), discount=Decimal(\"20.00\"), tax=Decimal(\"8.00\"), shipping=Decimal(\"5.00\"), total=Decimal(\"93.00\"))\n    assert t.subtotal - t.discount + t.tax + t.shipping == t.total\n\n    cart = _make_cart((\"A\", \"50.00\", 1, \"electronics\"), (\"B\", \"25.00\", 2, \"books\"))\n    coupon = DiscountCoupon(code=\"MIXED\", discount_percent=Decimal(\"10\"), fixed_amount=Decimal(\"5.00\"))\n    totals = compute_totals(cart, coupon=coupon)\n\n    expected_total = totals.subtotal - totals.discount + totals.tax + totals.shipping\n    assert totals.total == expected_total\n\n\ndef test_ac5_none_coupon_preserves_behavior():\n    cart = _make_cart((\"A\", \"20.00\", 2, \"general\"))  # subtotal = 40.00\n    policy = PricingPolicy(default_tax_rate=Decimal(\"10\"), flat_shipping=Decimal(\"5.00\"))\n\n    totals_no_coupon = compute_totals(cart, policy)\n    totals_explicit_none = compute_totals(cart, policy, coupon=None)\n\n    assert totals_no_coupon.discount == Decimal(\"0.00\")\n    assert totals_explicit_none.discount == Decimal(\"0.00\")\n    assert totals_no_coupon == totals_explicit_none\n    assert totals_no_coupon.subtotal == Decimal(\"40.00\")\n    assert totals_no_coupon.tax == Decimal(\"4.00\")\n    assert totals_no_coupon.shipping == Decimal(\"5.00\")\n    assert totals_no_coupon.total == Decimal(\"49.00\")\n\n\ndef test_tax_proportion_across_multiple_categories():\n    policy = PricingPolicy(\n        category_tax_rates={\"electronics\": Decimal(\"10\"), \"books\": Decimal(\"5\")}\n    )\n    cart = _make_cart((\"E1\", \"60.00\", 1, \"electronics\"), (\"B1\", \"40.00\", 1, \"books\"))\n    coupon = DiscountCoupon(code=\"SAVE20P\", discount_percent=Decimal(\"20\"))  # 20.00 discount\n\n    totals = compute_totals(cart, policy, coupon=coupon)\n    assert totals.subtotal == Decimal(\"100.00\")\n    assert totals.discount == Decimal(\"20.00\")\n    assert totals.tax == Decimal(\"6.40\")\n"
+    }
+  ],
+  "feature_test_ids": [],
+  "regression_test_ids": [
+    "tests.test_cart::test_add_and_subtotal",
+    "tests.test_cart::test_adding_same_sku_merges_lines",
+    "tests.test_cart::test_lines_sorted_by_sku",
+    "tests.test_cart::test_quantity_limit",
+    "tests.test_cart::test_quantity_must_be_positive",
+    "tests.test_cart::test_update_and_remove",
+    "tests.test_catalog::test_duplicate_sku_rejected",
+    "tests.test_catalog::test_lookup_and_category",
+    "tests.test_catalog::test_negative_price_rejected",
+    "tests.test_catalog::test_product_price_is_rounded",
+    "tests.test_catalog::test_search_is_case_insensitive",
+    "tests.test_catalog::test_unknown_sku",
+    "tests.test_inventory::test_commit_reduces_on_hand",
+    "tests.test_inventory::test_over_reserve_fails",
+    "tests.test_inventory::test_release_more_than_held_fails",
+    "tests.test_inventory::test_restock_and_reserve",
+    "tests.test_inventory::test_restock_requires_positive_quantity",
+    "tests.test_orders::test_cancel_releases_stock",
+    "tests.test_orders::test_failed_reservation_rolls_back",
+    "tests.test_orders::test_pay_ship_flow",
+    "tests.test_orders::test_place_empty_cart_fails",
+    "tests.test_orders::test_place_reserves_stock",
+    "tests.test_orders::test_wrong_payment_amount",
+    "tests.test_pricing::test_category_tax_rates",
+    "tests.test_pricing::test_default_tax_and_flat_shipping",
+    "tests.test_pricing::test_empty_cart_totals",
+    "tests.test_pricing::test_free_shipping_at_threshold"
+  ],
+  "traceability": [
+    {
+      "test_name": "test_ac1_coupon_min_subtotal_error",
+      "criteria": [
+        "AC1"
+      ]
+    },
+    {
+      "test_name": "test_ac1_coupon_min_subtotal_boundary",
+      "criteria": [
+        "AC1"
+      ]
+    },
+    {
+      "test_name": "test_ac2_percentage_coupon_discount",
+      "criteria": [
+        "AC2"
+      ]
+    },
+    {
+      "test_name": "test_ac3_exceeding_discount_clamping",
+      "criteria": [
+        "AC3"
+      ]
+    },
+    {
+      "test_name": "test_ac4_totals_formula_and_positional_defaults",
+      "criteria": [
+        "AC4"
+      ]
+    },
+    {
+      "test_name": "test_ac5_none_coupon_preserves_behavior",
+      "criteria": [
+        "AC5"
+      ]
+    },
+    {
+      "test_name": "test_tax_proportion_across_multiple_categories",
+      "criteria": [
+        "AC2",
+        "AC4"
+      ]
+    }
+  ],
+  "generation_metadata": {
+    "model": "gemini/gemini-flash-latest",
+    "attempts": [
+      {
+        "stage": "apply_edits",
+        "ok": true,
+        "files": [
+          "shopcart/pricing.py"
+        ]
+      },
+      {
+        "stage": "apply_edits",
+        "ok": true,
+        "files": [
+          "shopcart/pricing.py"
+        ]
+      }
+    ],
+    "seed": 1337,
+    "llm_usage": {
+      "calls": 6,
+      "cached_calls": 2,
+      "prompt_tokens": 27836,
+      "completion_tokens": 15250,
+      "by_purpose": {
+        "feature_discovery": 1,
+        "task_spec": 1,
+        "feature_tests": 1,
+        "reference": 1,
+        "reference_repair": 1,
+        "feature_tests_repair": 1
+      },
+      "models": [
+        "gemini/gemini-3.5-flash",
+        "gemini/gemini-flash-latest"
+      ]
+    }
+  }
+}

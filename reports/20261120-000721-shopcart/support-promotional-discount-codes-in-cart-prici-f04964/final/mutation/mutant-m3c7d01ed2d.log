@@ -1,0 +1,21 @@
+F
+=================================== FAILURES ===================================
+__________ test_ac1_min_subtotal_below_threshold_raises_pricing_error __________
+
+    def test_ac1_min_subtotal_below_threshold_raises_pricing_error():
+        catalog = _make_catalog()
+        cart = Cart(catalog)
+        cart.add_item("BOOK-1", 1)  # subtotal = 24.50
+    
+        coupon = DiscountCoupon("SAVE10", fixed_amount=Decimal("5.00"), min_subtotal=Decimal("50.00"))
+    
+        expected_msg = "cart subtotal 24.50 does not meet coupon minimum 50.00"
+>       with pytest.raises(PricingError, match=expected_msg):
+E       Failed: DID NOT RAISE <class 'shopcart.pricing.PricingError'>
+
+tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py:32: Failed
+-------------- generated xml file: /cf/out/mutant-m3c7d01ed2d.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_support_promotional_discount_codes_in_cart_prici_f04964.py::test_ac1_min_subtotal_below_threshold_raises_pricing_error
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 0.03s

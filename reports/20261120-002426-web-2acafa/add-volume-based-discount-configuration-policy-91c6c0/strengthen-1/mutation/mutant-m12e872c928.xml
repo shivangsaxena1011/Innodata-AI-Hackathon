@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="6" time="0.043" timestamp="2026-11-20T00:26:44.365511+00:00" hostname="5f2cb0704dd5"><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac1_exact_tier_match" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac2_highest_applicable_tier" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac3_below_tier_no_discount" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac4_tax_calculated_on_discounted_price" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac5_shipping_on_discounted_subtotal" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_shipping_at_threshold_boundary" time="0.000"><failure message="AssertionError: assert Decimal('5.99') == Decimal('0.00')&#10; +  where Decimal('5.99') = Totals(subtotal=Decimal('50.00'), tax=Decimal('4.00'), shipping=Decimal('5.99'), total=Decimal('59.99')).shipping&#10; +  and   Decimal('0.00') = Decimal('0.00')">def test_shipping_at_threshold_boundary():
+        """Ensure shipping is free exactly at the threshold with discount."""
+        # Product price 10.00, quantity 10 = 100.00. 50% discount = 50.00.
+        # Free shipping threshold is 50.00. GtE 50.00 should be free.
+        cart, policy, _ = setup_cart_and_policy()
+        policy.add_tier(10, 50)
+        cart.add_item("SKU-1", 10)
+    
+        totals = compute_totals(cart, policy)
+        assert totals.subtotal == Decimal("50.00")
+&gt;       assert totals.shipping == Decimal("0.00")
+E       AssertionError: assert Decimal('5.99') == Decimal('0.00')
+E        +  where Decimal('5.99') = Totals(subtotal=Decimal('50.00'), tax=Decimal('4.00'), shipping=Decimal('5.99'), total=Decimal('59.99')).shipping
+E        +  and   Decimal('0.00') = Decimal('0.00')
+
+tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py:84: AssertionError</failure></testcase></testsuite></testsuites>

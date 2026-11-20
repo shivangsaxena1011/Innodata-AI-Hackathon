@@ -1,0 +1,330 @@
+{
+  "candidates": [
+    {
+      "candidate": {
+        "feature_id": "support-promotional-discount-codes-in-cart-prici-f04964",
+        "title": "Support promotional discount codes in cart pricing",
+        "archetype": "business_rule",
+        "problem_statement": "Marketing teams need the ability to apply discount codes during checkout to drive promotions. Currently, `compute_totals` only accounts for subtotal, tax, and shipping, without supporting item-level or order-level discounts. Adding a coupon code mechanism allows carts to calculate valid discount deductions and adjust final totals.",
+        "requirements": [
+          "Create a `DiscountCoupon` dataclass in `shopcart.pricing` with fields `code: str`, `discount_percent: Decimal = Decimal('0')`, `fixed_amount: Decimal = Decimal('0')`, and `min_subtotal: Decimal = Decimal('0')`.",
+          "Add an optional `coupon: DiscountCoupon | None = None` parameter to `compute_totals(cart: Cart, policy: PricingPolicy | None = None, coupon: DiscountCoupon | None = None) -> Totals`.",
+          "Add a `discount: Decimal` field to `Totals` (default `Decimal('0.00')`). The final `total` property in `Totals` must equal `subtotal - discount + tax + shipping`.",
+          "If a coupon is provided but `cart.subtotal()` is strictly less than `coupon.min_subtotal`, raise `PricingError` (a subclass of `Exception`).",
+          "Discount amount is calculated as `percent_of(cart.subtotal(), coupon.discount_percent) + to_money(coupon.fixed_amount)`. The calculated discount cannot exceed `cart.subtotal()`; if it exceeds `cart.subtotal()`, clamp `discount` to `cart.subtotal()`.",
+          "Tax must be calculated on the discounted subtotal (`cart.subtotal() - discount`), using the existing tax policy logic distributed proportionally across lines, or applying the effective rate: compute tax on each line's proportional share after discount (rounded to `CENT`). If discount equals subtotal, tax is `Decimal('0.00')`."
+        ],
+        "acceptance_criteria": [
+          "Calling `compute_totals(cart, coupon=coupon)` with `min_subtotal` greater than `cart.subtotal()` raises `PricingError`.",
+          "Valid percent discount reduces `subtotal` by `percent_of(cart.subtotal(), coupon.discount_percent)` and records it in `Totals.discount`.",
+          "A fixed-amount coupon exceeding the subtotal clamps `Totals.discount` to `cart.subtotal()` and does not result in a negative total.",
+          "`Totals.total` precisely matches `subtotal - discount + tax + shipping`."
+        ],
+        "complexity": "medium",
+        "affected_modules": [
+          "shopcart/pricing.py"
+        ],
+        "existing_behaviour": "Totals only tracks subtotal, tax, shipping, and total (which is subtotal + tax + shipping). PricingPolicy has no discount concept.",
+        "edge_cases": [
+          "Subtotal exactly equals min_subtotal: coupon is valid and applied.",
+          "Discount is larger than subtotal: discount is clamped to subtotal, resulting in $0.00 subtotal-after-discount and $0.00 tax.",
+          "Both discount_percent and fixed_amount are specified: their sum is discounted up to subtotal."
+        ],
+        "contract": [
+          {
+            "kind": "exception",
+            "module": "shopcart.pricing",
+            "name": "PricingError",
+            "signature": "class PricingError(Exception)",
+            "behaviour": "Raised when pricing operations fail, such as when a coupon does not meet the minimum subtotal requirement."
+          },
+          {
+            "kind": "class",
+            "module": "shopcart.pricing",
+            "name": "DiscountCoupon",
+            "signature": "class DiscountCoupon:\n    code: str\n    discount_percent: Decimal = Decimal('0')\n    fixed_amount: Decimal = Decimal('0')\n    min_subtotal: Decimal = Decimal('0')",
+            "behaviour": "Represents a promotional discount coupon with percentage and/or fixed amount savings and an optional minimum subtotal threshold."
+          }
+        ],
+        "novelty_score": 1.0,
+        "rejection_reason": null
+      },
+      "score": 5.4,
+      "accepted": true,
+      "reason": null
+    },
+    {
+      "candidate": {
+        "feature_id": "add-order-refund-and-return-lifecycle-states-059169",
+        "title": "Add order refund and return lifecycle states",
+        "archetype": "state_machine",
+        "problem_statement": "Customer support agents currently cannot process returns or refunds on fulfilled orders. The order state machine only transitions up to `SHIPPED` or `CANCELLED`. Adding return and refund transitions allows the platform to properly track returned merchandise and restock inventory.",
+        "requirements": [
+          "Add `REFUNDED` and `RETURNED` members to `OrderStatus` enum in `shopcart.orders`.",
+          "Update `ALLOWED_TRANSITIONS` to allow: `OrderStatus.PAID -> {OrderStatus.SHIPPED, OrderStatus.REFUNDED}`, `OrderStatus.SHIPPED -> {OrderStatus.RETURNED}`, and `OrderStatus.RETURNED -> {OrderStatus.REFUNDED}`.",
+          "Add `refund(self)` method to `Order`. If status is `PAID` or `RETURNED`, transition to `REFUNDED`. Calling `refund()` from any other status raises `OrderError`.",
+          "Add `return_items(self, inventory: Inventory)` method to `Order`. If status is `SHIPPED`, transition to `RETURNED` and call `inventory.restock(item.sku, item.quantity)` for each item in the order. Calling `return_items` from any status other than `SHIPPED` raises `OrderError`."
+        ],
+        "acceptance_criteria": [
+          "Invoking `order.return_items(inventory)` on a `SHIPPED` order changes status to `RETURNED` and increments inventory available stock by the quantities of items in the order.",
+          "Invoking `order.refund()` on a `RETURNED` order transitions status to `REFUNDED`.",
+          "Invoking `order.refund()` on a `PAID` order (before shipping) transitions status to `REFUNDED` without restocking (since stock is cancelled/handled separately).",
+          "Attempting `order.return_items(inventory)` on a `PENDING` or `PAID` order raises `OrderError`."
+        ],
+        "complexity": "medium",
+        "affected_modules": [
+          "shopcart/orders.py"
+        ],
+        "existing_behaviour": "OrderStatus has PENDING, PAID, SHIPPED, CANCELLED. PAID can only transition to SHIPPED. SHIPPED is a terminal state with no outbound transitions.",
+        "edge_cases": [
+          "Attempting to refund an already REFUNDED order raises OrderError.",
+          "Attempting to return items on a CANCELLED order raises OrderError.",
+          "Calling return_items with multiple distinct SKUs restocks all line items in the inventory."
+        ],
+        "contract": [
+          {
+            "kind": "method",
+            "module": "shopcart.orders",
+            "name": "Order.refund",
+            "signature": "def refund(self) -> None",
+            "behaviour": "Transitions an order in PAID or RETURNED state to REFUNDED, or raises OrderError if invalid."
+          },
+          {
+            "kind": "method",
+            "module": "shopcart.orders",
+            "name": "Order.return_items",
+            "signature": "def return_items(self, inventory: Inventory) -> None",
+            "behaviour": "Transitions an order in SHIPPED state to RETURNED and restocks all order line items back into inventory."
+          }
+        ],
+        "novelty_score": 0.9585,
+        "rejection_reason": null
+      },
+      "score": 5.359,
+      "accepted": true,
+      "reason": null
+    },
+    {
+      "candidate": {
+        "feature_id": "add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+        "title": "Add inventory valuation and stock report aggregation",
+        "archetype": "query_aggregation",
+        "problem_statement": "Warehouse and operations managers need visibility into total inventory levels, available versus reserved quantities, and the total monetary value of on-hand inventory. Currently, inventory tracking only exposes individual SKU lookups without aggregate reporting or catalog price cross-referencing.",
+        "requirements": [
+          "Create an `InventoryReport` dataclass in `shopcart.inventory` with fields: `total_on_hand: int`, `total_reserved: int`, `total_available: int`, `total_valuation: Decimal`, and `sku_breakdown: dict[str, dict[str, int | Decimal]]`.",
+          "Implement `generate_inventory_report(inventory: Inventory, catalog: Catalog) -> InventoryReport` in `shopcart.inventory`.",
+          "For each SKU tracked in `inventory`, `sku_breakdown[sku]` must contain keys: `'on_hand'` (int), `'reserved'` (int), `'available'` (int), and `'valuation'` (Decimal, equal to `on_hand * product.price` from `catalog`).",
+          "If a SKU in inventory is not found in `catalog`, default its unit price to `Decimal('0.00')` for valuation calculations.",
+          "`total_on_hand` is the sum of all `on_hand` quantities. `total_reserved` is the sum of all `reserved` quantities. `total_available` is the sum of all `available` quantities (`on_hand - reserved`). `total_valuation` is the sum of all SKU valuations, rounded to `CENT`."
+        ],
+        "acceptance_criteria": [
+          "`generate_inventory_report` returns an `InventoryReport` with accurate totals across all tracked items.",
+          "`sku_breakdown` contains correct on-hand, reserved, available, and valuation metrics for each SKU.",
+          "Unlisted SKUs in inventory have valuation `Decimal('0.00')` without raising key errors.",
+          "Empty inventory returns zeroed totals and an empty breakdown dictionary."
+        ],
+        "complexity": "medium",
+        "affected_modules": [
+          "shopcart/inventory.py"
+        ],
+        "existing_behaviour": "Inventory maintains internal on_hand and reserved dicts, but only exposes `available(sku: str) -> int`. There is no batch query or monetary valuation.",
+        "edge_cases": [
+          "Inventory has no items restocked: returns report with all totals 0 and empty dictionary.",
+          "SKU has stock reserved: available is on_hand - reserved, and valuation is based on total on_hand.",
+          "Catalog lookup for SKU raises KeyError: gracefully handled by valuing SKU at 0.00."
+        ],
+        "contract": [
+          {
+            "kind": "class",
+            "module": "shopcart.inventory",
+            "name": "InventoryReport",
+            "signature": "class InventoryReport:\n    total_on_hand: int\n    total_reserved: int\n    total_available: int\n    total_valuation: Decimal\n    sku_breakdown: dict[str, dict[str, int | Decimal]]",
+            "behaviour": "Represents an aggregated inventory status and valuation report."
+          },
+          {
+            "kind": "function",
+            "module": "shopcart.inventory",
+            "name": "generate_inventory_report",
+            "signature": "def generate_inventory_report(inventory: Inventory, catalog: Catalog) -> InventoryReport",
+            "behaviour": "Calculates aggregate inventory quantities and catalog-based monetary valuation across all tracked inventory SKUs."
+          }
+        ],
+        "novelty_score": 0.9449,
+        "rejection_reason": null
+      },
+      "score": 5.345,
+      "accepted": true,
+      "reason": null
+    },
+    {
+      "candidate": {
+        "feature_id": "configurable-tiered-shipping-policy-based-on-car-37fcc9",
+        "title": "Configurable tiered shipping policy based on cart weight",
+        "archetype": "configuration_policy",
+        "problem_statement": "Logistics managers need shipping costs to be computed dynamically based on package weight tiers rather than just a flat rate and price threshold. Currently `PricingPolicy` only calculates shipping using a flat `shipping_rate` and `free_shipping_threshold` on cart subtotal.",
+        "requirements": [
+          "Add an optional `weight: Decimal = Decimal('0.0')` field (in kilograms/pounds) to `Product` in `shopcart.catalog`.",
+          "Create a `WeightTierShippingPolicy` in `shopcart.pricing` with `tiers: list[tuple[Decimal, Decimal]]` (list of `(max_weight, shipping_fee)` pairs sorted ascending by `max_weight`), and `fallback_rate_per_unit_weight: Decimal = Decimal('2.00')`.",
+          "Implement `compute_cart_weight(cart: Cart) -> Decimal` in `shopcart.pricing` that calculates `sum(item.product.weight * item.quantity for item in cart.lines())`.",
+          "Implement `calculate_shipping_by_weight(cart: Cart, policy: WeightTierShippingPolicy) -> Decimal` in `shopcart.pricing`.",
+          "Shipping rule: If cart is empty, shipping is `Decimal('0.00')`. Otherwise, find the first tier where `total_weight <= max_weight` and return `to_money(tier_shipping_fee)`. If total weight exceeds all tiers, shipping is `highest_tier_fee + (total_weight - max_tier_weight) * fallback_rate_per_unit_weight` rounded to `CENT`."
+        ],
+        "acceptance_criteria": [
+          "Empty cart has shipping cost `Decimal('0.00')`.",
+          "Cart with weight falling into the first tier returns the first tier's fee.",
+          "Cart with weight matching tier boundary exactly selects that tier.",
+          "Cart exceeding the highest tier weight applies the fallback rate per excess unit weight added to the highest tier fee."
+        ],
+        "complexity": "medium",
+        "affected_modules": [
+          "shopcart/catalog.py",
+          "shopcart/pricing.py"
+        ],
+        "existing_behaviour": "PricingPolicy only checks if subtotal >= free_shipping_threshold to set shipping to 0, otherwise charges flat shipping_rate. Product has no weight attribute.",
+        "edge_cases": [
+          "Product created without specifying weight defaults to Decimal('0.0').",
+          "Cart with 0.0 total weight matches tier 0 if max_weight >= 0, or lowest tier.",
+          "WeightTierShippingPolicy with empty tiers raises ValueError when evaluated against non-empty cart."
+        ],
+        "contract": [
+          {
+            "kind": "class",
+            "module": "shopcart.pricing",
+            "name": "WeightTierShippingPolicy",
+            "signature": "class WeightTierShippingPolicy:\n    tiers: list[tuple[Decimal, Decimal]]\n    fallback_rate_per_unit_weight: Decimal = Decimal('2.00')",
+            "behaviour": "Configurable tiered weight policy mapping maximum weight limits to shipping rates."
+          },
+          {
+            "kind": "function",
+            "module": "shopcart.pricing",
+            "name": "compute_cart_weight",
+            "signature": "def compute_cart_weight(cart: Cart) -> Decimal",
+            "behaviour": "Sums the total weight of all line items in the cart."
+          },
+          {
+            "kind": "function",
+            "module": "shopcart.pricing",
+            "name": "calculate_shipping_by_weight",
+            "signature": "def calculate_shipping_by_weight(cart: Cart, policy: WeightTierShippingPolicy) -> Decimal",
+            "behaviour": "Calculates total shipping cost for a cart using weight tiers and fallback rates."
+          }
+        ],
+        "novelty_score": 0.8687,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 5.269,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    },
+    {
+      "candidate": {
+        "feature_id": "add-cart-merge-and-transfer-capabilities-530f14",
+        "title": "Add cart merge and transfer capabilities",
+        "archetype": "interface_extension",
+        "problem_statement": "Users who browse anonymously and then log in need their guest cart merged into their account cart without losing items. Currently, `Cart` has no method to absorb or transfer items from another cart, requiring manual per-item iteration and re-validation.",
+        "requirements": [
+          "Implement `merge(self, other: Cart) -> None` on `Cart` in `shopcart.cart`.",
+          "When `cart_a.merge(cart_b)` is called, each item in `cart_b.lines()` is added to `cart_a` using `add_item` logic.",
+          "If adding items from `other` would cause any item in `cart_a` to exceed `MAX_QUANTITY_PER_LINE`, do not modify `cart_a` (atomic operation) and raise `CartError`.",
+          "After successfully merging into `cart_a`, the caller may choose whether `other` is cleared: provide parameter `clear_source: bool = False`. If `True`, `other.clear()` is called after successful merge.",
+          "If `cart_a` and `cart_b` reference different catalogs, allow the merge if all items in `cart_b` exist in `cart_a.catalog`; if any SKU in `cart_b` does not exist in `cart_a.catalog`, raise `CartError` without modifying either cart."
+        ],
+        "acceptance_criteria": [
+          "`cart_a.merge(cart_b)` combines quantities for identical SKUs and appends new SKUs to `cart_a`.",
+          "If merging causes an item quantity to exceed 99, `CartError` is raised and `cart_a` is unchanged.",
+          "If `clear_source=True`, `cart_b.is_empty()` is `True` after merge.",
+          "If merge fails due to capacity limit or missing catalog SKU, neither `cart_a` nor `cart_b` is modified."
+        ],
+        "complexity": "medium",
+        "affected_modules": [
+          "shopcart/cart.py"
+        ],
+        "existing_behaviour": "Cart only supports individual add_item, update_quantity, remove_item, and clear operations. There is no bulk or multi-cart operation.",
+        "edge_cases": [
+          "Merging an empty cart into cart_a does nothing and succeeds.",
+          "Merging cart_a into itself raises CartError.",
+          "Failure halfway through checking line limits rolls back any in-memory state changes."
+        ],
+        "contract": [
+          {
+            "kind": "method",
+            "module": "shopcart.cart",
+            "name": "Cart.merge",
+            "signature": "def merge(self, other: Cart, clear_source: bool = False) -> None",
+            "behaviour": "Merges all line items from another cart into this cart atomically, optionally clearing the source cart upon success."
+          }
+        ],
+        "novelty_score": 0.9485,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 5.349,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    },
+    {
+      "candidate": {
+        "feature_id": "validate-cart-items-availability-directly-agains-db8e7c",
+        "title": "Validate cart items availability directly against inventory",
+        "archetype": "component_interaction",
+        "problem_statement": "Shoppers often proceed toward checkout only to find order placement fails due to out-of-stock items. A checkout pre-flight check is needed to validate that all items in a cart are currently available in inventory and to return a detailed availability summary before attempting order creation.",
+        "requirements": [
+          "Create an `AvailabilityIssue` dataclass in `shopcart.cart` with fields `sku: str`, `requested: int`, and `available: int`.",
+          "Create a `CartValidationResult` dataclass in `shopcart.cart` with fields `is_valid: bool` and `issues: list[AvailabilityIssue]`.",
+          "Implement `validate_cart_availability(cart: Cart, inventory: Inventory) -> CartValidationResult` in `shopcart.cart`.",
+          "For each `LineItem` in `cart.lines()`: check `inventory.available(sku)`. If `requested > available`, append an `AvailabilityIssue(sku=item.sku, requested=item.quantity, available=avail)` to issues.",
+          "Issues must be ordered alphabetically by `sku`. `is_valid` is `True` if and only if `len(issues) == 0`."
+        ],
+        "acceptance_criteria": [
+          "If all cart items have `inventory.available(sku) >= quantity`, returns `CartValidationResult(is_valid=True, issues=[])`.",
+          "If one or more items exceed available stock, returns `is_valid=False` with all affected items in `issues` sorted by SKU.",
+          "Empty cart returns `CartValidationResult(is_valid=True, issues=[])`.",
+          "Function does not mutate cart contents or inventory reservations."
+        ],
+        "complexity": "easy",
+        "affected_modules": [
+          "shopcart/cart.py"
+        ],
+        "existing_behaviour": "Cart has no reference to Inventory. Inventory reservations only happen during Order.place, which throws InventoryError if stock is insufficient.",
+        "edge_cases": [
+          "Item in cart has 0 available inventory: issue has available=0.",
+          "Cart has multiple items where some are valid and some are short: only short items are in issues.",
+          "Does not modify inventory or reserve any stock."
+        ],
+        "contract": [
+          {
+            "kind": "class",
+            "module": "shopcart.cart",
+            "name": "AvailabilityIssue",
+            "signature": "class AvailabilityIssue:\n    sku: str\n    requested: int\n    available: int",
+            "behaviour": "Describes an inventory deficiency for a specific SKU requested by a cart."
+          },
+          {
+            "kind": "class",
+            "module": "shopcart.cart",
+            "name": "CartValidationResult",
+            "signature": "class CartValidationResult:\n    is_valid: bool\n    issues: list[AvailabilityIssue]",
+            "behaviour": "Result object representing whether a cart can be satisfied by inventory and any stock deficiencies found."
+          },
+          {
+            "kind": "function",
+            "module": "shopcart.cart",
+            "name": "validate_cart_availability",
+            "signature": "def validate_cart_availability(cart: Cart, inventory: Inventory) -> CartValidationResult",
+            "behaviour": "Inspects all line items in a cart against available stock in inventory without modifying state."
+          }
+        ],
+        "novelty_score": 0.9451,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 4.945,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    }
+  ],
+  "llm": [
+    {
+      "model": "gemini/gemini-flash-latest",
+      "cached": true
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="0.022" timestamp="2026-11-20T00:26:10.519201+00:00" hostname="041c4c66d071"><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac1_exact_tier_match" time="0.000" /><testcase classname="tests.test_codeforge_add_volume_based_discount_configuration_policy_91c6c0" name="test_ac2_highest_applicable_tier" time="0.000"><failure message="AssertionError: assert Decimal('114.00') == Decimal('108.00')&#10; +  where Decimal('114.00') = Totals(subtotal=Decimal('114.00'), tax=Decimal('9.12'), shipping=Decimal('0.00'), total=Decimal('123.12')).subtotal&#10; +  and   Decimal('108.00') = Decimal('108.00')">def test_ac2_highest_applicable_tier():
+        # Given tiers (5, 5%) and (10, 10%)
+        # 12 units of $10.00 item -&gt; 10% off $120.00 = $108.00
+        cart, policy, _ = setup_cart_and_policy()
+        policy.add_tier(5, 5)
+        policy.add_tier(10, 10)
+        cart.add_item("SKU-1", 12)
+    
+        totals = compute_totals(cart, policy)
+        # 12 * 10 = 120. 120 * (1 - 0.10) = 108.00
+&gt;       assert totals.subtotal == Decimal("108.00")
+E       AssertionError: assert Decimal('114.00') == Decimal('108.00')
+E        +  where Decimal('114.00') = Totals(subtotal=Decimal('114.00'), tax=Decimal('9.12'), shipping=Decimal('0.00'), total=Decimal('123.12')).subtotal
+E        +  and   Decimal('108.00') = Decimal('108.00')
+
+tests/test_codeforge_add_volume_based_discount_configuration_policy_91c6c0.py:37: AssertionError</failure></testcase></testsuite></testsuites>
