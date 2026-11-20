@@ -1,0 +1,224 @@
+{
+  "generated_at": "2026-11-20T06:00:06.369182+00:00",
+  "agent": "oracle",
+  "tasks": 5,
+  "trials": 5,
+  "solved": 5,
+  "unsolved": 0,
+  "quota_errors": 0,
+  "errors": 0,
+  "pass_rate": 1.0,
+  "note": "pass_rate counts only trials the verifier graded; quota and infrastructure errors are listed separately. Oracle validation is in each task_manifest.json.",
+  "results": [
+    {
+      "task_id": "add-cache-hit-miss-ratio-reporting-d7c477",
+      "title": "Add hit_ratio property to CacheInfo",
+      "archetype": "query_aggregation",
+      "starting_commit_sha": "c5de5137153b301933922e47bc70b598970e0627",
+      "agent": "oracle",
+      "model": null,
+      "attempts": 1,
+      "solved": 1,
+      "valid_trials": 1,
+      "pass_rate": 1.0,
+      "trials": [
+        {
+          "attempt": 1,
+          "model": null,
+          "outcome": "solved",
+          "reward": 1.0,
+          "rewards": {
+            "reward": 1.0,
+            "feature_pass_rate": 1.0,
+            "regression_pass_rate": 1.0
+          },
+          "exception": null,
+          "duration_sec": 46.8,
+          "agent_seconds": 2.6,
+          "input_tokens": null,
+          "output_tokens": null,
+          "cost_usd": null,
+          "model_info": null,
+          "verifier": {
+            "rewards": {
+              "reward": 1.0,
+              "feature_pass_rate": 1.0,
+              "regression_pass_rate": 1.0
+            },
+            "feature_not_passed": [],
+            "regression_not_passed": []
+          },
+          "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\workspace\\hj\\oracle-f6cb9f39"
+        }
+      ]
+    },
+    {
+      "task_id": "add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+      "title": "Add inventory valuation and stock report aggregation",
+      "archetype": "query_aggregation",
+      "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+      "agent": "oracle",
+      "model": null,
+      "attempts": 1,
+      "solved": 1,
+      "valid_trials": 1,
+      "pass_rate": 1.0,
+      "trials": [
+        {
+          "attempt": 1,
+          "model": null,
+          "outcome": "solved",
+          "reward": 1.0,
+          "rewards": {
+            "reward": 1.0,
+            "feature_pass_rate": 1.0,
+            "regression_pass_rate": 1.0
+          },
+          "exception": null,
+          "duration_sec": 44.8,
+          "agent_seconds": 2.8,
+          "input_tokens": null,
+          "output_tokens": null,
+          "cost_usd": null,
+          "model_info": null,
+          "verifier": {
+            "rewards": {
+              "reward": 1.0,
+              "feature_pass_rate": 1.0,
+              "regression_pass_rate": 1.0
+            },
+            "feature_not_passed": [],
+            "regression_not_passed": []
+          },
+          "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\workspace\\hj\\oracle-2bc8ac9b"
+        }
+      ]
+    },
+    {
+      "task_id": "add-order-refund-and-return-lifecycle-states-059169",
+      "title": "Add order refund and return lifecycle states",
+      "archetype": "state_machine",
+      "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+      "agent": "oracle",
+      "model": null,
+      "attempts": 1,
+      "solved": 1,
+      "valid_trials": 1,
+      "pass_rate": 1.0,
+      "trials": [
+        {
+          "attempt": 1,
+          "model": null,
+          "outcome": "solved",
+          "reward": 1.0,
+          "rewards": {
+            "reward": 1.0,
+            "feature_pass_rate": 1.0,
+            "regression_pass_rate": 1.0
+          },
+          "exception": null,
+          "duration_sec": 50.3,
+          "agent_seconds": 3.2,
+          "input_tokens": null,
+          "output_tokens": null,
+          "cost_usd": null,
+          "model_info": null,
+          "verifier": {
+            "rewards": {
+              "reward": 1.0,
+              "feature_pass_rate": 1.0,
+              "regression_pass_rate": 1.0
+            },
+            "feature_not_passed": [],
+            "regression_not_passed": []
+          },
+          "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\workspace\\hj\\oracle-43c3cf70"
+        }
+      ]
+    },
+    {
+      "task_id": "add-volume-based-discount-configuration-policy-91c6c0",
+      "title": "Add volume-based discount configuration policy",
+      "archetype": "configuration_policy",
+      "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+      "agent": "oracle",
+      "model": null,
+      "attempts": 1,
+      "solved": 1,
+      "valid_trials": 1,
+      "pass_rate": 1.0,
+      "trials": [
+        {
+          "attempt": 1,
+          "model": null,
+          "outcome": "solved",
+          "reward": 1.0,
+          "rewards": {
+            "reward": 1.0,
+            "feature_pass_rate": 1.0,
+            "regression_pass_rate": 1.0
+          },
+          "exception": null,
+          "duration_sec": 78.7,
+          "agent_seconds": 4.2,
+          "input_tokens": null,
+          "output_tokens": null,
+          "cost_usd": null,
+          "model_info": null,
+          "verifier": {
+            "rewards": {
+              "reward": 1.0,
+              "feature_pass_rate": 1.0,
+              "regression_pass_rate": 1.0
+            },
+            "feature_not_passed": [],
+            "regression_not_passed": []
+          },
+          "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\workspace\\hj\\oracle-46325f9f"
+        }
+      ]
+    },
+    {
+      "task_id": "support-promotional-discount-codes-in-cart-prici-f04964",
+      "title": "Support promotional discount codes in cart pricing",
+      "archetype": "business_rule",
+      "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+      "agent": "oracle",
+      "model": null,
+      "attempts": 1,
+      "solved": 1,
+      "valid_trials": 1,
+      "pass_rate": 1.0,
+      "trials": [
+        {
+          "attempt": 1,
+          "model": null,
+          "outcome": "solved",
+          "reward": 1.0,
+          "rewards": {
+            "reward": 1.0,
+            "feature_pass_rate": 1.0,
+            "regression_pass_rate": 1.0
+          },
+          "exception": null,
+          "duration_sec": 77.3,
+          "agent_seconds": 4.8,
+          "input_tokens": null,
+          "output_tokens": null,
+          "cost_usd": null,
+          "model_info": null,
+          "verifier": {
+            "rewards": {
+              "reward": 1.0,
+              "feature_pass_rate": 1.0,
+              "regression_pass_rate": 1.0
+            },
+            "feature_not_passed": [],
+            "regression_not_passed": []
+          },
+          "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\workspace\\hj\\oracle-a74b61e5"
+        }
+      ]
+    }
+  ]
+}

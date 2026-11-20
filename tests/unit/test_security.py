@@ -8,7 +8,7 @@ from codeforge.utils.proc import run
 
 
 @pytest.mark.parametrize("bad", ["../x.py", "/etc/passwd", "a/../../b", "C:/win.ini", ".git/config",
-                                 "", "~/.ssh/id_rsa"])
+                                 "", "~/.ssh/id_rsa", ".", "./", " . "])
 def test_safe_relpath_rejects_unsafe(bad):
     with pytest.raises(fs.UnsafePathError):
         fs.safe_relpath(bad)

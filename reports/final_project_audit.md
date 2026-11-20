@@ -9,7 +9,7 @@ Every finding below was checked by running the code or reading the source. Statu
 | Item | Value |
 |---|---|
 | CodeForge package | `src/codeforge`: 72 Python modules, ~6.3k lines; dashboard ~720 lines of HTML/CSS/JS |
-| Tests | 52 unit tests (`tests/unit`), 3 Docker + Harbor integration tests (`tests/integration`) |
+| Tests | 55 unit tests (`tests/unit`), 3 Docker + Harbor integration tests (`tests/integration`) |
 | Generated task packages | 4 on the bundled sample (`generated_tasks/shopcart/`), plus generalization tasks on public repos (`generated_tasks/cachetools/`, `generated_tasks/tinydb/` when valid) |
 | Toolchain verified | Python 3.12, uv 0.11.25, Docker 29.9.3 (Linux engine), Harbor 0.26.0, Git 2.56 |
 | Git | Branch `main` tracking `origin/main` (GitHub). 4 commits by the user before this audit; this audit left its changes **uncommitted** for review. Nothing was pushed. |
@@ -31,8 +31,9 @@ Every finding below was checked by running the code or reading the source. Statu
 | A11 | Dependency pinning in target images | Target dependencies are installed with the repository's own specs (`pip install -e .`, `-r requirements*.txt`). Unpinned upstream specs can resolve differently on a later build. Base images *are* digest-pinned. | **Open (documented)**: Harbor lint does not flag it; a lock-file-aware installer would be the next step. |
 | A12 | Agent network | Harbor agent containers use `network_mode = "public"` because real agents must reach their model API; the verifier is `no-network`. | **OK (by design)** |
 | A13 | Mutation for JavaScript | AST mutation is Python-only; JS relies on semantic mutants. The JS execution adapter has not run on a real JS repository (clsx uses `uvu`, which is unsupported). | **Open (documented)** |
-| A14 | Real-agent benchmark | Not executed in this session: the free Flash quotas (20 requests/model/day) were exhausted. A one-time run is scheduled for 2026-11-20 14:00 IST, after the 13:30 IST reset. | **Open (scheduled)** |
+| A14 | Real-agent benchmark | Not executed in this session: the free Flash quotas (20 requests/model/day) were exhausted. A one-time run is scheduled for 2026-11-20 14:00 IST, after the 13:30 IST reset. | **Open (scheduled)**: status re-checked 2026-11-20 11:16 IST: 0 runs yet, not started manually to avoid a duplicate job. |
 | A15 | Innodata repository | Not supplied. Nothing in the project or the hackathon material provides it. | **Open (external)** |
+| A16 | Path safety | Hypothesis found that `safe_relpath(".")` (or `"./"`) raised `IndexError` instead of `UnsafePathError`, because `"."` has no path parts. A model-supplied `"."` path would have crashed an edit instead of being rejected. | **Fixed**: empty-part paths are rejected; regression cases added (55 unit tests). |
 
 ## 3. Secrets and personal data
 A scan of all 2,318 tracked files plus new untracked files found:

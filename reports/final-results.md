@@ -56,11 +56,41 @@ Each reference passes its own tests (**4/4**) and fails every other task's tests
 cross-task combinations fail. The tasks test genuinely different behaviour. They come from
 4 distinct archetypes, and the mean pairwise similarity of the 3-task run was 0.045.
 
+### 2b. All five shipped packages: 5 × 5
+`codeforge crosscheck all` runs on every shipped package, including the cachetools task.
+Row *i* runs in task *i*'s own environment. Saved in
+[`cross_task_validation_5x5.json`](cross_task_validation_5x5.json).
+
+| tests \ reference | R1 cachetools hit_ratio | R2 inventory | R3 refund | R4 volume discount | R5 promo codes |
+|---|---|---|---|---|---|
+| **T1** cachetools hit_ratio | **pass** (8/8) | fail ‡ | fail ‡ | fail ‡ | fail ‡ |
+| **T2** inventory valuation | fail ‡ | **pass** (7/7) | fail | fail | fail |
+| **T3** refund lifecycle | fail ‡ | fail | **pass** (7/7) | fail | fail |
+| **T4** volume discount | fail ‡ | fail | fail | **pass** (13/13) | fail |
+| **T5** promo codes | fail ‡ | fail | fail | fail | **pass** (10/10) |
+
+‡ cross-repository cell
+
+- **Diagonal:** **5/5** pass.
+- **Off-diagonal:** **20/20** fail: 12/12 same-repository and 8/8 cross-repository.
+- **How the 20 cells failed:**
+  - In 8 cells, every hidden test ran and failed. These are the cachetools row and the
+    refund row.
+  - In 12 cells, the hidden test module failed at import: the interface names it requires
+    (for example `InventoryReport`, `VolumeDiscountPolicy`, `DiscountCoupon`) are added only
+    by its own reference.
+- **No infrastructure failures:** every cell produced a real pytest result.
+- **How to read the cross-repository cells:** they only show that a task's tests still fail
+  when another repository's reference is applied. The behavioural-discrimination evidence
+  is the 12 same-repository cells.
+
 ## 3. Controls through Harbor (no model involved)
 
 | Check | Result | Evidence |
 |---|---|---|
 | Oracle agent (reference solution) on every package | reward **1.0**, 4/4 | `validation/validation.json` in each package |
+| Final re-validation: oracle on all 5 shipped packages (4 shopcart + 1 cachetools), 2026-11-20 | **5/5 solved**, reward 1.0, feature and regression pass rate 1.0 | `reports/benchmark-20261120-055508-oracle/benchmark.md` |
+| `harbor lint` on all 5 shipped packages | no findings (5/5) | final audit run |
 | `nop` agent (no changes) on every package | reward **0.0**, 4/4 graded | `reports/benchmark-20261120-030556-nop/benchmark.md` |
 | `codeforge evaluate <refund task> --agent oracle` | solved, reward 1.0 | rerun during the audit |
 
@@ -77,10 +107,15 @@ Evidence: `reports/20261120-052818-cachetools/`, `reports/20261120-052944-cachet
 `generated_tasks/cachetools/`.
 
 ## 5. Agent benchmark (real AI agent)
-**Pending, not executed yet.** The real-agent benchmark (Harbor's `gemini-cli` agent on the
-free Gemini tier) could not run in this session: every free Flash model had used its daily
-quota (`GenerateRequestsPerDayPerProjectPerModel-FreeTier = 20`). A one-time run is scheduled
-for **2026-11-20 14:00 IST**, after the 13:30 IST reset:
+**Pending, not executed yet. No results exist, and none are claimed.** The status was checked
+at 2026-11-20 11:16 IST: the scheduled task `codeforge-agent-benchmark` had **0 runs**, and
+`reports/benchmark.json` / `reports/benchmark.md` did not exist yet. To avoid a duplicate job,
+it was not started manually.
+
+The real-agent benchmark (Harbor's `gemini-cli` agent on the free Gemini tier) could not run
+earlier because every free Flash model had used its daily quota
+(`GenerateRequestsPerDayPerProjectPerModel-FreeTier = 20`). The one-time run is scheduled for
+**2026-11-20 14:00 IST**, after the 13:30 IST reset:
 
 ```
 uv run python -m codeforge.main benchmark --agent gemini-cli --repo shopcart \
@@ -95,7 +130,7 @@ infrastructure errors are reported separately.
 
 | Suite | Result |
 |---|---|
-| Unit tests (`python -m pytest tests/unit`) | **52 passed** |
+| Unit tests (`python -m pytest tests/unit`) | **55 passed** |
 | Integration (`python -m pytest tests/integration`; real Docker + Harbor oracle/nop) | **3 passed** |
 | Lint (`ruff check src tests`) | clean |
 | Clean install in a fresh copy (`uv sync` → doctor → analyze → tests → serve) | passed (see `final_project_audit.md` §5) |

@@ -12,7 +12,7 @@ Status as of 2026-11-20. ✅ = present and verified by running it · ⏳ = pendi
 | 6 | Feature and regression tests | `tests/feature/` (hidden), `tests/regression/` (pristine originals), `tests/expected.json` | ✅ |
 | 7 | Validation evidence | `validation/validation.json` + logs per task; `reports/<run>/` | ✅ |
 | 8 | Mutation-testing reports | `validation.json` → `mutation_result`, `semantic_mutation_result`; dashboard Validation tab | ✅ |
-| 9 | Cross-task variation evidence | `reports/cross_task_validation.json` (4×4: 4/4 diagonal pass, 12/12 off-diagonal fail) | ✅ |
+| 9 | Cross-task variation evidence | `reports/cross_task_validation.json` (4×4: 4/4 diagonal pass, 12/12 off-diagonal fail); `reports/cross_task_validation_5x5.json` (5×5: 5/5 pass, 20/20 fail) | ✅ |
 | 10 | Architecture documentation | `docs/architecture.md`, `docs/technology-decisions.md`, `docs/security.md` | ✅ |
 | 11 | Third-party licenses and notices | `THIRD_PARTY_NOTICES.md`, `licenses/`, `third_party/manifest.yaml`, `docs/source-integration-manifest.md`, `docs/upstream-research.md` | ✅ |
 | 12 | Demo instructions | `docs/final-demo-script.md`, `docs/demo-guide.md` | ✅ |

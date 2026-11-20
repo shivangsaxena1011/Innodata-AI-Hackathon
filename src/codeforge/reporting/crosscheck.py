@@ -54,20 +54,26 @@ def crosscheck(task_dirs: list[Path], out_dir: Path, sandbox: DockerSandbox | No
     sandbox.require()
     manifests = [json.loads((d / "task_manifest.json").read_text(encoding="utf-8"))
                  for d in task_dirs]
-    commits = {m["repository"]["starting_commit_sha"] for m in manifests}
-    if len(commits) != 1:
-        raise ValueError(f"packages come from different commits: {sorted(commits)}")
-    digests = {_env_digest(d) for d in task_dirs}
-    if len(digests) != 1:
-        raise ValueError("packages have different environments; cross-checking needs one")
-    adapter = profiles.adapter_by_name("python-pytest") \
-        if manifests[0]["repository"]["language"] == "python" else None
-    if adapter is None:
+    if any(m["repository"]["language"] != "python" for m in manifests):
         raise ValueError("cross-check currently supports Python packages")
+    adapter = profiles.adapter_by_name("python-pytest")
+    assert adapter is not None
 
-    tag = f"codeforge-pkg/{manifests[0]['repository']['name']}:{next(iter(digests))}"
-    if not sandbox.image_exists(tag):
-        sandbox.build(task_dirs[0] / "environment", tag, log_path=out_dir / "build.log")
+    # Row i runs in task i's own environment (the repository its tests belong to). Packages
+    # that share an identical environment share one image.
+    images: dict[str, str] = {}
+    row_image = []
+    for d, m in zip(task_dirs, manifests, strict=True):
+        digest = _env_digest(d)
+        if digest not in images:
+            tag = f"codeforge-pkg/{m['repository']['name']}:{digest}"
+            if not sandbox.image_exists(tag):
+                sandbox.build(d / "environment", tag,
+                              log_path=out_dir / f"build-{m['repository']['name']}.log")
+            images[digest] = tag
+        row_image.append(images[digest])
+    repos = [m["repository"]["name"] for m in manifests]
+    commits = {m["repository"]["starting_commit_sha"] for m in manifests}
 
     refs = [reference_files(d) for d in task_dirs]
     tests = [feature_tests(d) for d in task_dirs]
@@ -77,7 +83,7 @@ def crosscheck(task_dirs: list[Path], out_dir: Path, sandbox: DockerSandbox | No
         plan = TestPlan(feature_tests=tests_i, mutant_test_paths=list(tests_i),
                         mutants=[MutantOverlay(f"r{j}", ref) for j, ref in enumerate(refs)],
                         stop_on_first_failure_for_mutants=False)
-        res = execute(plan, adapter, tag, sandbox, out_dir / f"tests-{i}",
+        res = execute(plan, adapter, row_image[i], sandbox, out_dir / f"tests-{i}",
                       timeout=180 * len(refs) + 120)
         row = []
         for j in range(len(refs)):
@@ -86,6 +92,8 @@ def crosscheck(task_dirs: list[Path], out_dir: Path, sandbox: DockerSandbox | No
             missing = [e for e in run.errors if e.startswith("<")]
             ok = bool(run.passed) and not run.failed and not errors and not missing
             row.append({"tests_of": ids[i], "reference_of": ids[j],
+                        "same_repository": repos[i] == repos[j],
+                        "environment_image": row_image[i],
                         "result": "pass" if ok else "fail", "passed": len(run.passed),
                         "failed": len(run.failed), "errors": len(errors) + len(missing),
                         "expected": "pass" if i == j else "fail"})
@@ -95,20 +103,31 @@ def crosscheck(task_dirs: list[Path], out_dir: Path, sandbox: DockerSandbox | No
     diag_ok = all(cells[i][i]["result"] == "pass" for i in range(n))
     off = [cells[i][j] for i in range(n) for j in range(n) if i != j]
     off_fail = sum(c["result"] == "fail" for c in off)
+    same = [c for c in off if c["same_repository"]]
+    cross = [c for c in off if not c["same_repository"]]
     result = {
         "generated_at": datetime.now(UTC).isoformat(),
-        "repository": manifests[0]["repository"]["name"],
-        "starting_commit_sha": next(iter(commits)),
-        "environment_image": tag,
+        "repository": repos[0] if len(set(repos)) == 1 else sorted(set(repos)),
+        "starting_commit_sha": next(iter(commits)) if len(commits) == 1 else sorted(commits),
+        "environment_image": row_image[0] if len(images) == 1 else sorted(images.values()),
         "tasks": [{"index": k, "task_id": ids[k], "title": manifests[k]["title"],
-                   "archetype": manifests[k]["archetype"]} for k in range(n)],
+                   "archetype": manifests[k]["archetype"], "repository": repos[k],
+                   "starting_commit_sha": manifests[k]["repository"]["starting_commit_sha"]}
+                  for k in range(n)],
         "matrix": [[c["result"] for c in row] for row in cells],
         "cells": [c for row in cells for c in row],
         "diagonal_pass": f"{sum(cells[i][i]['result'] == 'pass' for i in range(n))}/{n}",
         "off_diagonal_fail": f"{off_fail}/{len(off)}",
+        "same_repository_off_diagonal_fail":
+            f"{sum(c['result'] == 'fail' for c in same)}/{len(same)}",
+        "cross_repository_off_diagonal_fail":
+            f"{sum(c['result'] == 'fail' for c in cross)}/{len(cross)}",
         "all_expectations_met": diag_ok and off_fail == len(off),
         "note": "Computed only from the shipped Harbor packages: tests from tests/feature, "
-                "reference files decoded from solution/solve.sh, environment from environment/.",
+                "reference files decoded from solution/solve.sh, environment from environment/. "
+                "Row i runs in task i's own environment. Same-repository cells measure "
+                "behavioural discrimination; cross-repository cells only show that a task's "
+                "tests still fail when another repository's reference is applied.",
     }
     out_dir.mkdir(parents=True, exist_ok=True)
     return result

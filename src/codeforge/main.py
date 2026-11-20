@@ -152,7 +152,8 @@ def benchmark(
     if not tasks:
         typer.echo("no validated tasks found")
         raise typer.Exit(1)
-    model_list = [m.strip() for m in models.split(",") if m.strip()] if agent != "nop" else []
+    control_agent = agent in ("nop", "oracle")  # control agents take no model
+    model_list = [] if control_agent else [m.strip() for m in models.split(",") if m.strip()]
     out = s.reports_dir / f"benchmark-{datetime.now(UTC).strftime('%Y%m%d-%H%M%S')}-{agent}"
     summary = run_benchmark(tasks, agent, model_list or [None], attempts, out)
     typer.echo((out / "benchmark.md").read_text(encoding="utf-8"))
@@ -163,14 +164,17 @@ def benchmark(
 
 @app.command()
 def crosscheck(
-    repo: str = typer.Argument("shopcart", help="repository name under generated_tasks/"),
+    repo: str = typer.Argument("shopcart", help="repository name under generated_tasks/, "
+                                                "or 'all' for every shipped package"),
     out: Path = typer.Option(Path("reports/cross_task_validation.json")),
 ) -> None:
     """Run every task's hidden tests against every task's reference (N x N), from packages."""
     from codeforge.reporting.crosscheck import crosscheck as run_crosscheck
 
     s = get_settings()
-    tasks = sorted(p.parent for p in (s.output_dir / repo).glob("*/task_manifest.json"))
+    pattern = "*/*/task_manifest.json" if repo == "all" else f"{repo}/*/task_manifest.json"
+    tasks = sorted(p.parent for p in s.output_dir.glob(pattern)
+                   if not p.parent.parent.name.startswith("_"))
     if len(tasks) < 2:
         typer.echo("need at least two task packages")
         raise typer.Exit(1)
@@ -178,13 +182,15 @@ def crosscheck(
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(result, indent=2), encoding="utf-8")
     for k, t in enumerate(result["tasks"]):
-        typer.echo(f"T{k + 1}  [{t['archetype']}] {t['title']}")
+        typer.echo(f"T{k + 1}  {t['repository']:<11} [{t['archetype']}] {t['title']}")
     header = "tests\\ref " + " ".join(f"R{j + 1:<4}" for j in range(len(result["tasks"])))
     typer.echo(header)
     for i, row in enumerate(result["matrix"]):
         typer.echo(f"T{i + 1:<9}" + " ".join(f"{c:<5}" for c in row))
     typer.echo(f"diagonal pass {result['diagonal_pass']} · off-diagonal fail "
-               f"{result['off_diagonal_fail']} · all expectations met: "
+               f"{result['off_diagonal_fail']} (same-repo "
+               f"{result['same_repository_off_diagonal_fail']}, cross-repo "
+               f"{result['cross_repository_off_diagonal_fail']}) · all expectations met: "
                f"{result['all_expectations_met']}")
     typer.echo(f"saved {out}")
 

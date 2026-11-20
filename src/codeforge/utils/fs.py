@@ -26,7 +26,8 @@ def safe_relpath(rel: str) -> str:
     if rel.startswith("./"):
         rel = rel[2:]
     p = PurePosixPath(rel)
-    if not rel or p.is_absolute() or ".." in p.parts or rel.startswith("~") or ":" in p.parts[0]:
+    if not rel or not p.parts or p.is_absolute() or ".." in p.parts or rel.startswith("~") \
+            or ":" in p.parts[0]:
         raise UnsafePathError(f"unsafe path: {rel!r}")
     if p.parts[0] == ".git":
         raise UnsafePathError(f"refusing to touch .git: {rel!r}")

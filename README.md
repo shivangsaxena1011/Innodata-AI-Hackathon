@@ -180,7 +180,7 @@ Every candidate task must pass all gates in isolated Docker containers; failure 
 
 5. **Run test suite**:
    ```bash
-   uv run python -m pytest tests/unit -q          # 52 unit tests
+   uv run python -m pytest tests/unit -q          # 55 unit tests
    uv run python -m pytest tests/integration -q   # Docker + Harbor (needs Docker)
    ```
 
@@ -237,6 +237,7 @@ uv run python -m codeforge.main benchmark --agent gemini-cli --repo shopcart   #
 Runs every task's hidden tests against every task's reference (N x N) using only the shipped packages:
 ```bash
 uv run python -m codeforge.main crosscheck shopcart   # writes reports/cross_task_validation.json
+uv run python -m codeforge.main crosscheck all --out reports/cross_task_validation_5x5.json
 ```
 
 ### 7. `codeforge serve`
@@ -283,9 +284,12 @@ CodeForge is engineered for **zero marginal cost**:
 | Add inventory valuation and stock report aggregation | query / aggregation | 7 | 95.7 | 92% | 2/4 |
 | Add volume-based discount configuration policy | configuration policy | 13 | 99.2 | 90% | 4/4 |
 
-**Cross-task validation**: `codeforge crosscheck shopcart` passes every reference on its own
-tests (**4/4**) and fails all **12/12** cross-task combinations
-([cross_task_validation.json](reports/cross_task_validation.json)).
+**Cross-task validation:**
+- `codeforge crosscheck shopcart`: every reference passes its own tests (**4/4**) and fails
+  all **12/12** other combinations ([4×4](reports/cross_task_validation.json)).
+- Across all five shipped packages (`codeforge crosscheck all`): **5/5** on the diagonal, and
+  **20/20** off-diagonal combinations fail (12/12 same-repository, 8/8 cross-repository)
+  ([5×5](reports/cross_task_validation_5x5.json)).
 
 **Generalization on public repositories:**
 - **cachetools** (MIT): a VALID task was generated, validity 100, 8 hidden tests protecting
@@ -294,11 +298,12 @@ tests (**4/4**) and fails all **12/12** cross-task combinations
   **rejected** after 3 repair attempts.
 - **clsx** (JS, MIT): analysed; execution reported **unsupported** (`uvu` test runner).
 
-**Real AI-agent benchmark**: pending. The free Gemini quota was exhausted; a run with
-Harbor's `gemini-cli` agent is scheduled after the daily reset. Oracle validation and agent
-results are kept separate.
+**Real AI-agent benchmark**: pending, not executed yet, and no agent results are claimed.
+The free Gemini quota was exhausted, so a one-time run with Harbor's `gemini-cli` agent is
+scheduled after the daily reset; its results will appear in `reports/benchmark.md`. Oracle
+validation (reference solution, reward 1.0 on all 5 packages) and agent results are kept separate.
 
-**CodeForge's own tests**: 52 unit tests + 3 Docker/Harbor integration tests pass; a
+**CodeForge's own tests**: 55 unit tests + 3 Docker/Harbor integration tests pass; a
 clean-install test was run ([audit](reports/final_project_audit.md)).
 
 ## ⚠️ Honest limitations
