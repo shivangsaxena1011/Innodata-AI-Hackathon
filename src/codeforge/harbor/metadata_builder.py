@@ -49,7 +49,8 @@ def build_task_toml(org: str, task: GeneratedTask, profile: RepositoryProfile,
         f"schema_version = {_toml_value(SCHEMA_VERSION)}",
         f"source = {_toml_value(f'codeforge-ai {__version__}')}",
         "artifacts = " + _toml_value([{"source": "/app",
-                                        "exclude": ["__pycache__", ".pytest_cache", "*.pyc"]}]),
+                                        "exclude": ["__pycache__", ".pytest_cache", "*.pyc",
+                                                    "*.egg-info"]}]),
         "",
     ]
     lines += _table("task", {

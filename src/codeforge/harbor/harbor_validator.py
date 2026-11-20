@@ -77,12 +77,27 @@ def lint(task_dir: Path, settings: Settings | None = None) -> LintResult:
     return LintResult(r.ok and not findings, findings, r.output[-4000:])
 
 
-def run_trial(task_dir: Path, jobs_dir: Path, agent: str, job_name: str,
+def short_job(agent: str, task_dir: Path) -> str:
+    """Short, unique job name. Harbor nests the agent's whole /app under the job directory,
+    so long names overflow Windows' 260-character path limit."""
+    import hashlib
+    import time
+
+    digest = hashlib.sha1(f"{task_dir}{time.time_ns()}".encode()).hexdigest()[:8]
+    return f"{agent[:10]}-{digest}"
+
+
+def run_trial(task_dir: Path, jobs_dir: Path | None, agent: str, job_name: str | None = None,
               model: str | None = None, timeout: int = 3600,
               settings: Settings | None = None, extra: list[str] | None = None) -> TrialOutcome:
-    exe = harbor_executable(settings)
+    """Run one Harbor trial. Jobs always live under the short `<workspace>/hj` root (see
+    `short_job`); `jobs_dir` is accepted for API compatibility but not used for output."""
+    s = settings or get_settings()
+    exe = harbor_executable(s)
     if not exe:
         return TrialOutcome(agent, False, None, exception="harbor CLI not installed")
+    jobs_dir = s.workspace_dir / "hj"
+    job_name = short_job(agent, task_dir)
     jobs_dir.mkdir(parents=True, exist_ok=True)
     args = [exe, "run", "-p", str(task_dir), "-a", agent, "-e", "docker",
             "-o", str(jobs_dir), "--job-name", job_name, "-n", "1"]

@@ -1,4 +1,0 @@
-Skipping image OS validation for hb__57379154ec51c6404fadfde63c22acdd: docker inspect returned 1
-Collecting main service artifacts
-Skipping image OS validation for hb__a0992d493646f7b1765820d95b6df1a4: docker inspect returned 1
-Trial add-order-refund-and-return-life__4pN5v2B failed: [Errno 2] No such file or directory: 'C:\\Users\\Project\\Innodata AI Hackathon\\reports\\benchmark-20261120-030244-nop\\jobs\\add-order-refund-and-return-lifecycle-st-nop-20261120030324-0\\add-order-refund-and-return-life__4pN5v2B\\.verifier-artifacts-se52gn3_\\1\\app\\.\\shopcart.egg-info\\dependency_links.txt'

@@ -1,6 +1,0 @@
-Agent 'nop' does not declare an options_model; leftover kwargs are ignored
-Skipping image OS validation for hb__57379154ec51c6404fadfde63c22acdd: docker inspect returned 1
-Collecting main service artifacts
-Skipping image OS validation for hb__5f83587999912223aba840797bef6ff2: docker inspect returned 1
-Trial support-promotional-discount-cod__bzg3KWF failed: [Errno 2] No such file or directory: 'C:\\Users\\Project\\Innodata AI Hackathon\\reports\\benchmark-20261120-030244-nop\\jobs\\support-promotional-discount-codes-in-ca-nop-20261120030440-0\\support-promotional-discount-cod__bzg3KWF\\.verifier-artifacts-fdlue2rg\\1\\app\\.\\shopcart.egg-info\\dependency_links.txt'
-Not retrying trial because the maximum number of retries has been reached
