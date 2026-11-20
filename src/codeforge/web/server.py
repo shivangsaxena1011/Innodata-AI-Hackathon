@@ -14,6 +14,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -29,6 +30,9 @@ URL_RE = re.compile(r"^https://[\w.\-]+/[\w.\-~/]+$")
 
 configure_logging()
 app = FastAPI(title="CodeForge AI", version=__version__)
+# Only answer requests addressed to the local machine (blocks DNS-rebinding attacks from web
+# pages that resolve their own domain to 127.0.0.1).
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "[::1]"])
 app.mount("/static", StaticFiles(directory=STATIC), name="static")
 
 _lock = threading.Lock()
@@ -88,15 +92,12 @@ def status() -> dict:
 
 @app.post("/api/analyze")
 def analyze(req: AnalyzeRequest) -> dict:
-    from codeforge.pipeline import SAMPLE_DIR
+    from codeforge.pipeline import resolve_source
     from codeforge.repository import git_manager
     from codeforge.repository.repository_profiler import profile_repository
 
     s = get_settings()
-    source = _validate_repo(req.repo)
-    if source == "sample":
-        source = str(git_manager.materialize_sample(SAMPLE_DIR, s.workspace_dir / "samples" /
-                                                    "shopcart"))
+    source = resolve_source(_validate_repo(req.repo), s.workspace_dir)
     try:
         co = git_manager.checkout(source, s.workspace_dir, req.ref, max_repo_mb=s.max_repo_mb)
         p = profile_repository(co, cache_dir=s.cache_dir)

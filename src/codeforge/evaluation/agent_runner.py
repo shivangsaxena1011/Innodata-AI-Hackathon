@@ -44,7 +44,10 @@ def evaluate_agent(task_dir: Path, agent: str, model: str | None, attempts: int 
             "attempt": k + 1, "model": model, "outcome": classify(outcome),
             "reward": outcome.reward, "rewards": outcome.rewards,
             "exception": outcome.exception, "duration_sec": outcome.duration_sec,
-            "job_dir": outcome.job_dir,
+            "agent_seconds": outcome.agent_seconds,
+            "input_tokens": outcome.input_tokens, "output_tokens": outcome.output_tokens,
+            "cost_usd": outcome.cost_usd, "model_info": outcome.model_info,
+            "verifier": outcome.grading, "job_dir": outcome.job_dir,
         })
     solved = sum(t["outcome"] == "solved" for t in trials)
     valid_trials = sum(t["outcome"] in ("solved", "unsolved") for t in trials)
@@ -100,13 +103,26 @@ def _markdown(s: dict) -> str:
              f"Generated {s['generated_at']}. Graded pass rate: **{rate}** "
              f"({s['solved']} solved, {s['unsolved']} unsolved, {s['quota_errors']} quota "
              f"errors, {s['errors']} other errors).", "",
-             "| Task | Archetype | Model | Outcome | Reward | Feature pass rate | Time (s) |",
-             "|---|---|---|---|---|---|---|"]
+             "| Task | Archetype | Model | Outcome | Reward | Feature pass | Regression pass "
+             "| Tokens in/out | Agent time (s) | Total time (s) |",
+             "|---|---|---|---|---|---|---|---|---|---|"]
     for r in s["results"]:
         for t in r["trials"]:
-            fpr = (t.get("rewards") or {}).get("feature_pass_rate")
+            rw = t.get("rewards") or {}
+
+            def fmt(v):
+                return "—" if v is None else v
+            tokens = "—" if t.get("input_tokens") is None else \
+                f"{t['input_tokens']}/{t.get('output_tokens')}"
             lines.append(f"| {r['title']} | {r['archetype']} | `{t['model']}` | {t['outcome']} | "
-                         f"{t['reward']} | {fpr if fpr is not None else '—'} | "
-                         f"{t['duration_sec']} |")
+                         f"{fmt(t['reward'])} | {fmt(rw.get('feature_pass_rate'))} | "
+                         f"{fmt(rw.get('regression_pass_rate'))} | {tokens} | "
+                         f"{fmt(t.get('agent_seconds'))} | {t['duration_sec']} |")
+    errors = [(r["title"], t) for r in s["results"] for t in r["trials"]
+              if t["outcome"] in ("quota_error", "error")]
+    if errors:
+        lines += ["", "## Errors (not counted as agent failures)", ""]
+        lines += [f"- **{title}** ({t['outcome']}): {str(t.get('exception'))[:300]}"
+                  for title, t in errors]
     lines += ["", s["note"], ""]
     return "\n".join(lines)

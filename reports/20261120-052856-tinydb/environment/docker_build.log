@@ -1,0 +1,81 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 369B 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/python:3.13-slim@sha256:e48f59cdba69a3cbd9ed2cf0f348d90d45a8d350d98134cf1070bc106ee9ed90
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 105B 0.0s done
+#3 DONE 0.1s
+
+#4 [internal] load build context
+#4 DONE 0.0s
+
+#5 [1/4] FROM docker.io/library/python:3.13-slim@sha256:e48f59cdba69a3cbd9ed2cf0f348d90d45a8d350d98134cf1070bc106ee9ed90
+#5 resolve docker.io/library/python:3.13-slim@sha256:e48f59cdba69a3cbd9ed2cf0f348d90d45a8d350d98134cf1070bc106ee9ed90 0.1s done
+#5 DONE 0.1s
+
+#4 [internal] load build context
+#4 transferring context: 601.71kB 0.1s done
+#4 DONE 0.1s
+
+#6 [2/4] WORKDIR /app
+#6 CACHED
+
+#7 [3/4] COPY repo/ /app/
+#7 DONE 0.1s
+
+#8 [4/4] RUN pip install -e . &&     python -c "import pytest" 2>/dev/null || pip install pytest==8.3.5
+#8 1.730 Obtaining file:///app
+#8 1.732   Installing build dependencies: started
+#8 5.349   Installing build dependencies: finished with status 'done'
+#8 5.352   Checking if build backend supports build_editable: started
+#8 5.622   Checking if build backend supports build_editable: finished with status 'done'
+#8 5.624   Getting requirements to build editable: started
+#8 6.030   Getting requirements to build editable: finished with status 'done'
+#8 6.032   Installing backend dependencies: started
+#8 8.420   Installing backend dependencies: finished with status 'done'
+#8 8.422   Preparing editable metadata (pyproject.toml): started
+#8 9.033   Preparing editable metadata (pyproject.toml): finished with status 'done'
+#8 9.040 Building wheels for collected packages: tinydb
+#8 9.043   Building editable for tinydb (pyproject.toml): started
+#8 9.196   Building editable for tinydb (pyproject.toml): finished with status 'done'
+#8 9.197   Created wheel for tinydb: filename=tinydb-4.9.0-py3-none-any.whl size=4275 sha256=ccb88c14881a9e795335671b36132f540370a9c2805b7b89add6f44924356733
+#8 9.197   Stored in directory: /tmp/pip-ephem-wheel-cache-v5ptmb3a/wheels/19/62/e5/caf0138816cbbc0c92b8fb19626cf9ac282f22194a65231821
+#8 9.201 Successfully built tinydb
+#8 9.266 Installing collected packages: tinydb
+#8 9.288 Successfully installed tinydb-4.9.0
+#8 9.288 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#8 10.91 Collecting pytest==8.3.5
+#8 11.10   Downloading pytest-8.3.5-py3-none-any.whl.metadata (7.6 kB)
+#8 11.50 Collecting iniconfig (from pytest==8.3.5)
+#8 11.56   Downloading iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+#8 11.64 Collecting packaging (from pytest==8.3.5)
+#8 11.72   Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+#8 11.79 Collecting pluggy<2,>=1.5 (from pytest==8.3.5)
+#8 11.86   Downloading pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+#8 11.93 Downloading pytest-8.3.5-py3-none-any.whl (343 kB)
+#8 12.13 Downloading pluggy-1.7.0-py3-none-any.whl (27 kB)
+#8 12.19 Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+#8 12.24 Downloading packaging-26.3-py3-none-any.whl (129 kB)
+#8 12.43 Installing collected packages: pluggy, packaging, iniconfig, pytest
+#8 13.19 
+#8 13.20 Successfully installed iniconfig-2.3.1 packaging-26.3 pluggy-1.7.0 pytest-8.3.5
+#8 13.20 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#8 DONE 13.4s
+
+#9 exporting to image
+#9 exporting layers
+#9 exporting layers 0.4s done
+#9 exporting manifest sha256:93a562dafdda535e8084d1af5dd21d40de51ab7ff107b43924c105976bae7f19 0.0s done
+#9 exporting config sha256:a22092a89787c02bf8d4316b5baec0a6da624a64293b3d3f1b5e22f4fd37a36f 0.0s done
+#9 exporting attestation manifest sha256:e6f09def3e6a62edb3a5808222edfe234f8718ad9f4ec218350c2ce120676b90 0.0s done
+#9 exporting manifest list sha256:b7fa17504df9d851bfdd898964f680367034f168c277a07de24aca4599843739
+#9 exporting manifest list sha256:b7fa17504df9d851bfdd898964f680367034f168c277a07de24aca4599843739 0.0s done
+#9 naming to docker.io/codeforge-env/tinydb:edff96aeb261 done
+#9 unpacking to docker.io/codeforge-env/tinydb:edff96aeb261
+#9 unpacking to docker.io/codeforge-env/tinydb:edff96aeb261 0.2s done
+#9 DONE 0.8s

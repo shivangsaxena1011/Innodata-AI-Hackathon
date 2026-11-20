@@ -63,6 +63,12 @@ class TrialOutcome:
     job_dir: str = ""
     duration_sec: float = 0.0
     output_tail: str = ""
+    agent_seconds: float | None = None
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+    cost_usd: float | None = None
+    model_info: dict | None = None
+    grading: dict | None = None  # CodeForge grader details from the verifier
 
 
 def lint(task_dir: Path, settings: Settings | None = None) -> LintResult:
@@ -121,6 +127,21 @@ def run_trial(task_dir: Path, jobs_dir: Path | None, agent: str, job_name: str |
     if exc:
         outcome.exception = (exc.get("exception_type", "") + ": " +
                              str(exc.get("exception_message", ""))[:500]).strip(": ")
+    ar = data.get("agent_result") or {}
+    outcome.input_tokens = ar.get("n_input_tokens")
+    outcome.output_tokens = ar.get("n_output_tokens")
+    outcome.cost_usd = ar.get("cost_usd")
+    outcome.model_info = (data.get("agent_info") or {}).get("model_info")
+    ex = data.get("agent_execution") or {}
+    if ex.get("started_at") and ex.get("finished_at"):
+        from datetime import datetime
+
+        start = datetime.fromisoformat(ex["started_at"].replace("Z", "+00:00"))
+        end = datetime.fromisoformat(ex["finished_at"].replace("Z", "+00:00"))
+        outcome.agent_seconds = round((end - start).total_seconds(), 1)
+    grading = results[0].parent / "verifier" / "grading.json"
+    if grading.exists():
+        outcome.grading = json.loads(grading.read_text(encoding="utf-8"))
     outcome.ok = outcome.reward is not None
     return outcome
 

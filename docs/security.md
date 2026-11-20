@@ -18,7 +18,10 @@ Target repositories and all generated code are **untrusted**.
 | Secrets only from the environment or `.env`; redacted in logs; packages scanned for key patterns | `logging_config.py`, `validation/leakage_checker.py` |
 | Agent image has no git history, tests, solution or secrets (checked inside the image) | `environment_validator.check_image_for_shortcuts` |
 | Verifier ignores agent-planted pytest and interpreter hooks; pristine tests restored | `harbor/test_packager.py` |
-| Dashboard binds to 127.0.0.1; repository input validated; one run at a time | `web/server.py` |
+| Dashboard binds to 127.0.0.1; `TrustedHostMiddleware` rejects foreign `Host` headers (DNS rebinding); repository input validated; one run at a time | `web/server.py` |
+| `.env` is exported into the process environment without overriding existing variables; only variable names are ever reported | `config.load_dotenv` |
+| Harbor job folders use short names (Windows 260-character path limit) under the git-ignored `workspace/hj/` | `harbor_validator.short_job` |
+| Submission bundle refuses `.env` files, real secret values and key-shaped strings | `scripts/build_submission.py` |
 
 Known residual risks:
 - Dependency installation during image builds needs network access and runs the

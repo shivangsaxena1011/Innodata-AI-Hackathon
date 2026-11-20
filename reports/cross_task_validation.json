@@ -1,0 +1,208 @@
+{
+  "generated_at": "2026-11-20T05:27:16.978387+00:00",
+  "repository": "shopcart",
+  "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+  "environment_image": "codeforge-pkg/shopcart:972316a90ea93f25",
+  "tasks": [
+    {
+      "index": 0,
+      "task_id": "add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+      "title": "Add inventory valuation and stock report aggregation",
+      "archetype": "query_aggregation"
+    },
+    {
+      "index": 1,
+      "task_id": "add-order-refund-and-return-lifecycle-states-059169",
+      "title": "Add order refund and return lifecycle states",
+      "archetype": "state_machine"
+    },
+    {
+      "index": 2,
+      "task_id": "add-volume-based-discount-configuration-policy-91c6c0",
+      "title": "Add volume-based discount configuration policy",
+      "archetype": "configuration_policy"
+    },
+    {
+      "index": 3,
+      "task_id": "support-promotional-discount-codes-in-cart-prici-f04964",
+      "title": "Support promotional discount codes in cart pricing",
+      "archetype": "business_rule"
+    }
+  ],
+  "matrix": [
+    [
+      "pass",
+      "fail",
+      "fail",
+      "fail"
+    ],
+    [
+      "fail",
+      "pass",
+      "fail",
+      "fail"
+    ],
+    [
+      "fail",
+      "fail",
+      "pass",
+      "fail"
+    ],
+    [
+      "fail",
+      "fail",
+      "fail",
+      "pass"
+    ]
+  ],
+  "cells": [
+    {
+      "tests_of": "add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+      "reference_of": "add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+      "result": "pass",
+      "passed": 7,
+      "failed": 0,
+      "errors": 0,
+      "expected": "pass"
+    },
+    {
+      "tests_of": "add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+      "reference_of": "add-order-refund-and-return-lifecycle-states-059169",
+      "result": "fail",
+      "passed": 0,
+      "failed": 0,
+      "errors": 1,
+      "expected": "fail"
+    },
+    {
+      "tests_of": "add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+      "reference_of": "add-volume-based-discount-configuration-policy-91c6c0",
+      "result": "fail",
+      "passed": 0,
+      "failed": 0,
+      "errors": 1,
+      "expected": "fail"
+    },
+    {
+      "tests_of": "add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+      "reference_of": "support-promotional-discount-codes-in-cart-prici-f04964",
+      "result": "fail",
+      "passed": 0,
+      "failed": 0,
+      "errors": 1,
+      "expected": "fail"
+    },
+    {
+      "tests_of": "add-order-refund-and-return-lifecycle-states-059169",
+      "reference_of": "add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+      "result": "fail",
+      "passed": 0,
+      "failed": 7,
+      "errors": 0,
+      "expected": "fail"
+    },
+    {
+      "tests_of": "add-order-refund-and-return-lifecycle-states-059169",
+      "reference_of": "add-order-refund-and-return-lifecycle-states-059169",
+      "result": "pass",
+      "passed": 7,
+      "failed": 0,
+      "errors": 0,
+      "expected": "pass"
+    },
+    {
+      "tests_of": "add-order-refund-and-return-lifecycle-states-059169",
+      "reference_of": "add-volume-based-discount-configuration-policy-91c6c0",
+      "result": "fail",
+      "passed": 0,
+      "failed": 7,
+      "errors": 0,
+      "expected": "fail"
+    },
+    {
+      "tests_of": "add-order-refund-and-return-lifecycle-states-059169",
+      "reference_of": "support-promotional-discount-codes-in-cart-prici-f04964",
+      "result": "fail",
+      "passed": 0,
+      "failed": 7,
+      "errors": 0,
+      "expected": "fail"
+    },
+    {
+      "tests_of": "add-volume-based-discount-configuration-policy-91c6c0",
+      "reference_of": "add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+      "result": "fail",
+      "passed": 0,
+      "failed": 0,
+      "errors": 1,
+      "expected": "fail"
+    },
+    {
+      "tests_of": "add-volume-based-discount-configuration-policy-91c6c0",
+      "reference_of": "add-order-refund-and-return-lifecycle-states-059169",
+      "result": "fail",
+      "passed": 0,
+      "failed": 0,
+      "errors": 1,
+      "expected": "fail"
+    },
+    {
+      "tests_of": "add-volume-based-discount-configuration-policy-91c6c0",
+      "reference_of": "add-volume-based-discount-configuration-policy-91c6c0",
+      "result": "pass",
+      "passed": 13,
+      "failed": 0,
+      "errors": 0,
+      "expected": "pass"
+    },
+    {
+      "tests_of": "add-volume-based-discount-configuration-policy-91c6c0",
+      "reference_of": "support-promotional-discount-codes-in-cart-prici-f04964",
+      "result": "fail",
+      "passed": 0,
+      "failed": 0,
+      "errors": 1,
+      "expected": "fail"
+    },
+    {
+      "tests_of": "support-promotional-discount-codes-in-cart-prici-f04964",
+      "reference_of": "add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+      "result": "fail",
+      "passed": 0,
+      "failed": 0,
+      "errors": 1,
+      "expected": "fail"
+    },
+    {
+      "tests_of": "support-promotional-discount-codes-in-cart-prici-f04964",
+      "reference_of": "add-order-refund-and-return-lifecycle-states-059169",
+      "result": "fail",
+      "passed": 0,
+      "failed": 0,
+      "errors": 1,
+      "expected": "fail"
+    },
+    {
+      "tests_of": "support-promotional-discount-codes-in-cart-prici-f04964",
+      "reference_of": "add-volume-based-discount-configuration-policy-91c6c0",
+      "result": "fail",
+      "passed": 0,
+      "failed": 0,
+      "errors": 1,
+      "expected": "fail"
+    },
+    {
+      "tests_of": "support-promotional-discount-codes-in-cart-prici-f04964",
+      "reference_of": "support-promotional-discount-codes-in-cart-prici-f04964",
+      "result": "pass",
+      "passed": 10,
+      "failed": 0,
+      "errors": 0,
+      "expected": "pass"
+    }
+  ],
+  "diagonal_pass": "4/4",
+  "off_diagonal_fail": "12/12",
+  "all_expectations_met": true,
+  "note": "Computed only from the shipped Harbor packages: tests from tests/feature, reference files decoded from solution/solve.sh, environment from environment/."
+}

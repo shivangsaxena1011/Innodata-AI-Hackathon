@@ -1,0 +1,43 @@
+schema_version = "1.4"
+source = "codeforge-ai 0.1.0"
+artifacts = [{ source = "/app", exclude = ["__pycache__", ".pytest_cache", "*.pyc", "*.egg-info"] }]
+
+[task]
+name = "codeforge/add-cache-hit-miss-ratio-reporting-d7c477"
+version = "1.0.0"
+description = "This task extends the `CacheInfo` named tuple to include a calculated `hit_ratio` property. This ratio provides a quick metric of cache efficiency, defined as hits divided by the total number of accesses, rounded to four decimal places."
+authors = [{ name = "Team TECH TITAN: Shivang Saxena, Rani Malviya" }]
+keywords = ["codeforge", "feature-development", "query_aggregation", "python"]
+
+[metadata]
+author_name = "Team TECH TITAN"
+author_email = "unknown"
+difficulty = "easy"
+category = "software_engineering"
+tags = ["feature-development", "query_aggregation", "python"]
+expert_time_estimate_min = 20.0
+junior_time_estimate_min = 40.0
+repository_name = "cachetools"
+repository_url = "https://github.com/tkem/cachetools"
+starting_commit_sha = "c5de5137153b301933922e47bc70b598970e0627"
+language = "python"
+test_framework = "pytest"
+archetype = "query_aggregation"
+codeforge_version = "0.1.0"
+validity_score = 100.0
+validation_status = "valid"
+
+[verifier]
+timeout_sec = 1800.0
+environment_mode = "separate"
+network_mode = "no-network"
+
+[agent]
+timeout_sec = 3600.0
+
+[environment]
+network_mode = "public"
+build_timeout_sec = 900.0
+os = "linux"
+cpus = 2
+memory_mb = 4096

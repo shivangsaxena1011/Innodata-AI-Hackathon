@@ -152,12 +152,17 @@ def run_controls(
                  "pass_to_pass": sorted(p2p)}, log_paths=[reg_pos.log_path or ""]))
     # Stability: repeated reference runs give identical results.
     sets = [tuple(sorted(r.passed)) for r in f_pos]
-    stable = len(set(sets)) == 1 and pos_ok
+    identical = len(set(sets)) == 1
+    if not pos_ok:
+        stability_status = GateStatus.SKIPPED  # only meaningful once the reference passes
+        stability_summary = ("not evaluated: positive control failed "
+                             f"({'runs identical' if identical else 'runs disagree'})")
+    else:
+        stability_status = GateStatus.PASSED if identical else GateStatus.FAILED
+        stability_summary = "3/3 reference runs identical" if identical else \
+            "reference runs disagree (flaky tests)"
     gates.append(GateResult(
-        gate=GateName.STABILITY,
-        status=GateStatus.PASSED if stable else GateStatus.FAILED,
-        summary="3/3 reference runs identical" if len(set(sets)) == 1 else
-                "reference runs disagree (flaky tests)",
+        gate=GateName.STABILITY, status=stability_status, summary=stability_summary,
         details={"runs": [list(s) for s in sets]}))
 
     coverage = _coverage(pos.out_dir / "coverage.json", reference, originals) if cov_files else None

@@ -1,0 +1,58 @@
+.......F.                                                                [100%]
+=================================== FAILURES ===================================
+_____________________ test_validator_exception_propagation _____________________
+
+doc = {'val': 'ok'}
+
+    def failing_validator(doc):
+>       raise RuntimeError('Custom Error')
+E       RuntimeError: Custom Error
+
+tests/test_codeforge_add_document_validation_rules_522518.py:94: RuntimeError
+
+The above exception was the direct cause of the following exception:
+
+    def test_validator_exception_propagation():
+        table = get_table()
+        def failing_validator(doc):
+            raise RuntimeError('Custom Error')
+    
+        table.set_validator(failing_validator)
+    
+        with pytest.raises(RuntimeError, match='Custom Error'):
+>           table.insert({'val': 'ok'})
+
+tests/test_codeforge_add_document_validation_rules_522518.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tinydb/table.py:200: in insert
+    self._update_table(updater)
+tinydb/table.py:900: in _update_table
+    updater(table)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+table = {}
+
+    def updater(table: dict):
+        if doc_id in table:
+            raise ValueError(f'Document with ID {str(doc_id)} '
+                             f'already exists')
+    
+        # By calling ``dict(document)`` we convert the data we got to a
+        # ``dict`` instance even if it was a different class that
+        # implemented the ``Mapping`` interface
+        doc = dict(document)
+        if self._validator:
+            try:
+                if not self._validator(doc):
+                    raise ValueError('Document validation failed')
+            except Exception as e:
+                if isinstance(e, ValueError) and str(e) == 'Document validation failed':
+                    raise
+>               raise ValueError('Document validation failed') from e
+E               ValueError: Document validation failed
+
+tinydb/table.py:195: ValueError
+------------- generated xml file: /cf/out/feature_reference_3.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_document_validation_rules_522518.py::test_validator_exception_propagation
+1 failed, 8 passed in 0.04s

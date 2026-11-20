@@ -143,18 +143,24 @@ class LLMClient:
     def _exhausted_path(self) -> Path:
         return self.cache_dir / "exhausted_models.json"
 
+    @staticmethod
+    def quota_day() -> str:
+        """The Gemini free-tier quota day. Quotas reset at midnight Pacific time, so the key
+        is the Pacific date (UTC-8; during daylight time this releases one hour late, which
+        errs on the safe side). Windows Pythons often lack tz data, hence a fixed offset."""
+        return time.strftime("%Y-%m-%d", time.gmtime(time.time() - 8 * 3600))
+
     def _exhausted_today(self) -> set[str]:
         path = self._exhausted_path()
         if not path.exists():
             return set()
         data = json.loads(path.read_text(encoding="utf-8"))
-        return set(data.get(time.strftime("%Y-%m-%d", time.gmtime()), []))
+        return set(data.get(self.quota_day(), []))
 
     def _mark_exhausted(self, model: str) -> None:
-        """Remember that a model hit its free daily quota (resets at midnight Pacific; we
-        key by UTC date, which is conservative)."""
+        """Remember that a model hit its free daily quota until the Pacific-midnight reset."""
         path = self._exhausted_path()
-        day = time.strftime("%Y-%m-%d", time.gmtime())
+        day = self.quota_day()
         data = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
         data = {day: sorted(set(data.get(day, [])) | {model})}
         path.parent.mkdir(parents=True, exist_ok=True)

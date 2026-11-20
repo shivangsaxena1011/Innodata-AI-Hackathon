@@ -138,7 +138,9 @@ The loop is bounded by `max_repair_attempts` (default 2). Every attempt is store
 | Leakage and anti-shortcut | `validation/leakage_checker.py`, `environment_validator.check_image_for_shortcuts`, `harbor/test_packager.py` |
 | Validity score | `validation/validity_scorer.py` |
 | Harbor packaging and validation | `harbor/*` |
-| Agent benchmarking | `evaluation/agent_runner.py` (`codeforge evaluate`) |
+| Agent benchmarking | `evaluation/agent_runner.py` (`codeforge evaluate`, `codeforge benchmark`: outcome solved/unsolved/quota_error/error, tokens, agent time, verifier grading) |
+| Cross-task validation from packages | `reporting/crosscheck.py` (`codeforge crosscheck`: N×N matrix from `tests/feature` + references decoded from `solve.sh`) |
+| Environment-only check | `codeforge run <repo> --prepare-only` (build + baseline ×3, no model calls) |
 | Reporting and dashboard | `reporting/*`, `web/*` |
 
 ## 5. Still missing from Innodata

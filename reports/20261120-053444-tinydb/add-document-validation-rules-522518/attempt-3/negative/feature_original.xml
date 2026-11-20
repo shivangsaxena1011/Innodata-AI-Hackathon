@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="9" skipped="0" tests="9" time="0.060" timestamp="2026-11-20T05:37:01.085684+00:00" hostname="326e51537597"><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_validator_returns_false_raises_value_error" time="0.001"><failure message="AttributeError: 'Table' object has no attribute 'set_validator'">def test_validator_returns_false_raises_value_error():
+        table = get_table()
+&gt;       table.set_validator(lambda doc: doc.get('val') == 'ok')
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:13: AttributeError</failure></testcase><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_validator_returns_true_works" time="0.000"><failure message="AttributeError: 'Table' object has no attribute 'set_validator'">def test_validator_returns_true_works():
+        table = get_table()
+&gt;       table.set_validator(lambda doc: doc.get('val') == 'ok')
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:23: AttributeError</failure></testcase><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_insert_multiple_atomicity" time="0.001"><failure message="AttributeError: 'Table' object has no attribute 'set_validator'">def test_insert_multiple_atomicity():
+        table = get_table()
+&gt;       table.set_validator(lambda doc: doc.get('val') == 'ok')
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:32: AttributeError</failure></testcase><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_update_validation_fails" time="0.001"><failure message="AttributeError: 'Table' object has no attribute 'set_validator'">def test_update_validation_fails():
+        table = get_table()
+        table.insert({'val': 'ok'})
+&gt;       table.set_validator(lambda doc: doc.get('val') == 'ok')
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:47: AttributeError</failure></testcase><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_remove_validator" time="0.000"><failure message="AttributeError: 'Table' object has no attribute 'set_validator'">def test_remove_validator():
+        table = get_table()
+&gt;       table.set_validator(lambda doc: False) # Always invalid
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:59: AttributeError</failure></testcase><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_upsert_validation_insert" time="0.000"><failure message="AttributeError: 'Table' object has no attribute 'set_validator'">def test_upsert_validation_insert():
+        table = get_table()
+&gt;       table.set_validator(lambda doc: doc.get('val') == 'ok')
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:71: AttributeError</failure></testcase><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_upsert_validation_update" time="0.000"><failure message="AttributeError: 'Table' object has no attribute 'set_validator'">def test_upsert_validation_update():
+        table = get_table()
+        table.insert({'val': 'ok'})
+&gt;       table.set_validator(lambda doc: doc.get('val') == 'ok')
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:82: AttributeError</failure></testcase><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_validator_exception_propagation" time="0.000"><failure message="AttributeError: 'Table' object has no attribute 'set_validator'">def test_validator_exception_propagation():
+        table = get_table()
+        def failing_validator(doc):
+            raise RuntimeError('Custom Error')
+    
+&gt;       table.set_validator(failing_validator)
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:96: AttributeError</failure></testcase><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_update_multiple_atomicity" time="0.000"><failure message="AttributeError: 'Table' object has no attribute 'set_validator'">def test_update_multiple_atomicity():
+        table = get_table()
+        table.insert({'val': 'ok'})
+        table.insert({'val': 'ok'})
+    
+&gt;       table.set_validator(lambda doc: doc.get('val') == 'ok')
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:109: AttributeError</failure></testcase></testsuite></testsuites>

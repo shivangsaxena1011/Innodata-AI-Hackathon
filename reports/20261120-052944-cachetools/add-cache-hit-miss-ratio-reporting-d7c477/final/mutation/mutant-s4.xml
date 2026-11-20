@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="0.054" timestamp="2026-11-20T05:31:20.555568+00:00" hostname="ed19111e891d"><testcase classname="tests.test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477" name="test_cache_info_initial_hit_ratio" time="0.004" /><testcase classname="tests.test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477" name="test_cache_info_half_ratio" time="0.000" /><testcase classname="tests.test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477" name="test_cache_info_rounding_ratio" time="0.000" /><testcase classname="tests.test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477" name="test_cache_info_unpacking" time="0.000"><failure message="ValueError: too many values to unpack (expected 4)">def test_cache_info_unpacking():
+        """AC4: CacheInfo remains a 4-tuple for index-based access compatibility."""
+        cache = Cache(maxsize=128)
+    
+        @cached(cache, info=True)
+        def func(x):
+            return x
+    
+        func(1) # miss
+        func(1) # hit
+    
+        info = func.cache_info()
+        # Unpack as 4-tuple
+&gt;       hits, misses, maxsize, currsize = info
+E       ValueError: too many values to unpack (expected 4)
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:72: ValueError</failure></testcase></testsuite></testsuites>

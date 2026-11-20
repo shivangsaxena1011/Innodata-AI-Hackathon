@@ -1,0 +1,268 @@
+{
+  "candidates": [
+    {
+      "candidate": {
+        "feature_id": "add-document-validation-rules-522518",
+        "title": "Add Document Validation Rules",
+        "archetype": "business_rule",
+        "problem_statement": "Users need to ensure that documents inserted into a table conform to a specific schema or structure to prevent data corruption. Without a validation mechanism, applications often insert malformed objects that cause crashes downstream.",
+        "requirements": [
+          "Introduce a 'validate' method on the Table class.",
+          "The validator should be a callable that takes a dict (the document) and raises a ValueError if invalid.",
+          "If a validator is registered, all subsequent 'insert', 'update', and 'upsert' calls must run the validator on the document before writing to storage.",
+          "If validation fails, the operation must abort and raise the exception without modifying the database."
+        ],
+        "acceptance_criteria": [
+          "Table.set_validator(callback) registers a validation function.",
+          "Table.insert(doc) raises ValueError if the validator returns False or raises an exception.",
+          "Validation logic must run for update operations as well."
+        ],
+        "complexity": "medium",
+        "affected_modules": [
+          "tinydb/table.py"
+        ],
+        "existing_behaviour": "TinyDB is schemaless; it blindly accepts any Mapping type during insert and update operations.",
+        "edge_cases": [
+          "What happens if a document is updated via 'update_multiple'? (Must validate all records)",
+          "Can the validator be removed? (Yes, add 'remove_validator' method)"
+        ],
+        "contract": [
+          {
+            "kind": "method",
+            "module": "tinydb.table",
+            "name": "set_validator",
+            "signature": "def set_validator(self, validator: Callable[[dict], bool]) -> None",
+            "behaviour": "Registers a callable to validate documents before persistence."
+          },
+          {
+            "kind": "method",
+            "module": "tinydb.table",
+            "name": "remove_validator",
+            "signature": "def remove_validator(self) -> None",
+            "behaviour": "Clears any registered validator."
+          }
+        ],
+        "novelty_score": 1.0,
+        "rejection_reason": null
+      },
+      "score": 5.4,
+      "accepted": true,
+      "reason": null
+    },
+    {
+      "candidate": {
+        "feature_id": "implement-read-only-table-view-fc2884",
+        "title": "Implement Read-Only Table View",
+        "archetype": "state_machine",
+        "problem_statement": "In multi-threaded or shared-environment applications, developers need a way to expose parts of a database to consuming code without allowing write access, reducing the risk of accidental modification.",
+        "requirements": [
+          "Implement a read-only flag on the Table instance.",
+          "When 'readonly' is True, any attempt to call insert, update, upsert, remove, or truncate must raise a PermissionError.",
+          "The state must be toggleable during runtime if the underlying storage allows it.",
+          "Read operations like search, all, get, and count should continue to work normally."
+        ],
+        "acceptance_criteria": [
+          "Attempts to call .insert() on a read-only table raise PermissionError.",
+          "Setting readonly=True does not affect currently running transactions, only new calls.",
+          "State transition is observable via a 'readonly' property."
+        ],
+        "complexity": "easy",
+        "affected_modules": [
+          "tinydb/table.py"
+        ],
+        "existing_behaviour": "Tables are mutable by default with no access control mechanism.",
+        "edge_cases": [
+          "Can a read-only table be created initially? (Yes, via table(name, readonly=True))",
+          "Does clear_cache() work? (Yes, it's a read-only operation)"
+        ],
+        "contract": [
+          {
+            "kind": "class",
+            "module": "tinydb.table",
+            "name": "ReadOnlyTableError",
+            "signature": "class ReadOnlyTableError(Exception)",
+            "behaviour": "Raised when a mutation is attempted on a read-only table."
+          },
+          {
+            "kind": "method",
+            "module": "tinydb.table",
+            "name": "set_readonly",
+            "signature": "def set_readonly(self, state: bool) -> None",
+            "behaviour": "Toggles the write permission state of the table."
+          }
+        ],
+        "novelty_score": 0.8514,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 4.851,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    },
+    {
+      "candidate": {
+        "feature_id": "strict-query-type-validation-674c7a",
+        "title": "Strict Query Type Validation",
+        "archetype": "error_handling",
+        "problem_statement": "When passing incorrect types to query methods (e.g., passing a list where a dict is expected), the library often fails with confusing attribute errors deep in the stack trace. Users need immediate, typed feedback.",
+        "requirements": [
+          "Add type checking to Query methods (e.g., 'where', 'matches').",
+          "Raise 'QueryTypeError' if the input argument does not match expected types (e.g., 'matches' expects a string pattern).",
+          "Ensure the error message indicates which query parameter was invalid."
+        ],
+        "acceptance_criteria": [
+          "Calling .matches(123) raises QueryTypeError.",
+          "Validation occurs before any storage interaction or expensive search.",
+          "Errors are distinct from generic python TypeErrors."
+        ],
+        "complexity": "easy",
+        "affected_modules": [
+          "tinydb/queries.py"
+        ],
+        "existing_behaviour": "Queries rely on Python's duck typing and dynamic dispatch, leading to deferred errors.",
+        "edge_cases": [
+          "Does this impact chaining? (Ensure it validates at each link)"
+        ],
+        "contract": [
+          {
+            "kind": "exception",
+            "module": "tinydb.queries",
+            "name": "QueryTypeError",
+            "signature": "class QueryTypeError(TypeError)",
+            "behaviour": "Raised when a query method is called with incorrect argument types."
+          }
+        ],
+        "novelty_score": 0.9426,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 4.943,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    },
+    {
+      "candidate": {
+        "feature_id": "pluggable-serialization-middleware-e30e25",
+        "title": "Pluggable Serialization Middleware",
+        "archetype": "configuration_policy",
+        "problem_statement": "TinyDB uses JSON by default. Users often want to store data in other formats (like msgpack or YAML) without modifying the library, but the current Storage API is coupled to dictionary-based read/write.",
+        "requirements": [
+          "Create a 'SerializerMiddleware' that wraps an existing storage.",
+          "Allow registration of custom encoders/decoders for document serialization.",
+          "The middleware should handle the transformation of data to/from the format specified by the user before passing it to the underlying storage."
+        ],
+        "acceptance_criteria": [
+          "Ability to inject a custom serialization strategy without rewriting Storage.",
+          "Storage tests must pass when wrapped by the new middleware."
+        ],
+        "complexity": "hard",
+        "affected_modules": [
+          "tinydb/middlewares.py"
+        ],
+        "existing_behaviour": "Serialization is hardcoded to JSON in JSONStorage or handled by the user manualy.",
+        "edge_cases": [
+          "Performance overhead of middleware chaining.",
+          "Handling serialization errors gracefully."
+        ],
+        "contract": [
+          {
+            "kind": "class",
+            "module": "tinydb.middlewares",
+            "name": "SerializerMiddleware",
+            "signature": "class SerializerMiddleware(Middleware)",
+            "behaviour": "Middleware that intercepts read/write to serialize/deserialize data."
+          }
+        ],
+        "novelty_score": 0.965,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 4.565,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    },
+    {
+      "candidate": {
+        "feature_id": "inter-table-join-operation-28a4ba",
+        "title": "Inter-Table Join Operation",
+        "archetype": "component_interaction",
+        "problem_statement": "Applications often split data across multiple tables (e.g., 'users' and 'posts'). There is currently no native way to perform a JOIN operation, forcing users to load entire tables into memory, which is inefficient.",
+        "requirements": [
+          "Implement a 'join' method on the TinyDB database instance.",
+          "The join should accept two table names, a join key (e.g., 'user_id'), and an optional predicate.",
+          "The result should be an iterable of merged dictionaries."
+        ],
+        "acceptance_criteria": [
+          "Joining 'users' and 'posts' tables returns a generator yielding combined documents.",
+          "Memory usage must be optimized (do not load full tables if possible)."
+        ],
+        "complexity": "hard",
+        "affected_modules": [
+          "tinydb/database.py"
+        ],
+        "existing_behaviour": "Database interaction is strictly table-isolated; no cross-table query capabilities exist.",
+        "edge_cases": [
+          "Handling missing keys in one of the tables.",
+          "What if keys conflict? (Need collision resolution policy)"
+        ],
+        "contract": [
+          {
+            "kind": "method",
+            "module": "tinydb.database",
+            "name": "join",
+            "signature": "def join(self, table1: str, table2: str, left_on: str, right_on: str) -> Iterator[dict]",
+            "behaviour": "Performs an inner join between two tables based on shared keys."
+          }
+        ],
+        "novelty_score": 0.9595,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 4.559,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    },
+    {
+      "candidate": {
+        "feature_id": "add-table-summary-statistics-2319a9",
+        "title": "Add Table Summary Statistics",
+        "archetype": "query_aggregation",
+        "problem_statement": "Users frequently need to know the total size of their data on disk or memory usage without manually iterating over all documents, which is inefficient.",
+        "requirements": [
+          "Expose a 'stats()' method on the Table class.",
+          "Return a dictionary containing: total_documents, total_bytes (estimated size of JSON representation if possible, otherwise just document count), and last_updated timestamp if feasible.",
+          "The implementation should be highly efficient by avoiding deep iteration if possible."
+        ],
+        "acceptance_criteria": [
+          "Table.stats() returns a dict with 'count' key matching len(table).",
+          "Calling stats() does not trigger full table scans unless necessary."
+        ],
+        "complexity": "easy",
+        "affected_modules": [
+          "tinydb/table.py"
+        ],
+        "existing_behaviour": "Users must call len(table) or iterate to get size/stats information.",
+        "edge_cases": [
+          "Does stats() include cache size?",
+          "What if the table is empty?"
+        ],
+        "contract": [
+          {
+            "kind": "method",
+            "module": "tinydb.table",
+            "name": "stats",
+            "signature": "def stats(self) -> dict[str, Any]",
+            "behaviour": "Returns aggregated metadata about the table contents."
+          }
+        ],
+        "novelty_score": 0.8579,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 4.258,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    }
+  ],
+  "llm": [
+    {
+      "model": "gemini/gemini-3.1-flash-lite",
+      "cached": false
+    }
+  ]
+}

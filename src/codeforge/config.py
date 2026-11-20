@@ -68,6 +68,33 @@ class Settings(BaseSettings):
     harbor_org: str = "codeforge"
 
 
+def load_dotenv(path: Path | None = None) -> list[str]:
+    """Export KEY=VALUE lines from `.env` into os.environ without overriding variables that
+    are already set. LiteLLM and Harbor's agents read provider keys (e.g. GEMINI_API_KEY)
+    from the process environment, which pydantic-settings does not populate.
+    Returns the variable NAMES that were loaded (never their values)."""
+    import os
+
+    path = path or PROJECT_ROOT / ".env"
+    if not path.exists():
+        return []
+    loaded = []
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip().removeprefix("export ").strip()
+        value = value.strip().strip('"').strip("'")
+        if not key.isidentifier() or not value or value.startswith("your_"):
+            continue  # skip blanks and placeholders from .env.example
+        if key not in os.environ:
+            os.environ[key] = value
+            loaded.append(key)
+    return loaded
+
+
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
+    load_dotenv()
     return Settings()

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="0.050" timestamp="2026-11-20T05:31:14.726948+00:00" hostname="ed19111e891d"><testcase classname="tests.test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477" name="test_cache_info_initial_hit_ratio" time="0.003" /><testcase classname="tests.test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477" name="test_cache_info_half_ratio" time="0.000"><failure message="assert 0.0 == 0.5&#10; +  where 0.0 = CacheInfo(hits=2, misses=2, maxsize=10, currsize=2).hit_ratio">def test_cache_info_half_ratio():
+        """AC2: After 2 hits and 2 misses, hit_ratio returns 0.5."""
+        cache = Cache(maxsize=10)
+    
+        @cached(cache, info=True)
+        def func(x):
+            return x
+    
+        # 2 misses
+        func(1)
+        func(2)
+        # 2 hits
+        func(1)
+        func(2)
+    
+        info = func.cache_info()
+        assert info.hits == 2
+        assert info.misses == 2
+        # 2 / (2 + 2) = 0.5
+&gt;       assert info.hit_ratio == 0.5
+E       assert 0.0 == 0.5
+E        +  where 0.0 = CacheInfo(hits=2, misses=2, maxsize=10, currsize=2).hit_ratio
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:37: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-20T03:06:39.802689+00:00",
+  "generated_at": "2026-11-20T03:08:58.507088+00:00",
   "agent": "nop",
-  "tasks": 1,
-  "trials": 1,
+  "tasks": 4,
+  "trials": 4,
   "solved": 0,
-  "unsolved": 1,
+  "unsolved": 4,
   "quota_errors": 0,
   "errors": 0,
   "pass_rate": 0.0,
@@ -35,6 +35,90 @@
           "exception": null,
           "duration_sec": 43.2,
           "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\workspace\\hj\\nop-febf36d1"
+        }
+      ]
+    },
+    {
+      "task_id": "add-order-refund-and-return-lifecycle-states-059169",
+      "title": "Add order refund and return lifecycle states",
+      "archetype": "state_machine",
+      "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+      "agent": "nop",
+      "model": null,
+      "attempts": 1,
+      "solved": 0,
+      "valid_trials": 1,
+      "pass_rate": 0.0,
+      "trials": [
+        {
+          "attempt": 1,
+          "model": null,
+          "outcome": "unsolved",
+          "reward": 0.0,
+          "rewards": {
+            "reward": 0.0,
+            "feature_pass_rate": 0.0,
+            "regression_pass_rate": 1.0
+          },
+          "exception": null,
+          "duration_sec": 44.1,
+          "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\workspace\\hj\\nop-f14b9462"
+        }
+      ]
+    },
+    {
+      "task_id": "add-volume-based-discount-configuration-policy-91c6c0",
+      "title": "Add volume-based discount configuration policy",
+      "archetype": "configuration_policy",
+      "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+      "agent": "nop",
+      "model": null,
+      "attempts": 1,
+      "solved": 0,
+      "valid_trials": 1,
+      "pass_rate": 0.0,
+      "trials": [
+        {
+          "attempt": 1,
+          "model": null,
+          "outcome": "unsolved",
+          "reward": 0.0,
+          "rewards": {
+            "reward": 0.0,
+            "feature_pass_rate": 0.0,
+            "regression_pass_rate": 1.0
+          },
+          "exception": null,
+          "duration_sec": 44.2,
+          "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\workspace\\hj\\nop-3173fc7f"
+        }
+      ]
+    },
+    {
+      "task_id": "support-promotional-discount-codes-in-cart-prici-f04964",
+      "title": "Support promotional discount codes in cart pricing",
+      "archetype": "business_rule",
+      "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+      "agent": "nop",
+      "model": null,
+      "attempts": 1,
+      "solved": 0,
+      "valid_trials": 1,
+      "pass_rate": 0.0,
+      "trials": [
+        {
+          "attempt": 1,
+          "model": null,
+          "outcome": "unsolved",
+          "reward": 0.0,
+          "rewards": {
+            "reward": 0.0,
+            "feature_pass_rate": 0.0,
+            "regression_pass_rate": 1.0
+          },
+          "exception": null,
+          "duration_sec": 50.3,
+          "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\workspace\\hj\\nop-6b980f0f"
         }
       ]
     }

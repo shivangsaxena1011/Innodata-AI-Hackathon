@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="9" time="0.054" timestamp="2026-11-20T05:36:40.377335+00:00" hostname="8d56c2f2abd6"><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_validator_returns_false_raises_value_error" time="0.001" /><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_validator_returns_true_works" time="0.000" /><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_insert_multiple_atomicity" time="0.000" /><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_update_validation_fails" time="0.000" /><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_remove_validator" time="0.000" /><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_upsert_validation_insert" time="0.000" /><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_upsert_validation_update" time="0.000" /><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_validator_exception_propagation" time="0.000"><failure message="ValueError: Document validation failed">doc = {'val': 'ok'}
+
+    def failing_validator(doc):
+&gt;       raise RuntimeError('Custom Error')
+E       RuntimeError: Custom Error
+
+tests/test_codeforge_add_document_validation_rules_522518.py:94: RuntimeError
+
+The above exception was the direct cause of the following exception:
+
+    def test_validator_exception_propagation():
+        table = get_table()
+        def failing_validator(doc):
+            raise RuntimeError('Custom Error')
+    
+        table.set_validator(failing_validator)
+    
+        with pytest.raises(RuntimeError, match='Custom Error'):
+&gt;           table.insert({'val': 'ok'})
+
+tests/test_codeforge_add_document_validation_rules_522518.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tinydb/table.py:200: in insert
+    self._update_table(updater)
+tinydb/table.py:900: in _update_table
+    updater(table)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+table = {}
+
+    def updater(table: dict):
+        if doc_id in table:
+            raise ValueError(f'Document with ID {str(doc_id)} '
+                             f'already exists')
+    
+        # By calling ``dict(document)`` we convert the data we got to a
+        # ``dict`` instance even if it was a different class that
+        # implemented the ``Mapping`` interface
+        doc = dict(document)
+        if self._validator:
+            try:
+                if not self._validator(doc):
+                    raise ValueError('Document validation failed')
+            except Exception as e:
+                if isinstance(e, ValueError) and str(e) == 'Document validation failed':
+                    raise
+&gt;               raise ValueError('Document validation failed') from e
+E               ValueError: Document validation failed
+
+tinydb/table.py:195: ValueError</failure></testcase><testcase classname="tests.test_codeforge_add_document_validation_rules_522518" name="test_update_multiple_atomicity" time="0.000" /></testsuite></testsuites>

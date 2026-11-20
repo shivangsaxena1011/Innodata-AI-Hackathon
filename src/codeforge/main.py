@@ -46,15 +46,12 @@ def analyze(
     budget: int = typer.Option(2500, help="token budget for the rendered repo map"),
 ) -> None:
     """Profile a repository and print its ranked map (no Docker or LLM needed)."""
-    from codeforge.pipeline import SAMPLE_DIR
+    from codeforge.pipeline import resolve_source
     from codeforge.repository import git_manager
     from codeforge.repository.repository_profiler import profile_repository
 
     s = get_settings()
-    source = repo
-    if repo == "sample":
-        source = str(git_manager.materialize_sample(SAMPLE_DIR, s.workspace_dir / "samples" /
-                                                    "shopcart"))
+    source = resolve_source(repo, s.workspace_dir)
     co = git_manager.checkout(source, s.workspace_dir, ref, dirty, s.max_repo_mb)
     p = profile_repository(co, cache_dir=s.cache_dir, token_budget=budget)
     rm = p.repository_map
@@ -79,6 +76,8 @@ def run(
     dirty: DirtyPolicy = typer.Option(DirtyPolicy.REFUSE),
     harbor: bool = typer.Option(True, help="package and verify with Harbor (lint/oracle/nop)"),
     model: str | None = typer.Option(None, help="LiteLLM model id, e.g. gemini/gemini-2.5-flash"),
+    prepare_only: bool = typer.Option(False, "--prepare-only",
+                                      help="stop after environment build + baseline (no LLM)"),
 ) -> None:
     """Generate and validate feature-development tasks end to end."""
     from codeforge.ai.llm_client import LLMClient
@@ -86,6 +85,19 @@ def run(
 
     s = get_settings()
     pipeline = Pipeline(s, llm=LLMClient(s, model=model))
+    if prepare_only:
+        try:
+            ctx = pipeline.prepare(repo, ref, dirty)
+        except Exception as exc:
+            typer.echo(f"prepare failed: {type(exc).__name__}: {exc}")
+            raise typer.Exit(1) from exc
+        b = ctx.profile.baseline_test_status
+        typer.echo(f"\nREADY  {ctx.profile.repository_name} @ {ctx.profile.starting_commit_sha}")
+        typer.echo(f"       image {ctx.env.image_tag}  baseline: {len(b.passed)} pass, "
+                   f"{len(b.failed)} fail, {len(b.flaky)} flaky  shortcuts: "
+                   f"{ctx.shortcut_problems or 'none'}")
+        typer.echo(f"       evidence: {ctx.run_dir}")
+        return
     summary = pipeline.run(repo, ref, tasks, dirty, harbor)
     typer.echo("")
     for t in summary.get("tasks", []):
@@ -111,6 +123,8 @@ def evaluate(
     """Benchmark a real AI coding agent on one validated task through Harbor."""
     from codeforge.evaluation.agent_runner import evaluate_agent
 
+    if agent in ("oracle", "nop"):
+        model = None  # control agents take no model
     result = evaluate_agent(task_dir, agent, model, attempts)
     typer.echo(json.dumps(result, indent=2))
 
@@ -145,6 +159,34 @@ def benchmark(
     typer.echo(f"report: {out / 'benchmark.json'}")
     if summary["pass_rate"] is None and summary["trials"]:
         typer.echo("no trial was graded (see quota_errors / errors)")
+
+
+@app.command()
+def crosscheck(
+    repo: str = typer.Argument("shopcart", help="repository name under generated_tasks/"),
+    out: Path = typer.Option(Path("reports/cross_task_validation.json")),
+) -> None:
+    """Run every task's hidden tests against every task's reference (N x N), from packages."""
+    from codeforge.reporting.crosscheck import crosscheck as run_crosscheck
+
+    s = get_settings()
+    tasks = sorted(p.parent for p in (s.output_dir / repo).glob("*/task_manifest.json"))
+    if len(tasks) < 2:
+        typer.echo("need at least two task packages")
+        raise typer.Exit(1)
+    result = run_crosscheck(tasks, s.workspace_dir / "crosscheck" / repo)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(result, indent=2), encoding="utf-8")
+    for k, t in enumerate(result["tasks"]):
+        typer.echo(f"T{k + 1}  [{t['archetype']}] {t['title']}")
+    header = "tests\\ref " + " ".join(f"R{j + 1:<4}" for j in range(len(result["tasks"])))
+    typer.echo(header)
+    for i, row in enumerate(result["matrix"]):
+        typer.echo(f"T{i + 1:<9}" + " ".join(f"{c:<5}" for c in row))
+    typer.echo(f"diagonal pass {result['diagonal_pass']} · off-diagonal fail "
+               f"{result['off_diagonal_fail']} · all expectations met: "
+               f"{result['all_expectations_met']}")
+    typer.echo(f"saved {out}")
 
 
 @app.command()

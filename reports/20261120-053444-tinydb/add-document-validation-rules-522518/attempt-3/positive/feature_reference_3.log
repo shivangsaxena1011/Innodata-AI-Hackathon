@@ -1,0 +1,71 @@
+...F..F.F                                                                [100%]
+=================================== FAILURES ===================================
+_________________________ test_update_validation_fails _________________________
+
+    def test_update_validation_fails():
+        table = get_table()
+        table.insert({'val': 'ok'})
+        table.set_validator(lambda doc: doc.get('val') == 'ok')
+    
+        # Try to update to invalid state
+        with pytest.raises(ValueError, match='Document validation failed'):
+            table.update({'val': 'bad'}, where('val') == 'ok')
+    
+        # Verify original state preserved
+>       assert table.get(where('val') == 'ok') is not None
+E       AssertionError: assert None is not None
+E        +  where None = get(Query() == 'ok')
+E        +    where get = <Table name='test', total=1, storage=<tinydb.storages.MemoryStorage object at 0x72a784d123f0>>.get
+E        +    and   Query() = where('val')
+
+tests/test_codeforge_add_document_validation_rules_522518.py:54: AssertionError
+________________________ test_upsert_validation_update _________________________
+
+    def test_upsert_validation_update():
+        table = get_table()
+        table.insert({'val': 'ok'})
+        table.set_validator(lambda doc: doc.get('val') == 'ok')
+    
+        # Try to update existing to invalid
+        with pytest.raises(ValueError):
+            table.upsert({'val': 'bad'}, where('val') == 'ok')
+    
+>       assert table.all()[0]['val'] == 'ok'
+E       AssertionError: assert 'bad' == 'ok'
+E         
+E         - ok
+E         + bad
+
+tests/test_codeforge_add_document_validation_rules_522518.py:88: AssertionError
+________________________ test_update_multiple_atomicity ________________________
+
+    def test_update_multiple_atomicity():
+        table = get_table()
+        table.insert({'val': 'ok'})
+        table.insert({'val': 'ok'})
+    
+        table.set_validator(lambda doc: doc.get('val') == 'ok')
+    
+        # Update one to invalid, one to valid (order is defined by query matching)
+        # We construct updates: (lambda, condition). If the update makes it invalid, it should abort.
+        # Note: update_multiple iterates table, if one update makes it invalid, it should abort entirely.
+    
+        updates = [({'val': 'bad'}, where('val') == 'ok')]
+    
+        with pytest.raises(ValueError):
+            table.update_multiple(updates)
+    
+        # Atomicity: verify nothing changed
+>       assert table.count(where('val') == 'ok') == 2
+E       AssertionError: assert 1 == 2
+E        +  where 1 = count(Query() == 'ok')
+E        +    where count = <Table name='test', total=2, storage=<tinydb.storages.MemoryStorage object at 0x72a784c24450>>.count
+E        +    and   Query() = where('val')
+
+tests/test_codeforge_add_document_validation_rules_522518.py:121: AssertionError
+------------- generated xml file: /cf/out/feature_reference_3.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_document_validation_rules_522518.py::test_update_validation_fails
+FAILED tests/test_codeforge_add_document_validation_rules_522518.py::test_upsert_validation_update
+FAILED tests/test_codeforge_add_document_validation_rules_522518.py::test_update_multiple_atomicity
+3 failed, 6 passed in 0.04s

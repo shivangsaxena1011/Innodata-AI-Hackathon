@@ -1,0 +1,27 @@
+--- a/src/cachetools/__init__.py
++++ b/src/cachetools/__init__.py
+@@ -849,6 +849,13 @@
+ 
+     __slots__ = ()
+ 
++    @property
++    def hit_ratio(self):
++        total = self.hits + self.misses
++        if not total:
++            return 0.0
++        return round(self.hits / total, 4)
++
+     @classmethod
+     def _make_info(cls, cache, hits, misses):
+         if isinstance(cache, Cache):
+--- a/src/cachetools/__init__.pyi
++++ b/src/cachetools/__init__.pyi
+@@ -144,6 +144,8 @@
+     misses: int
+     maxsize: float | None
+     currsize: float
++    @property
++    def hit_ratio(self) -> float: ...
+ 
+ @type_check_only
+ class _AbstractCondition(AbstractContextManager[Any], Protocol):

@@ -1,0 +1,120 @@
+{
+  "codeforge_version": "0.1.0",
+  "started_at": "2026-11-20T05:29:40.224936+00:00",
+  "status": "completed",
+  "tasks": [
+    {
+      "task_id": "add-cache-hit-miss-ratio-reporting-d7c477",
+      "title": "Add cache hit/miss ratio reporting",
+      "archetype": "query_aggregation",
+      "status": "valid",
+      "score": 100.0,
+      "gates": [
+        {
+          "gate": "baseline",
+          "status": "passed",
+          "summary": "476 original tests pass consistently across 3 runs"
+        },
+        {
+          "gate": "positive_control",
+          "status": "passed",
+          "summary": "8/8 feature tests pass with the reference"
+        },
+        {
+          "gate": "negative_control",
+          "status": "passed",
+          "summary": "8/8 feature tests fail on the original code"
+        },
+        {
+          "gate": "regression",
+          "status": "passed",
+          "summary": "476/476 original tests still pass with the reference"
+        },
+        {
+          "gate": "stability",
+          "status": "passed",
+          "summary": "3/3 reference runs identical"
+        },
+        {
+          "gate": "independence",
+          "status": "passed",
+          "summary": "4/4 acceptance criteria traced to tests; 0 error(s), 0 warning(s)"
+        },
+        {
+          "gate": "mutation",
+          "status": "passed",
+          "summary": "mutation score 100% (8/8 killed, threshold 60%)"
+        },
+        {
+          "gate": "semantic_mutants",
+          "status": "passed",
+          "summary": "4/4 plausible wrong implementations caught"
+        },
+        {
+          "gate": "leakage",
+          "status": "passed",
+          "summary": "no leakage or shortcut found"
+        },
+        {
+          "gate": "harbor_lint",
+          "status": "passed",
+          "summary": "harbor lint: no findings"
+        },
+        {
+          "gate": "harbor_oracle",
+          "status": "passed",
+          "summary": "oracle reward 1.0"
+        },
+        {
+          "gate": "harbor_nop",
+          "status": "passed",
+          "summary": "nop (no changes) reward 0.0"
+        }
+      ],
+      "reasons": [],
+      "task_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\generated_tasks\\cachetools\\add-cache-hit-miss-ratio-reporting-d7c477",
+      "error": null
+    }
+  ],
+  "accepted": 1,
+  "rejected": 0,
+  "run_id": "20261120-052944-cachetools",
+  "repository": {
+    "name": "cachetools",
+    "url": "https://github.com/tkem/cachetools",
+    "commit": "c5de5137153b301933922e47bc70b598970e0627",
+    "language": "python",
+    "framework": null,
+    "test_framework": "pytest"
+  },
+  "variation": {
+    "tasks": 1,
+    "distinct_archetypes": 1,
+    "archetypes": [
+      "query_aggregation"
+    ],
+    "mean_pairwise_similarity": 0.0,
+    "max_pairwise_similarity": 0.0,
+    "diversity_score": null,
+    "pairs": []
+  },
+  "finished_at": "2026-11-20T05:33:09.564984+00:00",
+  "llm_usage": {
+    "calls": 6,
+    "cached_calls": 0,
+    "prompt_tokens": 96836,
+    "completion_tokens": 8140,
+    "by_purpose": {
+      "feature_discovery": 1,
+      "task_spec": 1,
+      "task_spec#retry1": 1,
+      "feature_tests": 1,
+      "reference": 1,
+      "semantic_mutants": 1
+    },
+    "models": [
+      "gemini/gemini-3-flash-preview",
+      "gemini/gemini-3.5-flash"
+    ]
+  }
+}

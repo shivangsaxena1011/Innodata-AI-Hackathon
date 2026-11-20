@@ -1,0 +1,33 @@
+.F
+=================================== FAILURES ===================================
+__________________________ test_cache_info_half_ratio __________________________
+
+    def test_cache_info_half_ratio():
+        """AC2: After 2 hits and 2 misses, hit_ratio returns 0.5."""
+        cache = Cache(maxsize=10)
+    
+        @cached(cache, info=True)
+        def func(x):
+            return x
+    
+        # 2 misses
+        func(1)
+        func(2)
+        # 2 hits
+        func(1)
+        func(2)
+    
+        info = func.cache_info()
+        assert info.hits == 2
+        assert info.misses == 2
+        # 2 / (2 + 2) = 0.5
+>       assert info.hit_ratio == 0.5
+E       assert None == 0.5
+E        +  where None = CacheInfo(hits=2, misses=2, maxsize=10, currsize=2).hit_ratio
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:37: AssertionError
+-------------- generated xml file: /cf/out/mutant-mca0490a2eb.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py::test_cache_info_half_ratio
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 1 passed in 0.05s

@@ -1,0 +1,175 @@
+........................................................................ [ 14%]
+........................................................................ [ 29%]
+.....................................FFFFFFFF........................... [ 44%]
+........................................................................ [ 59%]
+........................................................................ [ 74%]
+........................................................................ [ 89%]
+....................................................                     [100%]
+=================================== FAILURES ===================================
+______________________ test_cache_info_initial_hit_ratio _______________________
+
+    def test_cache_info_initial_hit_ratio():
+        """AC1: A newly initialized cache returns a hit_ratio of 0.0."""
+        cache = Cache(maxsize=10)
+    
+        @cached(cache, info=True)
+        def func(x):
+            return x
+    
+        info = func.cache_info()
+        assert info.hits == 0
+        assert info.misses == 0
+>       assert info.hit_ratio == 0.0
+E       AttributeError: 'CacheInfo' object has no attribute 'hit_ratio'
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:15: AttributeError
+__________________________ test_cache_info_half_ratio __________________________
+
+    def test_cache_info_half_ratio():
+        """AC2: After 2 hits and 2 misses, hit_ratio returns 0.5."""
+        cache = Cache(maxsize=10)
+    
+        @cached(cache, info=True)
+        def func(x):
+            return x
+    
+        # 2 misses
+        func(1)
+        func(2)
+        # 2 hits
+        func(1)
+        func(2)
+    
+        info = func.cache_info()
+        assert info.hits == 2
+        assert info.misses == 2
+        # 2 / (2 + 2) = 0.5
+>       assert info.hit_ratio == 0.5
+E       AttributeError: 'CacheInfo' object has no attribute 'hit_ratio'
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:37: AttributeError
+________________________ test_cache_info_rounding_ratio ________________________
+
+    def test_cache_info_rounding_ratio():
+        """AC3: After 1 hit and 2 misses, hit_ratio returns 0.3333."""
+        cache = Cache(maxsize=10)
+    
+        @cached(cache, info=True)
+        def func(x):
+            return x
+    
+        # 2 misses
+        func(1)
+        func(2)
+        # 1 hit
+        func(1)
+    
+        info = func.cache_info()
+        assert info.hits == 1
+        assert info.misses == 2
+        # 1 / 3 = 0.333333... -> rounded to 4 decimals = 0.3333
+>       assert info.hit_ratio == 0.3333
+E       AttributeError: 'CacheInfo' object has no attribute 'hit_ratio'
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:57: AttributeError
+__________________________ test_cache_info_unpacking ___________________________
+
+    def test_cache_info_unpacking():
+        """AC4: CacheInfo remains a 4-tuple for index-based access compatibility."""
+        cache = Cache(maxsize=128)
+    
+        @cached(cache, info=True)
+        def func(x):
+            return x
+    
+        func(1) # miss
+        func(1) # hit
+    
+        info = func.cache_info()
+        # Unpack as 4-tuple
+        hits, misses, maxsize, currsize = info
+    
+        assert hits == 1
+        assert misses == 1
+        assert maxsize == 128
+        assert currsize == 1
+    
+        # Verify hit_ratio is still available as a property attribute but not in the tuple expansion
+>       assert info.hit_ratio == 0.5
+E       AttributeError: 'CacheInfo' object has no attribute 'hit_ratio'
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:80: AttributeError
+_____________________ test_cache_info_rounding_boundaries ______________________
+
+    def test_cache_info_rounding_boundaries():
+        """Test rounding logic with specific floating point values."""
+        # 1 hit, 5 misses -> 1/6 = 0.166666... -> 0.1667
+        cache = Cache(maxsize=10)
+        @cached(cache, info=True)
+        def func(x):
+            return x
+    
+        for i in range(5): func(i) # 5 misses
+        func(0) # 1 hit
+    
+>       assert func.cache_info().hit_ratio == 0.1667
+E       AttributeError: 'CacheInfo' object has no attribute 'hit_ratio'
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:94: AttributeError
+___________________ test_cache_info_zero_division_edge_case ____________________
+
+    def test_cache_info_zero_division_edge_case():
+        """Ensure hit_ratio is 0.0 when hits and misses are 0 manually via CacheInfo constructor."""
+        # Testing the class directly to ensure logic is robust regardless of decorator
+        info = CacheInfo(0, 0, 10, 0)
+>       assert info.hit_ratio == 0.0
+E       AttributeError: 'CacheInfo' object has no attribute 'hit_ratio'
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:100: AttributeError
+___________________________ test_cache_info_all_hits ___________________________
+
+    def test_cache_info_all_hits():
+        """Test scenario with 100% hits after initial population."""
+        cache = Cache(maxsize=10)
+        @cached(cache, info=True)
+        def func(x):
+            return x
+    
+        func(1) # 1 miss
+        func(1) # 1 hit
+        func(1) # 2 hits
+    
+        # 2 hits, 1 miss -> 2/3 = 0.66666... -> 0.6667
+>       assert func.cache_info().hit_ratio == 0.6667
+E       AttributeError: 'CacheInfo' object has no attribute 'hit_ratio'
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:114: AttributeError
+__________________________ test_cache_info_all_misses __________________________
+
+    def test_cache_info_all_misses():
+        """Test scenario with 0% hits."""
+        cache = Cache(maxsize=10)
+        @cached(cache, info=True)
+        def func(x):
+            return x
+    
+        func(1)
+        func(2)
+        func(3)
+    
+        # 0 hits, 3 misses -> 0/3 = 0.0
+>       assert func.cache_info().hit_ratio == 0.0
+E       AttributeError: 'CacheInfo' object has no attribute 'hit_ratio'
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:128: AttributeError
+------------- generated xml file: /cf/out/regression_original.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py::test_cache_info_initial_hit_ratio
+FAILED tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py::test_cache_info_half_ratio
+FAILED tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py::test_cache_info_rounding_ratio
+FAILED tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py::test_cache_info_unpacking
+FAILED tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py::test_cache_info_rounding_boundaries
+FAILED tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py::test_cache_info_zero_division_edge_case
+FAILED tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py::test_cache_info_all_hits
+FAILED tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py::test_cache_info_all_misses
+8 failed, 476 passed in 1.13s

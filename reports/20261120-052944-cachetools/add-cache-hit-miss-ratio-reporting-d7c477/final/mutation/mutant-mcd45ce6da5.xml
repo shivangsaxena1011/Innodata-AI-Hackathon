@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.059" timestamp="2026-11-20T05:31:13.560875+00:00" hostname="ed19111e891d"><testcase classname="tests.test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477" name="test_cache_info_initial_hit_ratio" time="0.003"><failure message="ZeroDivisionError: division by zero">def test_cache_info_initial_hit_ratio():
+        """AC1: A newly initialized cache returns a hit_ratio of 0.0."""
+        cache = Cache(maxsize=10)
+    
+        @cached(cache, info=True)
+        def func(x):
+            return x
+    
+        info = func.cache_info()
+        assert info.hits == 0
+        assert info.misses == 0
+&gt;       assert info.hit_ratio == 0.0
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:15: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = CacheInfo(hits=0, misses=0, maxsize=10, currsize=0)
+
+    @property
+    def hit_ratio(self):
+        total = self.hits + self.misses
+        if not (not total):
+            return 0.0
+&gt;       return round(self.hits / total, 4)
+E       ZeroDivisionError: division by zero
+
+src/cachetools/__init__.py:857: ZeroDivisionError</failure></testcase></testsuite></testsuites>

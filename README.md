@@ -18,9 +18,9 @@
 ### 🌟 Core Strategy: Contract-First Feature Synthesis with Adversarial Validation
 
 1. **Seam & Archetype Identification**: Identifies high-cohesion, low-churn extension points and pairs them with distinct behaviour archetypes.
-2. **Contract-First Specification**: Emits an observable interface contract (functions, classes, CLI flags, HTTP routes) that defines the boundary without leaking implementation or test logic.
+2. **Contract-First Specification**: Emits an observable interface contract (functions, methods, classes, constants, exception types) that defines the boundary without leaking implementation or test logic.
 3. **Independent Dual-Path Generation**: Generates the hidden test suite and reference patch in completely isolated model calls from the specification only, ensuring tests are never overfitted to the reference solution.
-4. **Adversarial Multi-Gate Validation**: Enforces six rigorous execution gates in fresh Docker sandboxes (RED, GREEN, REGRESSION, MUTATION, STABILITY, CONTRACT) to eliminate vacuous, brittle, or non-discriminative tasks.
+4. **Adversarial Multi-Gate Validation**: Executed gates in fresh Docker sandboxes (RED, GREEN, REGRESSION, STABILITY, MUTATION, SEMANTIC MUTANTS) plus static INDEPENDENCE and LEAKAGE checks reject vacuous, brittle or non-discriminative tasks. Surviving mutants become counter-examples that strengthen the hidden tests.
 5. **Canonical Harbor Packaging**: Emits standard Harbor task packages (`instruction.md`, `task.toml`, `environment/Dockerfile`, `solution/solve.sh`, `tests/test.sh`) verified via `harbor lint` and `harbor run -a oracle` (reward 1.0) and `harbor run -a nop` (reward 0.0).
 
 ---
@@ -47,15 +47,15 @@
                                  │              D5: Plausible Mutants (AST + LLM)
                                  ▼
                       ┌──────────────────────┐
-                      │ E. Validation Engine │  RED ──▶ GREEN ──▶ REGRESSION ──▶
-                      └──────────┬───────────┘  MUTATION ──▶ STABILITY ──▶ CONTRACT
+                      │ E. Validation Engine │  RED ──▶ GREEN ──▶ REGRESSION ──▶ STABILITY
+                      └──────────┬───────────┘  ──▶ MUTATION ──▶ strengthening ⟲ repair loop
                                  ▼
                       ┌──────────────────────┐
                       │  F. Harbor Packager  │  Canonical Harbor task skeleton,
                       └──────────┬───────────┘  oracle verification (reward = 1.0)
                                  ▼
                       ┌──────────────────────┐
-                      │ G. Reporting & UI    │  evidence.json, suite HTML dashboard,
+                      │ G. Reporting & UI    │  validation.json, HTML report, dashboard,
                       └──────────────────────┘  discrimination & variation matrix
 ```
 
@@ -84,9 +84,11 @@ Every candidate task must pass all gates in isolated Docker containers; failure 
 * **RED Gate**: The hidden feature tests must fail against the baseline unpatched codebase.
 * **GREEN Gate**: The hidden feature tests must pass (100%) when the reference patch is applied.
 * **REGRESSION Gate**: All previously passing baseline tests must continue to pass without failure.
-* **MUTATION Gate**: Plausible mutant solutions (simulating realistic agent blunders via AST mutation and semantic errors) must be killed (≥1 test failure) by the feature tests.
 * **STABILITY Gate**: Execution of tests across 3 consecutive iterations must yield identical deterministic results.
-* **CONTRACT Gate**: Static check verifying that tests only reference approved symbols in the interface contract.
+* **MUTATION Gate**: Diff-scoped AST mutants (only lines the reference changed: comparisons, arithmetic, constants, enum swaps, collection entries, deleted calls, ...) must reach a kill rate of at least 60%.
+* **SEMANTIC MUTANTS Gate**: Plausible wrong implementations written by the model must be caught (warning below 100%, failure below 50%).
+* **INDEPENDENCE Check**: Every acceptance criterion traced to at least one test; no private or implementation-only imports, no skips, no assertion-free tests.
+* **HARBOR Gates**: `harbor lint` clean, oracle reward 1.0, no-op (`nop`) reward 0.0.
 * **LEAKAGE & SHORTCUT Checks**: Automated scans ensure no secrets, test implementations, or synthetic shortcuts leak into the agent environment.
 
 ---
@@ -121,7 +123,7 @@ Every candidate task must pass all gates in isolated Docker containers; failure 
 │   ├── source-integration-manifest.md # Upstream lineage and technical references
 │   └── technology-decisions.md  # Architectural Decision Records (ADRs)
 ├── examples/                    # Offline fixture repositories
-│   └── sample_target_repository # `tiny_cart` / `shopcart` Python reference target repo
+│   └── sample_target_repository # `shopcart`: CodeForge's own sample repo (NOT the Innodata repository)
 ├── generated_tasks/             # Emitted Harbor task packages (sample set verified)
 │   └── shopcart/
 ├── licenses/                    # Component & dependency licenses (Harbor, Aider, py-tree-sitter, etc.)
@@ -159,12 +161,16 @@ Every candidate task must pass all gates in isolated Docker containers; failure 
 2. **Set up the virtual environment with uv**:
    ```bash
    uv sync
+   uv tool install harbor   # if Harbor is not installed yet
    ```
+   > Windows: if Smart App Control blocks uv's downloaded Python, run
+   > `uv venv --python "<path to a python.org Python 3.12>\python.exe"` and then `uv sync`.
 
 3. **Configure environment variables**:
    ```bash
    cp .env.example .env
-   # Add your Gemini API key (free tier supported)
+   # Put your free Gemini API key in GEMINI_API_KEY (https://aistudio.google.com/apikey).
+   # CodeForge exports .env into the process environment for LiteLLM and Harbor agents.
    ```
 
 4. **Verify environment readiness**:
@@ -174,7 +180,8 @@ Every candidate task must pass all gates in isolated Docker containers; failure 
 
 5. **Run test suite**:
    ```bash
-   uv run pytest tests/unit -q
+   uv run python -m pytest tests/unit -q          # 52 unit tests
+   uv run python -m pytest tests/integration -q   # Docker + Harbor (needs Docker)
    ```
 
 ---
@@ -192,7 +199,8 @@ uv run python -m codeforge.main doctor
 ### 2. `codeforge analyze <repo>`
 Profiles target repository using py-tree-sitter and PageRank symbol extraction without running Docker or LLMs:
 ```bash
-uv run python -m codeforge.main analyze examples/sample_target_repository
+uv run python -m codeforge.main analyze sample          # bundled sample (deterministic commit)
+uv run python -m codeforge.main analyze https://github.com/tkem/cachetools
 ```
 
 ### 3. `codeforge run [repo] [options]`
@@ -203,6 +211,9 @@ uv run python -m codeforge.main run sample -n 2
 
 # Generate tasks on a custom Git repository at a specific branch or commit
 uv run python -m codeforge.main run https://github.com/org/repo.git --ref main -n 3
+
+# Only build the environment and run the baseline 3x (no model calls)
+uv run python -m codeforge.main run https://github.com/msiemens/tinydb --prepare-only
 ```
 
 ### 4. `codeforge evaluate <task_dir>`
@@ -216,12 +227,19 @@ uv run python -m codeforge.main evaluate generated_tasks/shopcart/add-order-refu
 ```
 
 ### 5. `codeforge benchmark`
-Runs an agent against the complete suite of validated tasks and writes a benchmark performance report:
+Runs an agent against every validated task (optionally one repository) and writes `benchmark.json` + `benchmark.md`. A task counts as solved only on verifier reward 1.0; quota and infrastructure errors are listed separately:
 ```bash
-uv run python -m codeforge.main benchmark --agent nop
+uv run python -m codeforge.main benchmark --agent nop --repo shopcart          # control: reward 0.0
+uv run python -m codeforge.main benchmark --agent gemini-cli --repo shopcart   # real agent, free Gemini tier
 ```
 
-### 6. `codeforge serve`
+### 6. `codeforge crosscheck`
+Runs every task's hidden tests against every task's reference (N x N) using only the shipped packages:
+```bash
+uv run python -m codeforge.main crosscheck shopcart   # writes reports/cross_task_validation.json
+```
+
+### 7. `codeforge serve`
 Launches the interactive real-time monitoring web dashboard:
 ```bash
 uv run python -m codeforge.main serve --port 8765
@@ -232,10 +250,10 @@ uv run python -m codeforge.main serve --port 8765
 ## 🌐 Interactive Web Dashboard
 
 CodeForge includes a lightweight, real-time web dashboard (built with FastAPI and pure modern frontend, requiring no node/npm build step):
-- **Live Pipeline Visualizer**: View active and completed task generation stages.
-- **Validation Gate Matrix**: Real-time breakdown of RED, GREEN, REGRESSION, MUTATION, and STABILITY results.
-- **Evidence Explorer**: Interactive inspector for `evidence.json`, diffs, test logs, and JUnit XML traces.
-- **Task Launcher**: Trigger task generation runs with custom model and archetype parameters directly from the browser.
+- **Analyze**: repository profile, pinned commit, extension points and the ranked repository map.
+- **Forge (task launcher)**: start a run (repository, ref, number of tasks, Harbor on/off) and watch every pipeline stage and event live.
+- **Task gallery**: validity score, gate status and mutation score per task.
+- **Task inspector**: agent instruction, every gate with its executed result, mutation and coverage, reference diff, hidden tests with requirement traceability, `task_manifest.json` / `task.toml`, and package download.
 
 ---
 
@@ -244,9 +262,57 @@ CodeForge includes a lightweight, real-time web dashboard (built with FastAPI an
 CodeForge is engineered for **zero marginal cost**:
 - **Gemini Free Tier Rotation**: Rotates through Google Gemini free-tier models (`gemini-flash-latest`, `gemini-3.5-flash`, `gemini-2.5-flash`, etc.) to stay within daily rate limits without incurring cost.
 - **Local Ollama Fallback**: Automatic offline fallback to local models (`llama3.2`) if API access is unavailable or quota is exceeded.
-- **Deterministic Disk Cache**: All LLM completions are cached by prompt hash and parameters under `.codeforge_cache/llm`, ensuring 100% reproducible re-runs without extra model requests.
+- **Deterministic Disk Cache**: All LLM completions are cached by prompt hash and parameters under `.codeforge_cache/llm`, so re-running the same pipeline on the same machine replays the same generations without extra model requests. (The cache is git-ignored; commit `.codeforge_cache/llm/` to make clones replayable.)
+- **Free-tier reality**: Gemini's free tier allows about 20 requests per model per day. One task needs about 6-12 calls, and a real agent benchmark needs many more.
 
 ---
+
+## 📊 Results (executed, not estimated)
+
+> The Innodata-supplied repository has not been provided yet. Headline results use
+> **CodeForge's own sample repository** (`shopcart`), which is **not** the Innodata
+> repository. Full details and evidence links: [reports/final-results.md](reports/final-results.md).
+
+**Sample repository**: 4 validated Harbor tasks, all with oracle reward **1.0**, no-op reward
+**0.0** and `harbor lint` clean:
+
+| Task | Archetype | Hidden tests | Validity | AST mutants killed | Semantic mutants |
+|---|---|---|---|---|---|
+| Support promotional discount codes in cart pricing | business rule | 10 | 98.5 | 80% | 4/4 |
+| Add order refund and return lifecycle states | state machine | 7 | 99.2 | 89.5% | 4/4 |
+| Add inventory valuation and stock report aggregation | query / aggregation | 7 | 95.7 | 92% | 2/4 |
+| Add volume-based discount configuration policy | configuration policy | 13 | 99.2 | 90% | 4/4 |
+
+**Cross-task validation**: `codeforge crosscheck shopcart` passes every reference on its own
+tests (**4/4**) and fails all **12/12** cross-task combinations
+([cross_task_validation.json](reports/cross_task_validation.json)).
+
+**Generalization on public repositories:**
+- **cachetools** (MIT): a VALID task was generated, validity 100, 8 hidden tests protecting
+  476 existing tests, oracle 1.0 / nop 0.0.
+- **TinyDB** (MIT): environment and 227-test baseline OK; the generated task was honestly
+  **rejected** after 3 repair attempts.
+- **clsx** (JS, MIT): analysed; execution reported **unsupported** (`uvu` test runner).
+
+**Real AI-agent benchmark**: pending. The free Gemini quota was exhausted; a run with
+Harbor's `gemini-cli` agent is scheduled after the daily reset. Oracle validation and agent
+results are kept separate.
+
+**CodeForge's own tests**: 52 unit tests + 3 Docker/Harbor integration tests pass; a
+clean-install test was run ([audit](reports/final_project_audit.md)).
+
+## ⚠️ Honest limitations
+
+- **Languages**: Python repositories are supported end to end. JavaScript is supported for
+  analysis; the Node execution adapter (node:test / vitest / jest) has not run on a real JS
+  repository yet. AST mutation is Python-only; other languages rely on semantic mutants.
+- **Free-tier quota**: about 20 requests per model per day. Large batches and agent
+  benchmarks need several days or more models. Ollama (`llama3.2`) is only a weak fallback.
+- **Model strength**: harder features can be rejected (for example the TinyDB atomic-validation
+  task). Rejection is the intended outcome when evidence is missing.
+- **Target dependency pinning**: base images are digest-pinned, but target dependencies are
+  installed from the repository's own specs, which may resolve differently later.
+- **Validity score**: a transparent heuristic summary; the executed gates are the proof.
 
 ## 👥 Authors & Team
 

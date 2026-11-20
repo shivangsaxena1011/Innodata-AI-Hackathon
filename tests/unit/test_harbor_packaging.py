@@ -89,3 +89,14 @@ def test_leakage_allows_disclosed_contract_text(tmp_path, sample_checkout, sampl
     assert check_package(d, task) == []
     (d / "instruction.md").write_text(f"hint: {logic}\n")
     assert any("reference code" in p for p in check_package(d, task))
+
+
+def test_agent_outcome_classification():
+    from codeforge.evaluation.agent_runner import classify
+    from codeforge.harbor.harbor_validator import TrialOutcome
+
+    assert classify(TrialOutcome("a", True, 1.0)) == "solved"
+    assert classify(TrialOutcome("a", True, 0.0)) == "unsolved"
+    assert classify(TrialOutcome("a", False, None, exception="429 RESOURCE_EXHAUSTED")) == \
+        "quota_error"
+    assert classify(TrialOutcome("a", False, None, exception="docker died")) == "error"

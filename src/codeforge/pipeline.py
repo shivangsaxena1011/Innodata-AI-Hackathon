@@ -51,6 +51,24 @@ from codeforge.validation.leakage_checker import check_package
 log = logging.getLogger(__name__)
 
 EventSink = Callable[[dict], None]
+
+
+def is_sample(source: str | None) -> bool:
+    if not source or source == "sample":
+        return True
+    try:
+        return Path(source).resolve() == SAMPLE_DIR.resolve()
+    except OSError:
+        return False
+
+
+def resolve_source(source: str | None, workspace: Path) -> str:
+    """'sample' (or the bundled sample's folder path) becomes a git repository with a
+    deterministic commit; anything else is returned unchanged."""
+    if is_sample(source):
+        return str(git_manager.materialize_sample(SAMPLE_DIR, workspace / "samples" /
+                                                  "shopcart"))
+    return str(source)
 _FRAME_RE = re.compile(r"^([\w./\\-]+\.\w+):(\d+):", re.M)
 
 
@@ -142,10 +160,10 @@ class Pipeline:
                 dirty_policy: DirtyPolicy = DirtyPolicy.REFUSE,
                 run_id: str | None = None) -> RepoContext:
         ws = self.s.workspace_dir
-        if not source or source == "sample":
-            source = str(git_manager.materialize_sample(SAMPLE_DIR, ws / "samples" / "shopcart"))
+        if is_sample(source):
             self.emit("repository", "info", "using the bundled CodeForge sample repository "
                       "(shopcart). It is NOT the Innodata-supplied repository.")
+        source = resolve_source(source, ws)
         self.emit("repository", "started", f"resolving {source} @ {ref or 'HEAD'}")
         co = git_manager.checkout(source, ws, ref, dirty_policy, self.s.max_repo_mb)
         self.emit("repository", "done", f"pinned commit {co.sha[:12]}", sha=co.sha,
@@ -628,7 +646,8 @@ class Pipeline:
         for name in required:
             g = v.gate(name)
             if g is None:
-                reasons.append(f"{name.value}: not run")
+                if not reasons:
+                    reasons.append(f"{name.value}: not run")
             elif g.status == GateStatus.FAILED:
                 reasons.append(f"{name.value}: {g.summary}")
         v.rejection_reasons = reasons

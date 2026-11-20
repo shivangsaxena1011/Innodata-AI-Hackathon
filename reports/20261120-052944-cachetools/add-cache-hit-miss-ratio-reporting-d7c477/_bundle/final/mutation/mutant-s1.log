@@ -1,0 +1,34 @@
+F
+=================================== FAILURES ===================================
+______________________ test_cache_info_initial_hit_ratio _______________________
+
+    def test_cache_info_initial_hit_ratio():
+        """AC1: A newly initialized cache returns a hit_ratio of 0.0."""
+        cache = Cache(maxsize=10)
+    
+        @cached(cache, info=True)
+        def func(x):
+            return x
+    
+        info = func.cache_info()
+        assert info.hits == 0
+        assert info.misses == 0
+>       assert info.hit_ratio == 0.0
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:15: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = CacheInfo(hits=0, misses=0, maxsize=10, currsize=0)
+
+    @property
+    def hit_ratio(self):
+        total = self.hits + self.misses
+>       return round(self.hits / total, 4)
+E       ZeroDivisionError: division by zero
+
+src/cachetools/__init__.py:855: ZeroDivisionError
+------------------ generated xml file: /cf/out/mutant-s1.xml -------------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py::test_cache_info_initial_hit_ratio
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 0.07s

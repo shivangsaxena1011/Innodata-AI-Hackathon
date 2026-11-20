@@ -1,0 +1,448 @@
+{
+  "task_id": "add-document-validation-rules-522518",
+  "title": "Add Document Validation Rules to Table",
+  "archetype": "business_rule",
+  "starting_commit_sha": "edff96aeb2616402e9489d46e90a592c05565621",
+  "repository_url": "https://github.com/msiemens/tinydb",
+  "spec": {
+    "task_id": "add-document-validation-rules-522518",
+    "title": "Add Document Validation Rules to Table",
+    "archetype": "business_rule",
+    "summary": "Introduce a schema validation mechanism for TinyDB tables, allowing developers to define a validator callable that will be enforced on all write operations to ensure data integrity.",
+    "background": "TinyDB is inherently schemaless, which is flexible but can lead to data corruption in applications where consistent document structures are expected. Currently, applications must manually check document structures before every write operation. Adding a native validator feature enables declarative data integrity, preventing invalid documents from being persisted without requiring boilerplate checks at every call site.",
+    "requirements": [
+      "Add a private '_validator' attribute to the Table class, initialized to None.",
+      "Implement 'set_validator(validator: Callable[[Mapping], bool])' method on the Table class to register a validation function.",
+      "Implement 'remove_validator()' method on the Table class to clear the registered validator.",
+      "Modify 'Table.insert', 'Table.insert_multiple', 'Table.update', 'Table.update_multiple', and 'Table.upsert' to invoke the validator if present before performing the write operation.",
+      "The validator must be applied to the document content (the dict representation) before it is persisted.",
+      "If the validator returns False or raises an exception, the operation must abort, raising a ValueError with a descriptive message, and no changes must be written to the storage.",
+      "If the validator is a callable, it is invoked for each document individually in 'insert_multiple', 'update', and 'update_multiple' scenarios."
+    ],
+    "acceptance_criteria": [
+      {
+        "id": "AC1",
+        "text": "Table.set_validator accepts a callable that returns True for valid documents and False (or raises Exception) for invalid ones."
+      },
+      {
+        "id": "AC2",
+        "text": "Table.insert raises ValueError when the validator returns False, and the document is not added to the database."
+      },
+      {
+        "id": "AC3",
+        "text": "Table.insert_multiple validates each document individually; if any document fails validation, the entire batch operation is aborted and no documents are inserted."
+      },
+      {
+        "id": "AC4",
+        "text": "Table.update raises ValueError if the result of the update operation violates the validation rule, ensuring the database is not updated to an invalid state."
+      },
+      {
+        "id": "AC5",
+        "text": "Table.remove_validator effectively disables validation, and subsequent writes behave as they did before this feature was introduced."
+      },
+      {
+        "id": "AC6",
+        "text": "Table.upsert triggers validation on the document being inserted or updated."
+      }
+    ],
+    "contract": [
+      {
+        "kind": "method",
+        "module": "tinydb.table",
+        "name": "set_validator",
+        "signature": "def set_validator(self, validator: Callable[[Mapping], bool]) -> None",
+        "behaviour": "Registers a callable to be called with a document (Mapping) before any write operation. If the validator returns False, the write operation will raise a ValueError."
+      },
+      {
+        "kind": "method",
+        "module": "tinydb.table",
+        "name": "remove_validator",
+        "signature": "def remove_validator(self) -> None",
+        "behaviour": "Removes the currently set validator from the table."
+      }
+    ],
+    "edge_cases": [
+      "Validation failures inside 'insert_multiple' or 'update_multiple' must not cause partial writes; the operation must be atomic (all or nothing).",
+      "Validation logic should handle cases where the document is a complex nested structure.",
+      "Ensure that 'upsert' validation logic correctly validates the final state of the document after an update, or the input document if an insert is performed."
+    ],
+    "error_handling": [
+      "If validation fails (returns False), raise 'ValueError' with a message: 'Document validation failed'.",
+      "If the validator raises an exception, the exception should propagate out, preventing the write operation."
+    ],
+    "constraints": [
+      "No new third-party dependencies.",
+      "Do not modify existing tests.",
+      "The validator must be applied to a copy or read-only view of the document to prevent accidental mutation of the data during validation.",
+      "Maintain backward compatibility: if no validator is set, default behavior remains unchanged."
+    ],
+    "interactions": [
+      "This feature adds a 'hook' into the 'Table._update_table' process or individual write methods, ensuring that every path to writing data (insert, update, upsert) respects the validator."
+    ],
+    "out_of_scope": [
+      "Support for schema definition languages like JSON Schema (keep it as a generic callable).",
+      "Async validation support."
+    ],
+    "difficulty": "medium",
+    "estimated_minutes": 120,
+    "relevant_files": [
+      "tinydb/table.py"
+    ]
+  },
+  "instruction": "# Add Document Validation Rules to Table\n\nIntroduce a schema validation mechanism for TinyDB tables, allowing developers to define a validator callable that will be enforced on all write operations to ensure data integrity.\n\n## Background\nTinyDB is inherently schemaless, which is flexible but can lead to data corruption in applications where consistent document structures are expected. Currently, applications must manually check document structures before every write operation. Adding a native validator feature enables declarative data integrity, preventing invalid documents from being persisted without requiring boilerplate checks at every call site.\n\n## Requirements\n1. Add a private '_validator' attribute to the Table class, initialized to None.\n2. Implement 'set_validator(validator: Callable[[Mapping], bool])' method on the Table class to register a validation function.\n3. Implement 'remove_validator()' method on the Table class to clear the registered validator.\n4. Modify 'Table.insert', 'Table.insert_multiple', 'Table.update', 'Table.update_multiple', and 'Table.upsert' to invoke the validator if present before performing the write operation.\n5. The validator must be applied to the document content (the dict representation) before it is persisted.\n6. If the validator returns False or raises an exception, the operation must abort, raising a ValueError with a descriptive message, and no changes must be written to the storage.\n7. If the validator is a callable, it is invoked for each document individually in 'insert_multiple', 'update', and 'update_multiple' scenarios.\n\n## Acceptance criteria\n- **AC1**: Table.set_validator accepts a callable that returns True for valid documents and False (or raises Exception) for invalid ones.\n- **AC2**: Table.insert raises ValueError when the validator returns False, and the document is not added to the database.\n- **AC3**: Table.insert_multiple validates each document individually; if any document fails validation, the entire batch operation is aborted and no documents are inserted.\n- **AC4**: Table.update raises ValueError if the result of the update operation violates the validation rule, ensuring the database is not updated to an invalid state.\n- **AC5**: Table.remove_validator effectively disables validation, and subsequent writes behave as they did before this feature was introduced.\n- **AC6**: Table.upsert triggers validation on the document being inserted or updated.\n\n## Interface contract\nImplement exactly these public names; automated checks use them.\n\n- `tinydb.table` → **method** `def set_validator(self, validator: Callable[[Mapping], bool]) -> None`  \n  Registers a callable to be called with a document (Mapping) before any write operation. If the validator returns False, the write operation will raise a ValueError.\n- `tinydb.table` → **method** `def remove_validator(self) -> None`  \n  Removes the currently set validator from the table.\n\n## Edge cases\n- Validation failures inside 'insert_multiple' or 'update_multiple' must not cause partial writes; the operation must be atomic (all or nothing).\n- Validation logic should handle cases where the document is a complex nested structure.\n- Ensure that 'upsert' validation logic correctly validates the final state of the document after an update, or the input document if an insert is performed.\n\n## Error handling\n- If validation fails (returns False), raise 'ValueError' with a message: 'Document validation failed'.\n- If the validator raises an exception, the exception should propagate out, preventing the write operation.\n\n## Interaction with existing behaviour\n- This feature adds a 'hook' into the 'Table._update_table' process or individual write methods, ensuring that every path to writing data (insert, update, upsert) respects the validator.\n\n## Constraints\n- No new third-party dependencies.\n- Do not modify existing tests.\n- The validator must be applied to a copy or read-only view of the document to prevent accidental mutation of the data during validation.\n- Maintain backward compatibility: if no validator is set, default behavior remains unchanged.\n- Do not modify or delete existing tests.\n- Do not add new third-party dependencies.\n- Keep all existing behaviour working.\n\n## Out of scope\n- Support for schema definition languages like JSON Schema (keep it as a generic callable).\n- Async validation support.\n\n## Environment\nThe repository (python) is in the current working directory. You may run the existing test suite to check your work.\n",
+  "reference": {
+    "explanation": "Added `_validator` attribute and `set_validator`/`remove_validator` methods to `Table`. Updated write operations (`insert`, `insert_multiple`, `update`, `update_multiple`, `upsert`) to enforce validation logic. Validation is applied to a copy of the document to satisfy the requirement of protecting data from accidental mutation during validation and ensuring atomicity by raising a `ValueError` inside the updater function if validation fails.",
+    "changes": [
+      {
+        "path": "tinydb/table.py",
+        "action": "modify",
+        "before_sha256": "276e235f6eba4affcf6f82ac782f903ef27c523c0cebe5a4f71f1e267f7fa0d9",
+        "content": "\"\"\"\nThis module implements tables, the central place for accessing and manipulating\ndata in TinyDB.\n\"\"\"\n\nfrom collections.abc import Callable, Iterable, Iterator, Mapping, MutableMapping\nfrom typing import (\n    NoReturn,\n    Optional,\n    Union,\n    cast,\n    overload\n)\n\nfrom .queries import QueryLike\nfrom .storages import Storage\nfrom .utils import LRUCache\n\n__all__ = ('Document', 'Table')\n\n\nclass Document(dict):\n    \"\"\"\n    A document stored in the database.\n\n    This class provides a way to access both a document's content and\n    its ID using ``doc.doc_id``.\n    \"\"\"\n\n    def __init__(self, value: Mapping, doc_id: int):\n        super().__init__(value)\n        self.doc_id = doc_id\n\n\nclass Table:\n    \"\"\"\n    Represents a single TinyDB table.\n\n    It provides methods for accessing and manipulating documents.\n\n    .. admonition:: Query Cache\n\n        As an optimization, a query cache is implemented using a\n        :class:`~tinydb.utils.LRUCache`. This class mimics the interface of\n        a normal ``dict``, but starts to remove the least-recently used entries\n        once a threshold is reached.\n\n        The query cache is updated on every search operation. When writing\n        data, the whole cache is discarded as the query results may have\n        changed.\n\n    .. admonition:: Customization\n\n        For customization, the following class variables can be set:\n\n        - ``document_class`` defines the class that is used to represent\n          documents,\n        - ``document_id_class`` defines the class that is used to represent\n          document IDs,\n        - ``query_cache_class`` defines the class that is used for the query\n          cache\n        - ``default_query_cache_capacity`` defines the default capacity of\n          the query cache\n\n        .. versionadded:: 4.0\n\n\n    :param storage: The storage instance to use for this table\n    :param name: The table name\n    :param cache_size: Maximum capacity of query cache\n    :param persist_empty: Store new table even with no operations on it\n    \"\"\"\n\n    #: The class used to represent documents\n    #:\n    #: .. versionadded:: 4.0\n    document_class = Document\n\n    #: The class used to represent a document ID\n    #:\n    #: .. versionadded:: 4.0\n    document_id_class = int\n\n    #: The class used for caching query results\n    #:\n    #: .. versionadded:: 4.0\n    query_cache_class = LRUCache\n\n    #: The default capacity of the query cache\n    #:\n    #: .. versionadded:: 4.0\n    default_query_cache_capacity = 10\n\n    def __init__(\n        self,\n        storage: Storage,\n        name: str,\n        cache_size: int = default_query_cache_capacity,\n        persist_empty: bool = False\n    ):\n        \"\"\"\n        Create a table instance.\n        \"\"\"\n\n        self._storage = storage\n        self._name = name\n        self._query_cache: LRUCache[QueryLike, list[Document]] \\\n            = self.query_cache_class(capacity=cache_size)\n\n        self._next_id: Optional[int] = None\n        self._validator: Optional[Callable[[Mapping], bool]] = None\n\n        # Only persist a brand-new empty table. Never clear existing documents\n        # when reopen/construct with persist_empty=True (see issue #636).\n        if persist_empty and not self._read_table():\n            self._update_table(lambda table: table.clear())\n\n    def __repr__(self):\n        args = [\n            'name={!r}'.format(self.name),\n            'total={}'.format(len(self)),\n            'storage={}'.format(self._storage),\n        ]\n\n        return '<{} {}>'.format(type(self).__name__, ', '.join(args))\n\n    def set_validator(self, validator: Callable[[Mapping], bool]) -> None:\n        self._validator = validator\n\n    def remove_validator(self) -> None:\n        self._validator = None\n\n    @property\n    def name(self) -> str:\n        \"\"\"\n        Get the table name.\n        \"\"\"\n        return self._name\n\n    @property\n    def storage(self) -> Storage:\n        \"\"\"\n        Get the table storage instance.\n        \"\"\"\n        return self._storage\n\n    def insert(self, document: Mapping) -> int:\n        \"\"\"\n        Insert a new document into the table.\n\n        :param document: the document to insert\n        :returns: the inserted document's ID\n        \"\"\"\n\n        # Make sure the document implements the ``Mapping`` interface\n        if not isinstance(document, Mapping):\n            raise ValueError('Document is not a Mapping')\n\n        # First, we get the document ID for the new document\n        if isinstance(document, self.document_class):\n            # For a `Document` object we use the specified ID\n            doc_id = document.doc_id\n\n            # We also reset the stored next ID so the next insert won't\n            # re-use document IDs by accident when storing an old value\n            self._next_id = None\n        else:\n            # In all other cases we use the next free ID\n            doc_id = self._get_next_id()\n\n        # Now, we update the table and add the document\n        def updater(table: dict):\n            if doc_id in table:\n                raise ValueError(f'Document with ID {str(doc_id)} '\n                                 f'already exists')\n\n            # By calling ``dict(document)`` we convert the data we got to a\n            # ``dict`` instance even if it was a different class that\n            # implemented the ``Mapping`` interface\n            doc = dict(document)\n            if self._validator and not self._validator(doc):\n                raise ValueError('Document validation failed')\n            table[doc_id] = doc\n\n        # See below for details on ``Table._update``\n        self._update_table(updater)\n\n        return doc_id\n\n    def insert_multiple(self, documents: Iterable[Mapping]) -> list[int]:\n        \"\"\"\n        Insert multiple documents into the table.\n\n        :param documents: an Iterable of documents to insert\n        :returns: a list containing the inserted documents' IDs\n        \"\"\"\n        doc_ids = []\n\n        def updater(table: dict):\n            for document in documents:\n\n                # Make sure the document implements the ``Mapping`` interface\n                if not isinstance(document, Mapping):\n                    raise ValueError('Document is not a Mapping')\n\n                if isinstance(document, self.document_class):\n                    # Check if document does not override an existing document\n                    if document.doc_id in table:\n                        raise ValueError(\n                            f'Document with ID {str(document.doc_id)} '\n                            f'already exists'\n                        )\n\n                    # Store the doc_id, so we can return all document IDs\n                    # later. Then save the document with its doc_id and\n                    # skip the rest of the current loop\n                    doc_id = document.doc_id\n                    doc_ids.append(doc_id)\n                    doc = dict(document)\n                    if self._validator and not self._validator(doc):\n                        raise ValueError('Document validation failed')\n                    table[doc_id] = doc\n                    # Same as insert(): don't reuse this ID for later\n                    # auto-assigned documents in this batch.\n                    self._next_id = None\n                    continue\n\n                # Generate new document ID for this document.\n                # Allocate from the in-progress table, not storage, so a\n                # Document inserted earlier in this batch is visible.\n                next_id = self._next_id\n                if next_id is None:\n                    if table:\n                        next_id = max(\n                            self.document_id_class(i) for i in table.keys()\n                        ) + 1\n                    else:\n                        next_id = 1\n                self._next_id = next_id\n                doc_id = self._get_next_id()\n                doc_ids.append(doc_id)\n                doc = dict(document)\n                if self._validator and not self._validator(doc):\n                    raise ValueError('Document validation failed')\n                table[doc_id] = doc\n\n        # See below for details on ``Table._update``\n        self._update_table(updater)\n\n        return doc_ids\n\n    def all(self) -> list[Document]:\n        \"\"\"\n        Get all documents stored in the table.\n\n        :returns: a list with all documents.\n        \"\"\"\n\n        # iter(self) (implemented in Table.__iter__ provides an iterator\n        # that returns all documents in this table. We use it to get a list\n        # of all documents by using the ``list`` constructor to perform the\n        # conversion.\n\n        return list(iter(self))\n\n    def search(self, cond: QueryLike) -> list[Document]:\n        \"\"\"\n        Search for all documents matching a 'where' cond.\n\n        Note: a repeated search with the same ``cond`` is served from an\n        internal cache. The returned list is a fresh copy, but its\n        documents are the same objects held by the cache -- treat them as\n        read-only, since mutating one (a key or a nested value) corrupts\n        what a later identical search returns.\n\n        :param cond: the condition to check against\n        :returns: list of matching documents\n        \"\"\"\n\n        # First, we check the query cache to see if it has results for this\n        # query\n        cached_results = self._query_cache.get(cond)\n        if cached_results is not None:\n            return cached_results[:]\n\n        # Perform the search by applying the query to all documents.\n        # Then, only if the document matches the query, convert it\n        # to the document class and document ID class.\n        docs = [\n            self.document_class(doc, self.document_id_class(doc_id))\n            for doc_id, doc in self._read_table().items()\n            if cond(doc)\n        ]\n\n        # Only cache cacheable queries.\n        #\n        # This weird `getattr` dance is needed to make MyPy happy as\n        # it doesn't know that a query might have a `is_cacheable` method\n        # that is not declared in the `QueryLike` protocol due to it being\n        # optional.\n        # See: https://github.com/python/mypy/issues/1424\n        #\n        # Note also that by default we expect custom query objects to be\n        # cacheable (which means they need to have a stable hash value).\n        # This is to keep consistency with TinyDB's behavior before\n        # `is_cacheable` was introduced which assumed that all queries\n        # are cacheable.\n        is_cacheable: Callable[[], bool] = getattr(cond, 'is_cacheable',\n                                                   lambda: True)\n        if is_cacheable():\n            # Update the query cache\n            self._query_cache[cond] = docs[:]\n\n        return docs\n\n    @overload\n    def get(self) -> NoReturn: ...\n\n    @overload\n    def get(\n        self, cond: QueryLike, doc_id: None = ..., doc_ids: None = ...\n    ) -> Optional[Document]: ...\n\n    @overload\n    def get(\n        self, *, cond: QueryLike, doc_id: None = ..., doc_ids: None = ...\n    ) -> Optional[Document]: ...\n\n    @overload\n    def get(\n        self, cond: Optional[QueryLike], doc_id: int, doc_ids: Optional[list] = ...\n    ) -> Optional[Document]: ...\n\n    @overload\n    def get(\n        self, *, cond: Optional[QueryLike] = ..., doc_id: int, doc_ids: Optional[list] = ...,\n    ) -> Optional[Document]: ...\n\n    @overload\n    def get(\n        self, cond: Optional[QueryLike], doc_id: None, doc_ids: list\n    ) -> list[Document]: ...\n\n    @overload\n    def get(\n        self, cond: Optional[QueryLike], *, doc_id: None = ..., doc_ids: list\n    ) -> list[Document]: ...\n\n    @overload\n    def get(\n        self, *, cond: Optional[QueryLike] = ..., doc_id: None = ..., doc_ids: list\n    ) -> list[Document]: ...\n\n    def get(\n        self,\n        cond: Optional[QueryLike] = None,\n        doc_id: Optional[int] = None,\n        doc_ids: Optional[list] = None\n    ):\n        \"\"\"\n        Get document(s) specified by a query or document ID(s).\n\n        - With ``cond`` or ``doc_id``: returns a single document, or ``None``\n          if no match exists. If multiple documents match ``cond``, the first\n          match in insertion order is returned.\n        - With ``doc_ids``: returns a list of matching documents (possibly\n          empty).\n\n        :param cond: the condition to check against\n        :param doc_id: the document's ID\n        :param doc_ids: the document's IDs (multiple)\n\n        :returns: a document, ``None``, or a list of documents when\n                  ``doc_ids`` is used\n        \"\"\"\n        table = self._read_table()\n\n        if doc_id is not None:\n            # Retrieve a document specified by its ID\n            raw_doc = table.get(str(doc_id), None)\n\n            if raw_doc is None:\n                return None\n\n            # Convert the raw data to the document class\n            return self.document_class(raw_doc, doc_id)\n\n        elif doc_ids is not None:\n            # Filter the table by extracting out all those documents which\n            # have doc id specified in the doc_id list.\n\n            # Since document IDs will be unique, we make it a set to ensure\n            # constant time lookup\n            doc_ids_set = set(str(doc_id) for doc_id in doc_ids)\n\n            # Now return the filtered documents in form of list\n            return [\n                self.document_class(doc, self.document_id_class(doc_id))\n                for doc_id, doc in table.items()\n                if doc_id in doc_ids_set\n            ]\n\n        elif cond is not None:\n            # Find a document specified by a query\n            # The trailing underscore in doc_id_ is needed so MyPy\n            # doesn't think that `doc_id_` (which is a string) needs\n            # to have the same type as `doc_id` which is this function's\n            # parameter and is an optional `int`.\n            for doc_id_, doc in self._read_table().items():\n                if cond(doc):\n                    return self.document_class(\n                        doc,\n                        self.document_id_class(doc_id_)\n                    )\n\n            return None\n\n        raise RuntimeError('You have to pass either cond or doc_id or doc_ids')\n\n    def contains(\n        self,\n        cond: Optional[QueryLike] = None,\n        doc_id: Optional[int] = None\n    ) -> bool:\n        \"\"\"\n        Check whether the database contains a document matching a query or\n        an ID.\n\n        If ``doc_id`` is set, it checks if the db contains the specified ID.\n\n        :param cond: the condition use\n        :param doc_id: the document ID to look for\n        \"\"\"\n        if doc_id is not None:\n            # Documents specified by ID\n            return self.get(doc_id=doc_id) is not None\n\n        elif cond is not None:\n            # Document specified by condition\n            return self.get(cond) is not None\n\n        raise RuntimeError('You have to pass either cond or doc_id')\n\n    def update(\n        self,\n        fields: Union[Mapping, Callable[[MutableMapping], None]],\n        cond: Optional[QueryLike] = None,\n        doc_ids: Optional[Iterable[int]] = None,\n    ) -> list[int]:\n        \"\"\"\n        Update all matching documents to have a given set of fields.\n\n        When ``doc_ids`` is given, IDs that don't refer to an existing\n        document are silently skipped, and the returned list only contains\n        the IDs that were actually updated.\n\n        :param fields: the fields that the matching documents will have\n                       or a callable that mutates matching documents in place\n        :param cond: which documents to update\n        :param doc_ids: a list of document IDs\n        :returns: a list containing the updated document's ID\n        \"\"\"\n\n        # Define the function that will perform the update\n        if callable(fields):\n            def perform_update(table, doc_id):\n                # Update documents by calling the update function provided by\n                # the user\n                fields(table[doc_id])\n        else:\n            def perform_update(table, doc_id):\n                # Update documents by setting all fields from the provided data\n                table[doc_id].update(fields)\n\n        if doc_ids is not None:\n            # Perform the update operation for documents specified by a list\n            # of document IDs. Document IDs that don't exist in the table are\n            # silently skipped, mirroring the behaviour of ``get(doc_ids=...)``\n            # (see issue #591). The list of *actually* updated IDs is\n            # determined inside the updater so it reflects the table state at\n            # write time.\n            requested_ids = list(doc_ids)\n            updated_ids: list[int] = []\n\n            def updater(table: dict):\n                # Filter to IDs that exist *before* performing any updates,\n                # so the operation is atomic: either every existing target is\n                # updated, or none is.\n                updated_ids.extend(\n                    doc_id for doc_id in requested_ids if doc_id in table\n                )\n                for doc_id in updated_ids:\n                    perform_update(table, doc_id)\n                    if self._validator and not self._validator(dict(table[doc_id])):\n                        raise ValueError('Document validation failed')\n\n            # Perform the update operation (see _update_table for details)\n            self._update_table(updater)\n\n            return updated_ids\n\n        elif cond is not None:\n            # Perform the update operation for documents specified by a query\n\n            # Collect affected doc_ids\n            updated_ids = []\n\n            def updater(table: dict):\n                _cond = cast(QueryLike, cond)\n\n                # We need to convert the keys iterator to a list because\n                # we may remove entries from the ``table`` dict during\n                # iteration and doing this without the list conversion would\n                # result in an exception (RuntimeError: dictionary changed size\n                # during iteration)\n                for doc_id in list(table.keys()):\n                    # Pass through all documents to find documents matching the\n                    # query. Call the processing callback with the document ID\n                    if _cond(table[doc_id]):\n                        # Add ID to list of updated documents\n                        updated_ids.append(doc_id)\n\n                        # Perform the update (see above)\n                        perform_update(table, doc_id)\n                        if self._validator and not self._validator(dict(table[doc_id])):\n                            raise ValueError('Document validation failed')\n\n            # Perform the update operation (see _update_table for details)\n            self._update_table(updater)\n\n            return updated_ids\n\n        else:\n            # Update all documents unconditionally\n\n            updated_ids = []\n\n            def updater(table: dict):\n                # Process all documents\n                for doc_id in list(table.keys()):\n                    # Add ID to list of updated documents\n                    updated_ids.append(doc_id)\n\n                    # Perform the update (see above)\n                    perform_update(table, doc_id)\n                    if self._validator and not self._validator(dict(table[doc_id])):\n                        raise ValueError('Document validation failed')\n\n            # Perform the update operation (see _update_table for details)\n            self._update_table(updater)\n\n            return updated_ids\n\n    def update_multiple(\n        self,\n        updates: Iterable[\n            tuple[Union[Mapping, Callable[[MutableMapping], None]], QueryLike]\n        ],\n    ) -> list[int]:\n        \"\"\"\n        Update all matching documents to have a given set of fields.\n\n        :returns: a list containing the updated document's ID\n        \"\"\"\n\n        # Define the function that will perform the update\n        def perform_update(fields, table, doc_id):\n            if callable(fields):\n                # Update documents by calling the update function provided\n                # by the user\n                fields(table[doc_id])\n            else:\n                # Update documents by setting all fields from the provided\n                # data\n                table[doc_id].update(fields)\n\n        # Perform the update operation for documents specified by a query\n\n        # Collect affected doc_ids\n        updated_ids = []\n\n        def updater(table: dict):\n            # We need to convert the keys iterator to a list because\n            # we may remove entries from the ``table`` dict during\n            # iteration and doing this without the list conversion would\n            # result in an exception (RuntimeError: dictionary changed size\n            # during iteration)\n            for doc_id in list(table.keys()):\n                for fields, cond in updates:\n                    _cond = cast(QueryLike, cond)\n\n                    # Pass through all documents to find documents matching the\n                    # query. Call the processing callback with the document ID\n                    if _cond(table[doc_id]):\n                        # Add ID to list of updated documents\n                        updated_ids.append(doc_id)\n\n                        # Perform the update (see above)\n                        perform_update(fields, table, doc_id)\n                        if self._validator and not self._validator(dict(table[doc_id])):\n                            raise ValueError('Document validation failed')\n\n        # Perform the update operation (see _update_table for details)\n        self._update_table(updater)\n\n        return updated_ids\n\n    def upsert(self, document: Mapping, cond: Optional[QueryLike] = None) -> list[int]:\n        \"\"\"\n        Update documents, if they exist, insert them otherwise.\n\n        Note: This will update *all* documents matching the query.\n        For example, if the query matches 3 documents, all 3 will be updated\n        with the new data. If no documents match, a new one is inserted.\n\n        Document argument can be a tinydb.table.Document object if you want\n        to specify a doc_id.\n\n        :param document: the document to insert or the fields to update\n        :param cond: which document to look for, optional if you've passed a\n        Document with a doc_id\n        :returns: a list containing the updated documents' IDs\n        \"\"\"\n\n        # Extract doc_id\n        if isinstance(document, self.document_class) and hasattr(document, 'doc_id'):\n            doc_ids: Optional[list[int]] = [document.doc_id]\n        else:\n            doc_ids = None\n\n        # Make sure we can actually find a matching document\n        if doc_ids is None and cond is None:\n            raise ValueError(\"If you don't specify a search query, you must \"\n                             \"specify a doc_id. Hint: use a table.Document \"\n                             \"object.\")\n\n        # Perform the update operation. ``update`` returns an empty list\n        # when no existing document matches the doc_id / query, in which\n        # case we fall through to insert below.\n        updated_docs = self.update(document, cond, doc_ids)\n\n        # If documents have been updated: return their IDs\n        if updated_docs:\n            return updated_docs\n\n        # There are no documents that match the specified query -> insert the\n        # data as a new document\n        return [self.insert(document)]\n\n    def remove(\n        self,\n        cond: Optional[QueryLike] = None,\n        doc_ids: Optional[Iterable[int]] = None,\n    ) -> list[int]:\n        \"\"\"\n        Remove all matching documents.\n\n        When ``doc_ids`` is given, IDs that don't refer to an existing\n        document are silently skipped, and the returned list only contains\n        the IDs that were actually removed.\n\n        :param cond: the condition to check against\n        :param doc_ids: a list of document IDs\n        :returns: a list containing the removed documents' ID\n        \"\"\"\n        if doc_ids is not None:\n            # This function returns the list of IDs for the documents that\n            # have been removed. Document IDs that don't exist in the table\n            # are silently skipped, mirroring the behaviour of\n            # ``get(doc_ids=...)`` (see issue #591). The list of *actually*\n            # removed IDs is determined inside the updater so it reflects the\n            # table state at write time.\n            requested_ids = list(doc_ids)\n            removed_ids: list[int] = []\n\n            def updater(table: dict):\n                # Filter to IDs that exist *before* performing any removals,\n                # so the operation is atomic: either every existing target is\n                # removed, or none is.\n                removed_ids.extend(\n                    doc_id for doc_id in requested_ids if doc_id in table\n                )\n                for doc_id in removed_ids:\n                    del table[doc_id]\n\n            # Perform the remove operation\n            self._update_table(updater)\n\n            return removed_ids\n\n        if cond is not None:\n            removed_ids = []\n\n            # This updater function will be called with the table data\n            # as its first argument. See ``Table._update`` for details on this\n            # operation\n            def updater(table: dict):\n                # We need to convince MyPy (the static type checker) that\n                # the ``cond is not None`` invariant still holds true when\n                # the updater function is called\n                _cond = cast(QueryLike, cond)\n\n                # We need to convert the keys iterator to a list because\n                # we may remove entries from the ``table`` dict during\n                # iteration and doing this without the list conversion would\n                # result in an exception (RuntimeError: dictionary changed size\n                # during iteration)\n                for doc_id in list(table.keys()):\n                    if _cond(table[doc_id]):\n                        # Add document ID to list of removed document IDs\n                        removed_ids.append(doc_id)\n\n                        # Remove document from the table\n                        table.pop(doc_id)\n\n            # Perform the remove operation\n            self._update_table(updater)\n\n            return removed_ids\n\n        raise RuntimeError('Use truncate() to remove all documents')\n\n    def truncate(self) -> None:\n        \"\"\"\n        Truncate the table by removing all documents.\n        \"\"\"\n\n        # Update the table by resetting all data\n        self._update_table(lambda table: table.clear())\n\n        # Reset document ID counter\n        self._next_id = None\n\n    def count(self, cond: QueryLike) -> int:\n        \"\"\"\n        Count the documents matching a query.\n\n        :param cond: the condition use\n        \"\"\"\n\n        return len(self.search(cond))\n\n    def clear_cache(self) -> None:\n        \"\"\"\n        Clear the query cache.\n        \"\"\"\n\n        self._query_cache.clear()\n\n    def __len__(self):\n        \"\"\"\n        Count the total number of documents in this table.\n        \"\"\"\n\n        return len(self._read_table())\n\n    def __iter__(self) -> Iterator[Document]:\n        \"\"\"\n        Iterate over all documents stored in the table.\n\n        :returns: an iterator over all documents.\n        \"\"\"\n\n        # Iterate all documents and their IDs\n        for doc_id, doc in self._read_table().items():\n            # Convert documents to the document class\n            yield self.document_class(doc, self.document_id_class(doc_id))\n\n    def _get_next_id(self):\n        \"\"\"\n        Return the ID for a newly inserted document.\n        \"\"\"\n\n        # If we already know the next ID\n        if self._next_id is not None:\n            next_id = self._next_id\n            self._next_id = next_id + 1\n\n            return next_id\n\n        # Determine the next document ID by finding out the max ID value\n        # of the current table documents\n\n        # Read the table documents\n        table = self._read_table()\n\n        # If the table is empty, set the initial ID\n        if not table:\n            next_id = 1\n            self._next_id = next_id + 1\n\n            return next_id\n\n        # Determine the next ID based on the maximum ID that's currently in use\n        max_id = max(self.document_id_class(i) for i in table.keys())\n        next_id = max_id + 1\n\n        # The next ID we will return AFTER this call needs to be larger than\n        # the current next ID we calculated\n        self._next_id = next_id + 1\n\n        return next_id\n\n    def _read_table(self) -> dict[str, Mapping]:\n        \"\"\"\n        Read the table data from the underlying storage.\n\n        Documents and doc_ids are NOT yet transformed, as\n        we may not want to convert *all* documents when returning\n        only one document for example.\n        \"\"\"\n\n        # Retrieve the tables from the storage\n        tables = self._storage.read()\n\n        if tables is None:\n            # The database is empty\n            return {}\n\n        # Retrieve the current table's data\n        try:\n            table = tables[self.name]\n        except KeyError:\n            # The table does not exist yet, so it is empty\n            return {}\n\n        return table\n\n    def _update_table(self, updater: Callable[[dict[int, Mapping]], None]):\n        \"\"\"\n        Perform a table update operation.\n\n        The storage interface used by TinyDB only allows to read/write the\n        complete database data, but not modifying only portions of it. Thus,\n        to only update portions of the table data, we first perform a read\n        operation, perform the update on the table data and then write\n        the updated data back to the storage.\n\n        As a further optimization, we don't convert the documents into the\n        document class, as the table data will *not* be returned to the user.\n        \"\"\"\n\n        tables = self._storage.read()\n\n        if tables is None:\n            # The database is empty\n            tables = {}\n\n        try:\n            raw_table = tables[self.name]\n        except KeyError:\n            # The table does not exist yet, so it is empty\n            raw_table = {}\n\n        # Convert the document IDs to the document ID class.\n        # This is required as the rest of TinyDB expects the document IDs\n        # to be an instance of ``self.document_id_class`` but the storage\n        # might convert dict keys to strings.\n        table = {\n            self.document_id_class(doc_id): doc\n            for doc_id, doc in raw_table.items()\n        }\n\n        # Perform the table update operation\n        updater(table)\n\n        # Convert the document IDs back to strings.\n        # This is required as some storages (most notably the JSON file format)\n        # don't support IDs other than strings.\n        tables[self.name] = {\n            str(doc_id): doc\n            for doc_id, doc in table.items()\n        }\n\n        # Write the newly updated data back to the storage\n        self._storage.write(tables)\n\n        # Clear the query cache, as the table contents have changed\n        self.clear_cache()\n"
+      }
+    ],
+    "unified_diff": "--- a/tinydb/table.py\n+++ b/tinydb/table.py\n@@ -108,6 +108,8 @@\n             = self.query_cache_class(capacity=cache_size)\n \n         self._next_id: Optional[int] = None\n+        self._validator: Optional[Callable[[Mapping], bool]] = None\n+\n         # Only persist a brand-new empty table. Never clear existing documents\n         # when reopen/construct with persist_empty=True (see issue #636).\n         if persist_empty and not self._read_table():\n@@ -122,6 +124,12 @@\n \n         return '<{} {}>'.format(type(self).__name__, ', '.join(args))\n \n+    def set_validator(self, validator: Callable[[Mapping], bool]) -> None:\n+        self._validator = validator\n+\n+    def remove_validator(self) -> None:\n+        self._validator = None\n+\n     @property\n     def name(self) -> str:\n         \"\"\"\n@@ -169,7 +177,10 @@\n             # By calling ``dict(document)`` we convert the data we got to a\n             # ``dict`` instance even if it was a different class that\n             # implemented the ``Mapping`` interface\n-            table[doc_id] = dict(document)\n+            doc = dict(document)\n+            if self._validator and not self._validator(doc):\n+                raise ValueError('Document validation failed')\n+            table[doc_id] = doc\n \n         # See below for details on ``Table._update``\n         self._update_table(updater)\n@@ -205,7 +216,10 @@\n                     # skip the rest of the current loop\n                     doc_id = document.doc_id\n                     doc_ids.append(doc_id)\n-                    table[doc_id] = dict(document)\n+                    doc = dict(document)\n+                    if self._validator and not self._validator(doc):\n+                        raise ValueError('Document validation failed')\n+                    table[doc_id] = doc\n                     # Same as insert(): don't reuse this ID for later\n                     # auto-assigned documents in this batch.\n                     self._next_id = None\n@@ -225,7 +239,10 @@\n                 self._next_id = next_id\n                 doc_id = self._get_next_id()\n                 doc_ids.append(doc_id)\n-                table[doc_id] = dict(document)\n+                doc = dict(document)\n+                if self._validator and not self._validator(doc):\n+                    raise ValueError('Document validation failed')\n+                table[doc_id] = doc\n \n         # See below for details on ``Table._update``\n         self._update_table(updater)\n@@ -474,6 +491,8 @@\n                 )\n                 for doc_id in updated_ids:\n                     perform_update(table, doc_id)\n+                    if self._validator and not self._validator(dict(table[doc_id])):\n+                        raise ValueError('Document validation failed')\n \n             # Perform the update operation (see _update_table for details)\n             self._update_table(updater)\n@@ -503,6 +522,8 @@\n \n                         # Perform the update (see above)\n                         perform_update(table, doc_id)\n+                        if self._validator and not self._validator(dict(table[doc_id])):\n+                            raise ValueError('Document validation failed')\n \n             # Perform the update operation (see _update_table for details)\n             self._update_table(updater)\n@@ -522,6 +543,8 @@\n \n                     # Perform the update (see above)\n                     perform_update(table, doc_id)\n+                    if self._validator and not self._validator(dict(table[doc_id])):\n+                        raise ValueError('Document validation failed')\n \n             # Perform the update operation (see _update_table for details)\n             self._update_table(updater)\n@@ -574,6 +597,8 @@\n \n                         # Perform the update (see above)\n                         perform_update(fields, table, doc_id)\n+                        if self._validator and not self._validator(dict(table[doc_id])):\n+                            raise ValueError('Document validation failed')\n \n         # Perform the update operation (see _update_table for details)\n         self._update_table(updater)\n"
+  },
+  "feature_test_files": [
+    {
+      "path": "tests/test_codeforge_add_document_validation_rules_522518.py",
+      "content": "import pytest\nfrom tinydb import TinyDB, where\nfrom tinydb.storages import MemoryStorage\nfrom tinydb.table import Table\n\n# Helper to create a clean Table instance\ndef get_table():\n    return TinyDB(storage=MemoryStorage).table('test')\n\n# AC1 & AC2: Validator returns False raises ValueError\ndef test_validator_returns_false_raises_value_error():\n    table = get_table()\n    table.set_validator(lambda doc: doc.get('val') == 'ok')\n    \n    with pytest.raises(ValueError, match='Document validation failed'):\n        table.insert({'val': 'bad'})\n        \n    assert len(table) == 0\n\n# AC1 & AC2: Validator returns True works\ndef test_validator_returns_true_works():\n    table = get_table()\n    table.set_validator(lambda doc: doc.get('val') == 'ok')\n    \n    table.insert({'val': 'ok'})\n    assert len(table) == 1\n    assert table.all()[0]['val'] == 'ok'\n\n# AC3: insert_multiple atomicity\ndef test_insert_multiple_atomicity():\n    table = get_table()\n    table.set_validator(lambda doc: doc.get('val') == 'ok')\n    \n    # Second document is invalid\n    docs = [{'val': 'ok'}, {'val': 'bad'}]\n    \n    with pytest.raises(ValueError, match='Document validation failed'):\n        table.insert_multiple(docs)\n        \n    # Atomicity: verify nothing was inserted\n    assert len(table) == 0\n\n# AC4: Update validation\ndef test_update_validation_fails():\n    table = get_table()\n    table.insert({'val': 'ok'})\n    table.set_validator(lambda doc: doc.get('val') == 'ok')\n    \n    # Try to update to invalid state\n    with pytest.raises(ValueError, match='Document validation failed'):\n        table.update({'val': 'bad'}, where('val') == 'ok')\n        \n    # Verify original state preserved\n    assert table.get(where('val') == 'ok') is not None\n\n# AC5: remove_validator disables validation\ndef test_remove_validator():\n    table = get_table()\n    table.set_validator(lambda doc: False) # Always invalid\n    \n    with pytest.raises(ValueError):\n        table.insert({'val': 'test'})\n        \n    table.remove_validator()\n    table.insert({'val': 'test'})\n    assert len(table) == 1\n\n# AC6: upsert validation (insert path)\ndef test_upsert_validation_insert():\n    table = get_table()\n    table.set_validator(lambda doc: doc.get('val') == 'ok')\n    \n    with pytest.raises(ValueError):\n        table.upsert({'val': 'bad'}, where('val') == 'bad')\n    \n    assert len(table) == 0\n\n# AC6: upsert validation (update path)\ndef test_upsert_validation_update():\n    table = get_table()\n    table.insert({'val': 'ok'})\n    table.set_validator(lambda doc: doc.get('val') == 'ok')\n    \n    # Try to update existing to invalid\n    with pytest.raises(ValueError):\n        table.upsert({'val': 'bad'}, where('val') == 'ok')\n    \n    assert table.all()[0]['val'] == 'ok'\n\n# Exception propagation check\ndef test_validator_exception_propagation():\n    table = get_table()\n    def failing_validator(doc):\n        raise RuntimeError('Custom Error')\n    \n    table.set_validator(failing_validator)\n    \n    with pytest.raises(RuntimeError, match='Custom Error'):\n        table.insert({'val': 'ok'})\n        \n    assert len(table) == 0\n\n# Multiple update atomicity\ndef test_update_multiple_atomicity():\n    table = get_table()\n    table.insert({'val': 'ok'})\n    table.insert({'val': 'ok'})\n    \n    table.set_validator(lambda doc: doc.get('val') == 'ok')\n    \n    # Update one to invalid, one to valid (order is defined by query matching)\n    # We construct updates: (lambda, condition). If the update makes it invalid, it should abort.\n    # Note: update_multiple iterates table, if one update makes it invalid, it should abort entirely.\n    \n    updates = [({'val': 'bad'}, where('val') == 'ok')]\n    \n    with pytest.raises(ValueError):\n        table.update_multiple(updates)\n        \n    # Atomicity: verify nothing changed\n    assert table.count(where('val') == 'ok') == 2\n"
+    }
+  ],
+  "feature_test_ids": [
+    "tests.test_codeforge_add_document_validation_rules_522518::test_insert_multiple_atomicity",
+    "tests.test_codeforge_add_document_validation_rules_522518::test_remove_validator",
+    "tests.test_codeforge_add_document_validation_rules_522518::test_upsert_validation_insert",
+    "tests.test_codeforge_add_document_validation_rules_522518::test_validator_exception_propagation",
+    "tests.test_codeforge_add_document_validation_rules_522518::test_validator_returns_false_raises_value_error",
+    "tests.test_codeforge_add_document_validation_rules_522518::test_validator_returns_true_works"
+  ],
+  "regression_test_ids": [
+    "tests.test_middlewares::test_caching",
+    "tests.test_middlewares::test_caching_flush",
+    "tests.test_middlewares::test_caching_flush_manually",
+    "tests.test_middlewares::test_caching_json_write",
+    "tests.test_middlewares::test_caching_read",
+    "tests.test_middlewares::test_caching_rejects_use_after_close",
+    "tests.test_middlewares::test_caching_write",
+    "tests.test_middlewares::test_caching_write_many",
+    "tests.test_middlewares::test_nested",
+    "tests.test_operations::test_add_int[json]",
+    "tests.test_operations::test_add_int[memory]",
+    "tests.test_operations::test_add_str[json]",
+    "tests.test_operations::test_add_str[memory]",
+    "tests.test_operations::test_decrement[json]",
+    "tests.test_operations::test_decrement[memory]",
+    "tests.test_operations::test_delete[json]",
+    "tests.test_operations::test_delete[memory]",
+    "tests.test_operations::test_increment[json]",
+    "tests.test_operations::test_increment[memory]",
+    "tests.test_operations::test_set[json]",
+    "tests.test_operations::test_set[memory]",
+    "tests.test_operations::test_subtract[json]",
+    "tests.test_operations::test_subtract[memory]",
+    "tests.test_queries::test_all",
+    "tests.test_queries::test_and",
+    "tests.test_queries::test_any",
+    "tests.test_queries::test_callable_in_path_with_chain",
+    "tests.test_queries::test_callable_in_path_with_map",
+    "tests.test_queries::test_custom",
+    "tests.test_queries::test_custom_with_params",
+    "tests.test_queries::test_custom_with_unhashable_params",
+    "tests.test_queries::test_empty_query_error",
+    "tests.test_queries::test_eq",
+    "tests.test_queries::test_equality",
+    "tests.test_queries::test_fragment",
+    "tests.test_queries::test_fragment_with_path",
+    "tests.test_queries::test_ge",
+    "tests.test_queries::test_get_item",
+    "tests.test_queries::test_gt",
+    "tests.test_queries::test_has",
+    "tests.test_queries::test_has_key",
+    "tests.test_queries::test_hash",
+    "tests.test_queries::test_le",
+    "tests.test_queries::test_lt",
+    "tests.test_queries::test_ne",
+    "tests.test_queries::test_no_path",
+    "tests.test_queries::test_noop",
+    "tests.test_queries::test_not",
+    "tests.test_queries::test_one_of",
+    "tests.test_queries::test_or",
+    "tests.test_queries::test_orm_usage",
+    "tests.test_queries::test_path_and",
+    "tests.test_queries::test_path_exists",
+    "tests.test_queries::test_regex",
+    "tests.test_queries::test_regex_flags_affect_hash_and_query_cache",
+    "tests.test_queries::test_repr",
+    "tests.test_queries::test_subclass",
+    "tests.test_storages::test_create_dirs",
+    "tests.test_storages::test_custom",
+    "tests.test_storages::test_custom_with_exception",
+    "tests.test_storages::test_encoding",
+    "tests.test_storages::test_in_memory",
+    "tests.test_storages::test_in_memory_close",
+    "tests.test_storages::test_json",
+    "tests.test_storages::test_json_invalid_directory",
+    "tests.test_storages::test_json_invalid_mode_warning",
+    "tests.test_storages::test_json_kwargs",
+    "tests.test_storages::test_json_read",
+    "tests.test_storages::test_json_readwrite",
+    "tests.test_storages::test_read_once",
+    "tests.test_tables::test_caching[json]",
+    "tests.test_tables::test_caching[memory]",
+    "tests.test_tables::test_lru_cache[json]",
+    "tests.test_tables::test_lru_cache[memory]",
+    "tests.test_tables::test_multiple_tables[json]",
+    "tests.test_tables::test_multiple_tables[memory]",
+    "tests.test_tables::test_next_id[json]",
+    "tests.test_tables::test_next_id[memory]",
+    "tests.test_tables::test_one_table[json]",
+    "tests.test_tables::test_one_table[memory]",
+    "tests.test_tables::test_persist_empty_does_not_wipe_existing_data",
+    "tests.test_tables::test_persist_table[json]",
+    "tests.test_tables::test_persist_table[memory]",
+    "tests.test_tables::test_query_cache[json]",
+    "tests.test_tables::test_query_cache[memory]",
+    "tests.test_tables::test_query_cache_size[json]",
+    "tests.test_tables::test_query_cache_size[memory]",
+    "tests.test_tables::test_query_cache_with_mutable_callable[json]",
+    "tests.test_tables::test_query_cache_with_mutable_callable[memory]",
+    "tests.test_tables::test_table_is_iterable[json]",
+    "tests.test_tables::test_table_is_iterable[memory]",
+    "tests.test_tables::test_table_name[json]",
+    "tests.test_tables::test_table_name[memory]",
+    "tests.test_tables::test_table_repr[json]",
+    "tests.test_tables::test_table_repr[memory]",
+    "tests.test_tables::test_tables_list[json]",
+    "tests.test_tables::test_tables_list[memory]",
+    "tests.test_tables::test_truncate_table[json]",
+    "tests.test_tables::test_truncate_table[memory]",
+    "tests.test_tables::test_zero_cache_size[json]",
+    "tests.test_tables::test_zero_cache_size[memory]",
+    "tests.test_tinydb::test_access_storage",
+    "tests.test_tinydb::test_all[json]",
+    "tests.test_tinydb::test_all[memory]",
+    "tests.test_tinydb::test_contains[json]",
+    "tests.test_tinydb::test_contains[memory]",
+    "tests.test_tinydb::test_contains_ids[json]",
+    "tests.test_tinydb::test_contains_ids[memory]",
+    "tests.test_tinydb::test_contains_invalid[json]",
+    "tests.test_tinydb::test_contains_invalid[memory]",
+    "tests.test_tinydb::test_count[json]",
+    "tests.test_tinydb::test_count[memory]",
+    "tests.test_tinydb::test_custom_mapping_type_with_json",
+    "tests.test_tinydb::test_delete",
+    "tests.test_tinydb::test_doc_id_missing_consistency[json]",
+    "tests.test_tinydb::test_doc_id_missing_consistency[memory]",
+    "tests.test_tinydb::test_doc_ids_json",
+    "tests.test_tinydb::test_drop_table",
+    "tests.test_tinydb::test_drop_tables[json]",
+    "tests.test_tinydb::test_drop_tables[memory]",
+    "tests.test_tinydb::test_empty_db_len",
+    "tests.test_tinydb::test_empty_write",
+    "tests.test_tinydb::test_gc",
+    "tests.test_tinydb::test_get[json]",
+    "tests.test_tinydb::test_get[memory]",
+    "tests.test_tinydb::test_get_idempotent[json]",
+    "tests.test_tinydb::test_get_idempotent[memory]",
+    "tests.test_tinydb::test_get_ids[json]",
+    "tests.test_tinydb::test_get_ids[memory]",
+    "tests.test_tinydb::test_get_invalid[json]",
+    "tests.test_tinydb::test_get_invalid[memory]",
+    "tests.test_tinydb::test_get_multiple_ids[json]",
+    "tests.test_tinydb::test_get_multiple_ids[memory]",
+    "tests.test_tinydb::test_insert[json]",
+    "tests.test_tinydb::test_insert[memory]",
+    "tests.test_tinydb::test_insert_ids[json]",
+    "tests.test_tinydb::test_insert_ids[memory]",
+    "tests.test_tinydb::test_insert_invalid_dict",
+    "tests.test_tinydb::test_insert_invalid_type_raises_error[json]",
+    "tests.test_tinydb::test_insert_invalid_type_raises_error[memory]",
+    "tests.test_tinydb::test_insert_multiple[json]",
+    "tests.test_tinydb::test_insert_multiple[memory]",
+    "tests.test_tinydb::test_insert_multiple_mixed_document_and_dict[json]",
+    "tests.test_tinydb::test_insert_multiple_mixed_document_and_dict[memory]",
+    "tests.test_tinydb::test_insert_multiple_with_doc_ids[json]",
+    "tests.test_tinydb::test_insert_multiple_with_doc_ids[memory]",
+    "tests.test_tinydb::test_insert_multiple_with_ids[json]",
+    "tests.test_tinydb::test_insert_multiple_with_ids[memory]",
+    "tests.test_tinydb::test_insert_multiple_with_single_dict[json]",
+    "tests.test_tinydb::test_insert_multiple_with_single_dict[memory]",
+    "tests.test_tinydb::test_insert_on_existing_db",
+    "tests.test_tinydb::test_insert_string",
+    "tests.test_tinydb::test_insert_valid_mapping_type[json]",
+    "tests.test_tinydb::test_insert_valid_mapping_type[memory]",
+    "tests.test_tinydb::test_insert_with_doc_id[json]",
+    "tests.test_tinydb::test_insert_with_doc_id[memory]",
+    "tests.test_tinydb::test_insert_with_duplicate_doc_id[json]",
+    "tests.test_tinydb::test_insert_with_duplicate_doc_id[memory]",
+    "tests.test_tinydb::test_lambda_query",
+    "tests.test_tinydb::test_lastid_after_open",
+    "tests.test_tinydb::test_move_document_between_tables[json]",
+    "tests.test_tinydb::test_move_document_between_tables[memory]",
+    "tests.test_tinydb::test_multiple_dbs",
+    "tests.test_tinydb::test_query_cache",
+    "tests.test_tinydb::test_query_cache_documents_are_shared_with_cache",
+    "tests.test_tinydb::test_remove[json]",
+    "tests.test_tinydb::test_remove[memory]",
+    "tests.test_tinydb::test_remove_all_fails[json]",
+    "tests.test_tinydb::test_remove_all_fails[memory]",
+    "tests.test_tinydb::test_remove_ids[json]",
+    "tests.test_tinydb::test_remove_ids[memory]",
+    "tests.test_tinydb::test_remove_ids_missing[json]",
+    "tests.test_tinydb::test_remove_ids_missing[memory]",
+    "tests.test_tinydb::test_remove_ids_mixed[json]",
+    "tests.test_tinydb::test_remove_ids_mixed[memory]",
+    "tests.test_tinydb::test_remove_multiple[json]",
+    "tests.test_tinydb::test_remove_multiple[memory]",
+    "tests.test_tinydb::test_remove_returns_ids[json]",
+    "tests.test_tinydb::test_remove_returns_ids[memory]",
+    "tests.test_tinydb::test_repr",
+    "tests.test_tinydb::test_search[json]",
+    "tests.test_tinydb::test_search[memory]",
+    "tests.test_tinydb::test_search_no_results_cache[json]",
+    "tests.test_tinydb::test_search_no_results_cache[memory]",
+    "tests.test_tinydb::test_search_path[json]",
+    "tests.test_tinydb::test_search_path[memory]",
+    "tests.test_tinydb::test_storage_access",
+    "tests.test_tinydb::test_storage_closed_once",
+    "tests.test_tinydb::test_tinydb_is_iterable[json]",
+    "tests.test_tinydb::test_tinydb_is_iterable[memory]",
+    "tests.test_tinydb::test_unique_ids",
+    "tests.test_tinydb::test_update[json]",
+    "tests.test_tinydb::test_update[memory]",
+    "tests.test_tinydb::test_update_all[json]",
+    "tests.test_tinydb::test_update_all[memory]",
+    "tests.test_tinydb::test_update_custom_transform_callable[json]",
+    "tests.test_tinydb::test_update_custom_transform_callable[memory]",
+    "tests.test_tinydb::test_update_ids[json]",
+    "tests.test_tinydb::test_update_ids[memory]",
+    "tests.test_tinydb::test_update_ids_missing[json]",
+    "tests.test_tinydb::test_update_ids_missing[memory]",
+    "tests.test_tinydb::test_update_ids_mixed[json]",
+    "tests.test_tinydb::test_update_ids_mixed[memory]",
+    "tests.test_tinydb::test_update_multiple[json]",
+    "tests.test_tinydb::test_update_multiple[memory]",
+    "tests.test_tinydb::test_update_multiple_operation[json]",
+    "tests.test_tinydb::test_update_multiple_operation[memory]",
+    "tests.test_tinydb::test_update_returns_ids[json]",
+    "tests.test_tinydb::test_update_returns_ids[memory]",
+    "tests.test_tinydb::test_update_transform[json]",
+    "tests.test_tinydb::test_update_transform[memory]",
+    "tests.test_tinydb::test_upsert[json]",
+    "tests.test_tinydb::test_upsert[memory]",
+    "tests.test_tinydb::test_upsert_by_id[json]",
+    "tests.test_tinydb::test_upsert_by_id[memory]",
+    "tests.test_utils::test_freeze",
+    "tests.test_utils::test_lru_cache",
+    "tests.test_utils::test_lru_cache_clear",
+    "tests.test_utils::test_lru_cache_delete",
+    "tests.test_utils::test_lru_cache_falsy_values_bug",
+    "tests.test_utils::test_lru_cache_get",
+    "tests.test_utils::test_lru_cache_iteration_works",
+    "tests.test_utils::test_lru_cache_none_value",
+    "tests.test_utils::test_lru_cache_set_multiple",
+    "tests.test_utils::test_lru_cache_set_update",
+    "tests.test_utils::test_lru_cache_unlimited",
+    "tests.test_utils::test_lru_cache_unlimited_explicit"
+  ],
+  "traceability": [
+    {
+      "test_name": "test_validator_returns_false_raises_value_error",
+      "criteria": [
+        "AC1",
+        "AC2"
+      ]
+    },
+    {
+      "test_name": "test_validator_returns_true_works",
+      "criteria": [
+        "AC1"
+      ]
+    },
+    {
+      "test_name": "test_insert_multiple_atomicity",
+      "criteria": [
+        "AC3"
+      ]
+    },
+    {
+      "test_name": "test_update_validation_fails",
+      "criteria": [
+        "AC4"
+      ]
+    },
+    {
+      "test_name": "test_remove_validator",
+      "criteria": [
+        "AC5"
+      ]
+    },
+    {
+      "test_name": "test_upsert_validation_insert",
+      "criteria": [
+        "AC6"
+      ]
+    },
+    {
+      "test_name": "test_upsert_validation_update",
+      "criteria": [
+        "AC6"
+      ]
+    },
+    {
+      "test_name": "test_validator_exception_propagation",
+      "criteria": [
+        "error_handling"
+      ]
+    },
+    {
+      "test_name": "test_update_multiple_atomicity",
+      "criteria": [
+        "AC3"
+      ]
+    }
+  ],
+  "generation_metadata": {
+    "model": "gemini/gemini-3.1-flash-lite",
+    "attempts": [
+      {
+        "stage": "apply_edits",
+        "ok": true,
+        "files": [
+          "tinydb/table.py"
+        ]
+      },
+      {
+        "stage": "apply_edits",
+        "ok": true,
+        "files": [
+          "tinydb/table.py"
+        ]
+      },
+      {
+        "stage": "apply_edits",
+        "ok": true,
+        "files": [
+          "tinydb/table.py"
+        ]
+      }
+    ],
+    "seed": 1337,
+    "llm_usage": {
+      "calls": 6,
+      "cached_calls": 0,
+      "prompt_tokens": 83382,
+      "completion_tokens": 25935,
+      "by_purpose": {
+        "feature_discovery": 1,
+        "task_spec": 1,
+        "feature_tests": 1,
+        "reference": 1,
+        "reference_repair": 2
+      },
+      "models": [
+        "gemini/gemini-3.1-flash-lite"
+      ]
+    }
+  }
+}

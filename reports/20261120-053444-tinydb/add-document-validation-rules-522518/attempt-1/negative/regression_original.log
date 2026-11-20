@@ -1,0 +1,97 @@
+FFFFFFFFF............................................................... [ 30%]
+.....s.................................................................. [ 60%]
+........................................................................ [ 91%]
+.....................                                                    [100%]
+=================================== FAILURES ===================================
+_______________ test_validator_returns_false_raises_value_error ________________
+
+    def test_validator_returns_false_raises_value_error():
+        table = get_table()
+>       table.set_validator(lambda doc: doc.get('val') == 'ok')
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:13: AttributeError
+______________________ test_validator_returns_true_works _______________________
+
+    def test_validator_returns_true_works():
+        table = get_table()
+>       table.set_validator(lambda doc: doc.get('val') == 'ok')
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:23: AttributeError
+________________________ test_insert_multiple_atomicity ________________________
+
+    def test_insert_multiple_atomicity():
+        table = get_table()
+>       table.set_validator(lambda doc: doc.get('val') == 'ok')
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:32: AttributeError
+_________________________ test_update_validation_fails _________________________
+
+    def test_update_validation_fails():
+        table = get_table()
+        table.insert({'val': 'ok'})
+>       table.set_validator(lambda doc: doc.get('val') == 'ok')
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:47: AttributeError
+____________________________ test_remove_validator _____________________________
+
+    def test_remove_validator():
+        table = get_table()
+>       table.set_validator(lambda doc: False) # Always invalid
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:59: AttributeError
+________________________ test_upsert_validation_insert _________________________
+
+    def test_upsert_validation_insert():
+        table = get_table()
+>       table.set_validator(lambda doc: doc.get('val') == 'ok')
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:71: AttributeError
+________________________ test_upsert_validation_update _________________________
+
+    def test_upsert_validation_update():
+        table = get_table()
+        table.insert({'val': 'ok'})
+>       table.set_validator(lambda doc: doc.get('val') == 'ok')
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:82: AttributeError
+_____________________ test_validator_exception_propagation _____________________
+
+    def test_validator_exception_propagation():
+        table = get_table()
+        def failing_validator(doc):
+            raise RuntimeError('Custom Error')
+    
+>       table.set_validator(failing_validator)
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:96: AttributeError
+________________________ test_update_multiple_atomicity ________________________
+
+    def test_update_multiple_atomicity():
+        table = get_table()
+        table.insert({'val': 'ok'})
+        table.insert({'val': 'ok'})
+    
+>       table.set_validator(lambda doc: doc.get('val') == 'ok')
+E       AttributeError: 'Table' object has no attribute 'set_validator'
+
+tests/test_codeforge_add_document_validation_rules_522518.py:109: AttributeError
+------------- generated xml file: /cf/out/regression_original.xml --------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_document_validation_rules_522518.py::test_validator_returns_false_raises_value_error
+FAILED tests/test_codeforge_add_document_validation_rules_522518.py::test_validator_returns_true_works
+FAILED tests/test_codeforge_add_document_validation_rules_522518.py::test_insert_multiple_atomicity
+FAILED tests/test_codeforge_add_document_validation_rules_522518.py::test_update_validation_fails
+FAILED tests/test_codeforge_add_document_validation_rules_522518.py::test_remove_validator
+FAILED tests/test_codeforge_add_document_validation_rules_522518.py::test_upsert_validation_insert
+FAILED tests/test_codeforge_add_document_validation_rules_522518.py::test_upsert_validation_update
+FAILED tests/test_codeforge_add_document_validation_rules_522518.py::test_validator_exception_propagation
+FAILED tests/test_codeforge_add_document_validation_rules_522518.py::test_update_multiple_atomicity
+9 failed, 227 passed, 1 skipped in 0.62s

@@ -1,0 +1,26 @@
+...F
+=================================== FAILURES ===================================
+__________________________ test_cache_info_unpacking ___________________________
+
+    def test_cache_info_unpacking():
+        """AC4: CacheInfo remains a 4-tuple for index-based access compatibility."""
+        cache = Cache(maxsize=128)
+    
+        @cached(cache, info=True)
+        def func(x):
+            return x
+    
+        func(1) # miss
+        func(1) # hit
+    
+        info = func.cache_info()
+        # Unpack as 4-tuple
+>       hits, misses, maxsize, currsize = info
+E       ValueError: too many values to unpack (expected 4)
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:72: ValueError
+------------------ generated xml file: /cf/out/mutant-s4.xml -------------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py::test_cache_info_unpacking
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 3 passed in 0.05s

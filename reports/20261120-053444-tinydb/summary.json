@@ -1,0 +1,91 @@
+{
+  "codeforge_version": "0.1.0",
+  "started_at": "2026-11-20T05:34:40.269556+00:00",
+  "status": "completed",
+  "tasks": [
+    {
+      "task_id": "add-document-validation-rules-522518",
+      "title": "Add Document Validation Rules",
+      "archetype": "business_rule",
+      "status": "rejected",
+      "score": 60.0,
+      "gates": [
+        {
+          "gate": "baseline",
+          "status": "passed",
+          "summary": "227 original tests pass consistently across 3 runs"
+        },
+        {
+          "gate": "positive_control",
+          "status": "failed",
+          "summary": "6/9 feature tests pass with the reference"
+        },
+        {
+          "gate": "negative_control",
+          "status": "passed",
+          "summary": "9/9 feature tests fail on the original code"
+        },
+        {
+          "gate": "regression",
+          "status": "passed",
+          "summary": "227/227 original tests still pass with the reference"
+        },
+        {
+          "gate": "stability",
+          "status": "failed",
+          "summary": "3/3 reference runs identical"
+        },
+        {
+          "gate": "independence",
+          "status": "passed",
+          "summary": "6/6 acceptance criteria traced to tests; 0 error(s), 0 warning(s)"
+        }
+      ],
+      "reasons": [
+        "positive_control: 6/9 feature tests pass with the reference",
+        "stability: 3/3 reference runs identical",
+        "mutation: not run",
+        "semantic_mutants: not run"
+      ],
+      "task_dir": null,
+      "error": null
+    }
+  ],
+  "accepted": 0,
+  "rejected": 1,
+  "run_id": "20261120-053444-tinydb",
+  "repository": {
+    "name": "tinydb",
+    "url": "https://github.com/msiemens/tinydb",
+    "commit": "edff96aeb2616402e9489d46e90a592c05565621",
+    "language": "python",
+    "framework": null,
+    "test_framework": "pytest"
+  },
+  "variation": {
+    "tasks": 0,
+    "distinct_archetypes": 0,
+    "archetypes": [],
+    "mean_pairwise_similarity": 0.0,
+    "max_pairwise_similarity": 0.0,
+    "diversity_score": null,
+    "pairs": []
+  },
+  "finished_at": "2026-11-20T05:37:09.054144+00:00",
+  "llm_usage": {
+    "calls": 6,
+    "cached_calls": 0,
+    "prompt_tokens": 83382,
+    "completion_tokens": 25935,
+    "by_purpose": {
+      "feature_discovery": 1,
+      "task_spec": 1,
+      "feature_tests": 1,
+      "reference": 1,
+      "reference_repair": 2
+    },
+    "models": [
+      "gemini/gemini-3.1-flash-lite"
+    ]
+  }
+}

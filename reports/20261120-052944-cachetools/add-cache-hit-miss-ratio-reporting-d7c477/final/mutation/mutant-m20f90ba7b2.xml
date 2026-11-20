@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="0.059" timestamp="2026-11-20T05:31:17.886412+00:00" hostname="ed19111e891d"><testcase classname="tests.test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477" name="test_cache_info_initial_hit_ratio" time="0.003" /><testcase classname="tests.test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477" name="test_cache_info_half_ratio" time="0.000" /><testcase classname="tests.test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477" name="test_cache_info_rounding_ratio" time="0.000"><failure message="assert 0.33333 == 0.3333&#10; +  where 0.33333 = CacheInfo(hits=1, misses=2, maxsize=10, currsize=2).hit_ratio">def test_cache_info_rounding_ratio():
+        """AC3: After 1 hit and 2 misses, hit_ratio returns 0.3333."""
+        cache = Cache(maxsize=10)
+    
+        @cached(cache, info=True)
+        def func(x):
+            return x
+    
+        # 2 misses
+        func(1)
+        func(2)
+        # 1 hit
+        func(1)
+    
+        info = func.cache_info()
+        assert info.hits == 1
+        assert info.misses == 2
+        # 1 / 3 = 0.333333... -&gt; rounded to 4 decimals = 0.3333
+&gt;       assert info.hit_ratio == 0.3333
+E       assert 0.33333 == 0.3333
+E        +  where 0.33333 = CacheInfo(hits=1, misses=2, maxsize=10, currsize=2).hit_ratio
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:57: AssertionError</failure></testcase></testsuite></testsuites>

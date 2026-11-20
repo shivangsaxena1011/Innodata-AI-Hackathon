@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="5" time="0.059" timestamp="2026-11-20T05:31:19.224638+00:00" hostname="ed19111e891d"><testcase classname="tests.test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477" name="test_cache_info_initial_hit_ratio" time="0.003" /><testcase classname="tests.test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477" name="test_cache_info_half_ratio" time="0.000" /><testcase classname="tests.test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477" name="test_cache_info_rounding_ratio" time="0.000" /><testcase classname="tests.test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477" name="test_cache_info_unpacking" time="0.000" /><testcase classname="tests.test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477" name="test_cache_info_rounding_boundaries" time="0.000"><failure message="assert 0.1666 == 0.1667&#10; +  where 0.1666 = CacheInfo(hits=1, misses=5, maxsize=10, currsize=5).hit_ratio&#10; +    where CacheInfo(hits=1, misses=5, maxsize=10, currsize=5) = cache_info()&#10; +      where cache_info = &lt;cached &lt;function test_cache_info_rounding_boundaries.&lt;locals&gt;.func at 0x74845d089120&gt;&gt;.cache_info">def test_cache_info_rounding_boundaries():
+        """Test rounding logic with specific floating point values."""
+        # 1 hit, 5 misses -&gt; 1/6 = 0.166666... -&gt; 0.1667
+        cache = Cache(maxsize=10)
+        @cached(cache, info=True)
+        def func(x):
+            return x
+    
+        for i in range(5): func(i) # 5 misses
+        func(0) # 1 hit
+    
+&gt;       assert func.cache_info().hit_ratio == 0.1667
+E       assert 0.1666 == 0.1667
+E        +  where 0.1666 = CacheInfo(hits=1, misses=5, maxsize=10, currsize=5).hit_ratio
+E        +    where CacheInfo(hits=1, misses=5, maxsize=10, currsize=5) = cache_info()
+E        +      where cache_info = &lt;cached &lt;function test_cache_info_rounding_boundaries.&lt;locals&gt;.func at 0x74845d089120&gt;&gt;.cache_info
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:94: AssertionError</failure></testcase></testsuite></testsuites>

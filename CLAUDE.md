@@ -13,6 +13,11 @@ feature-development tasks. The entry point is `src/codeforge/pipeline.py`; the C
 - Lint: `.venv/Scripts/python.exe -m ruff check src tests`
 - Environment check: `.venv/Scripts/python.exe -m codeforge.main doctor`
 - Full run on the bundled sample: `.venv/Scripts/python.exe -m codeforge.main run sample -n 2`
+- Environment + baseline only (no LLM): `... codeforge.main run <repo> --prepare-only`
+- 4×4 cross-task matrix from packages: `... codeforge.main crosscheck shopcart`
+- Agent benchmark: `... codeforge.main benchmark --agent gemini-cli --repo shopcart` (`--agent nop` = control)
+- Submission bundle: `uv run python scripts/build_submission.py` → `dist/`
+- Use `python -m pytest`, not `pytest.exe` (Windows Application Control blocks uv launchers)
 - Dashboard: `.venv/Scripts/python.exe -m codeforge.main serve --port 8765`
 
 ## Machine constraints (Windows)

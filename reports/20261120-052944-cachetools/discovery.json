@@ -1,0 +1,275 @@
+{
+  "candidates": [
+    {
+      "candidate": {
+        "feature_id": "add-cache-hit-miss-ratio-reporting-d7c477",
+        "title": "Add cache hit/miss ratio reporting",
+        "archetype": "query_aggregation",
+        "problem_statement": "Developers need to monitor the efficiency of their caches beyond raw hit/miss counts. Providing a calculated hit ratio directly in the CacheInfo or via a helper helps in tuning maxsize or TTL values.",
+        "requirements": [
+          "Extend the internal tracking of decorators to support calculating a hit ratio.",
+          "Add a hit_ratio property to the object returned by cache_info().",
+          "The hit_ratio is defined as hits / (hits + misses).",
+          "If total accesses (hits + misses) is zero, the hit_ratio must be 0.0.",
+          "The ratio should be a float rounded to 4 decimal places."
+        ],
+        "acceptance_criteria": [
+          "Calling a @cached function 2 times with hits and 2 times with misses results in a hit_ratio of 0.5.",
+          "Calling cache_info() on a fresh cache returns a hit_ratio of 0.0.",
+          "The hit_ratio is accessible as an attribute on the CacheInfo namedtuple."
+        ],
+        "complexity": "medium",
+        "affected_modules": [
+          "src/cachetools/__init__.py",
+          "src/cachetools/_decorator.py"
+        ],
+        "existing_behaviour": "CacheInfo only contains hits, misses, maxsize, and currsize. There is no automated calculation of efficiency metrics.",
+        "edge_cases": [
+          "Division by zero when hits and misses are both 0.",
+          "Precision handling for very high hit rates."
+        ],
+        "contract": [
+          {
+            "kind": "method",
+            "module": "cachetools",
+            "name": "CacheInfo.hit_ratio",
+            "signature": "@property def hit_ratio(self) -> float",
+            "behaviour": "Returns the ratio of hits to total accesses (hits + misses) rounded to 4 decimal places."
+          }
+        ],
+        "novelty_score": 1.0,
+        "rejection_reason": null
+      },
+      "score": 5.4,
+      "accepted": true,
+      "reason": null
+    },
+    {
+      "candidate": {
+        "feature_id": "add-a-peek-method-for-non-mutating-access-3e7f57",
+        "title": "Add a peek method for non-mutating access",
+        "archetype": "interface_extension",
+        "problem_statement": "In LRU or LFU caches, accessing an item via __getitem__ or get() modifies the cache state (reordering or incrementing frequency). Users sometimes need to check a value without affecting its eviction priority.",
+        "requirements": [
+          "Add a 'peek' method to the Cache base class.",
+          "For LRUCache, 'peek' returns the value but does NOT move the key to the 'most recently used' position.",
+          "For LFUCache, 'peek' returns the value but does NOT increment its access count.",
+          "For TTLCache, 'peek' returns the value but does NOT trigger expiration of the key (though it may still return None or raise KeyError if already expired).",
+          "Signature should match 'get(key, default=None)'."
+        ],
+        "acceptance_criteria": [
+          "In an LRUCache of size 2, peeking at the oldest item, then adding a new item, should still evict the peeked item.",
+          "In an LFUCache, peeking at an item multiple times does not change its position in the popitem() order relative to items that were naturally accessed.",
+          "If the key is not present, return the default value."
+        ],
+        "complexity": "medium",
+        "affected_modules": [
+          "src/cachetools/__init__.py"
+        ],
+        "existing_behaviour": "All access methods (get, __getitem__) are considered 'hits' and update the eviction metadata of the cache.",
+        "edge_cases": [
+          "Peeking at an item that is technically expired in TTLCache but not yet removed.",
+          "Peeking in a FIFOCache (where it has no effect on order anyway)."
+        ],
+        "contract": [
+          {
+            "kind": "method",
+            "module": "cachetools",
+            "name": "Cache.peek",
+            "signature": "def peek(self, key: Any, default: Any = None) -> Any",
+            "behaviour": "Returns the value associated with the key without updating eviction metadata (like LRU rank or LFU frequency)."
+          }
+        ],
+        "novelty_score": 0.9273,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 5.327,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    },
+    {
+      "candidate": {
+        "feature_id": "add-expiring-soon-callback-to-ttlcache-0fd1d2",
+        "title": "Add expiring-soon callback to TTLCache",
+        "archetype": "component_interaction",
+        "problem_statement": "In some systems, when an item expires, it needs to be cleaned up (e.g., closing a network socket or deleting a temp file). TTLCache should allow a callback to be executed right before an item is evicted due to TTL expiration.",
+        "requirements": [
+          "Add an optional 'on_expire' parameter to TTLCache.__init__.",
+          "on_expire must be a callable that accepts (key, value).",
+          "The callback must be triggered during any operation that causes items to expire (get, set, expire, popitem).",
+          "The callback must be triggered AFTER the item is removed from the internal mapping but before the initiating method returns.",
+          "Exceptions raised in the callback should be propagated to the caller."
+        ],
+        "acceptance_criteria": [
+          "Initializing TTLCache(maxsize=10, ttl=60, on_expire=my_callback) and letting an item expire triggers my_callback(key, value).",
+          "Manual calls to cache.expire() trigger the callback for each expired item.",
+          "The callback is not triggered for manual deletions via pop() or __delitem__."
+        ],
+        "complexity": "hard",
+        "affected_modules": [
+          "src/cachetools/__init__.py"
+        ],
+        "existing_behaviour": "TTLCache silently removes expired items during access or eviction.",
+        "edge_cases": [
+          "Callback raising an exception during a 'get' call.",
+          "Callback modifying the cache itself (should be discouraged but handled safely if possible, or documented as undefined).",
+          "Expiration of multiple items at once."
+        ],
+        "contract": [
+          {
+            "kind": "method",
+            "module": "cachetools",
+            "name": "TTLCache.__init__",
+            "signature": "def __init__(self, maxsize, ttl, timer=time.monotonic, getsizeof=None, on_expire=None)",
+            "behaviour": "Initializes a TTLCache with an optional callback for expired items."
+          }
+        ],
+        "novelty_score": 0.9211,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 5.121,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    },
+    {
+      "candidate": {
+        "feature_id": "support-key-specific-ttl-overrides-7af710",
+        "title": "Support key-specific TTL overrides",
+        "archetype": "configuration_policy",
+        "problem_statement": "Not all data is equal; some items in a TTLCache might need to persist longer than others (e.g., static config vs dynamic session data). Currently, TTLCache uses a global TTL.",
+        "requirements": [
+          "Allow the 'set' operation to optionally specify a TTL that overrides the cache default for that specific key.",
+          "Since __setitem__ does not support extra arguments, add a 'insert' method to TTLCache.",
+          "The 'insert' method accepts (key, value, ttl=None).",
+          "If ttl is None, the cache's default TTL is used.",
+          "The specific TTL should be stored alongside the item and used by the expiration logic.",
+          "Retrieving the item via __getitem__ should still use its specific expiration timestamp."
+        ],
+        "acceptance_criteria": [
+          "cache.insert('key', 'value', ttl=3600) persists the item for an hour even if the cache default is 60 seconds.",
+          "The 'ttl' property of the cache remains the default value for other items.",
+          "Items with specific TTLs are still evicted if maxsize is reached, following the LRU-order within TTLCache."
+        ],
+        "complexity": "hard",
+        "affected_modules": [
+          "src/cachetools/__init__.py"
+        ],
+        "existing_behaviour": "All items in a TTLCache share the same TTL duration from the moment they are inserted or updated.",
+        "edge_cases": [
+          "Updating an existing key with a different TTL.",
+          "Setting a TTL of 0 (should expire immediately).",
+          "Interaction with the timer function."
+        ],
+        "contract": [
+          {
+            "kind": "method",
+            "module": "cachetools",
+            "name": "TTLCache.insert",
+            "signature": "def insert(self, key: Any, value: Any, ttl: Optional[float] = None) -> None",
+            "behaviour": "Inserts an item into the cache with an optional per-key TTL override."
+          }
+        ],
+        "novelty_score": 0.9173,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 5.117,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    },
+    {
+      "candidate": {
+        "feature_id": "enforce-strict-capacity-validation-07bc84",
+        "title": "Enforce strict capacity validation",
+        "archetype": "business_rule",
+        "problem_statement": "Users sometimes initialize caches with invalid maxsize values (e.g., negative numbers or non-numeric types) which leads to unpredictable behavior during eviction. We need a consistent validation layer at initialization for all cache types.",
+        "requirements": [
+          "All Cache subclasses must validate maxsize during __init__.",
+          "maxsize must be a number (int or float) greater than or equal to 0.",
+          "If getsizeof is provided, it must be a callable.",
+          "If maxsize is not a valid number or is negative, raise a ValueError with a descriptive message.",
+          "If getsizeof is not a callable and not None, raise a TypeError."
+        ],
+        "acceptance_criteria": [
+          "LRUCache(-1) raises ValueError.",
+          "TTLCache(maxsize='10', ttl=60) raises ValueError.",
+          "FIFOCache(maxsize=10, getsizeof='not-a-callable') raises TypeError.",
+          "Cache(maxsize=0) is accepted and behaves as an empty cache that evicts immediately."
+        ],
+        "complexity": "easy",
+        "affected_modules": [
+          "src/cachetools/__init__.py"
+        ],
+        "existing_behaviour": "Cache and its subclasses currently accept maxsize without validation, potentially leading to errors only when the cache grows or eviction is triggered.",
+        "edge_cases": [
+          "maxsize=0 should be valid.",
+          "maxsize=float('inf') should be valid.",
+          "getsizeof=None is valid."
+        ],
+        "contract": [
+          {
+            "kind": "exception",
+            "module": "cachetools",
+            "name": "ValidationError",
+            "signature": "class ValidationError(ValueError)",
+            "behaviour": "Exception raised when cache configuration parameters are invalid."
+          }
+        ],
+        "novelty_score": 0.9275,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 4.928,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    },
+    {
+      "candidate": {
+        "feature_id": "implement-cache-warm-up-capability-f8751c",
+        "title": "Implement cache warm-up capability",
+        "archetype": "interface_extension",
+        "problem_statement": "When deploying new application versions, caches are cold, leading to performance spikes. A standard 'update' or 'load' method that bypasses some eviction logic or performs bulk insertions safely is needed.",
+        "requirements": [
+          "Add a 'load' method to the Cache class to support bulk insertion of items.",
+          "The method should accept an iterable of (key, value) pairs.",
+          "Items should be added in the order they appear in the iterable.",
+          "If the number of items exceeds maxsize, the standard eviction policy of the specific Cache subclass (LRU, FIFO, etc.) must be applied during loading.",
+          "The method must be atomic if a lock is provided to the decorator (though the base method is on the Cache class itself)."
+        ],
+        "acceptance_criteria": [
+          "cache.load([('a', 1), ('b', 2)]) populates the cache with both items.",
+          "Loading more than maxsize items into an LRUCache results in only the most recent items remaining.",
+          "Loading returns the number of items successfully stored."
+        ],
+        "complexity": "easy",
+        "affected_modules": [
+          "src/cachetools/__init__.py"
+        ],
+        "existing_behaviour": "Users must manually loop and use __setitem__, which doesn't convey intent and might be less efficient for bulk operations in subclasses.",
+        "edge_cases": [
+          "Loading an empty list.",
+          "Loading duplicate keys within the same load call (last one wins).",
+          "Loading items that are larger than maxsize if getsizeof is used."
+        ],
+        "contract": [
+          {
+            "kind": "method",
+            "module": "cachetools",
+            "name": "Cache.load",
+            "signature": "def load(self, iterable: Iterable[Tuple[Any, Any]]) -> int",
+            "behaviour": "Bulk loads items into the cache and returns the count of items currently in the cache after operation."
+          }
+        ],
+        "novelty_score": 0.9261,
+        "rejection_reason": "lower ranked than the selected candidates"
+      },
+      "score": 4.926,
+      "accepted": false,
+      "reason": "lower ranked than the selected candidates"
+    }
+  ],
+  "llm": [
+    {
+      "model": "gemini/gemini-3-flash-preview",
+      "cached": false
+    }
+  ]
+}

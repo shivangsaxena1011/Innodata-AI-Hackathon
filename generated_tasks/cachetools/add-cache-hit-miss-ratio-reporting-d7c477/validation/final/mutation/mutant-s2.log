@@ -1,0 +1,27 @@
+....F
+=================================== FAILURES ===================================
+_____________________ test_cache_info_rounding_boundaries ______________________
+
+    def test_cache_info_rounding_boundaries():
+        """Test rounding logic with specific floating point values."""
+        # 1 hit, 5 misses -> 1/6 = 0.166666... -> 0.1667
+        cache = Cache(maxsize=10)
+        @cached(cache, info=True)
+        def func(x):
+            return x
+    
+        for i in range(5): func(i) # 5 misses
+        func(0) # 1 hit
+    
+>       assert func.cache_info().hit_ratio == 0.1667
+E       assert 0.1666 == 0.1667
+E        +  where 0.1666 = CacheInfo(hits=1, misses=5, maxsize=10, currsize=5).hit_ratio
+E        +    where CacheInfo(hits=1, misses=5, maxsize=10, currsize=5) = cache_info()
+E        +      where cache_info = <cached <function test_cache_info_rounding_boundaries.<locals>.func at 0x74845d089120>>.cache_info
+
+tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py:94: AssertionError
+------------------ generated xml file: /cf/out/mutant-s2.xml -------------------
+=========================== short test summary info ============================
+FAILED tests/test_codeforge_add_cache_hit_miss_ratio_reporting_d7c477.py::test_cache_info_rounding_boundaries
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 4 passed in 0.05s

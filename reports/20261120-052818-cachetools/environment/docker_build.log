@@ -1,0 +1,79 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 369B 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/python:3.13-slim@sha256:e48f59cdba69a3cbd9ed2cf0f348d90d45a8d350d98134cf1070bc106ee9ed90
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 105B 0.0s done
+#3 DONE 0.1s
+
+#4 [internal] load build context
+#4 DONE 0.0s
+
+#5 [1/4] FROM docker.io/library/python:3.13-slim@sha256:e48f59cdba69a3cbd9ed2cf0f348d90d45a8d350d98134cf1070bc106ee9ed90
+#5 resolve docker.io/library/python:3.13-slim@sha256:e48f59cdba69a3cbd9ed2cf0f348d90d45a8d350d98134cf1070bc106ee9ed90 0.0s done
+#5 DONE 0.1s
+
+#4 [internal] load build context
+#4 transferring context: 317.32kB 0.0s done
+#4 DONE 0.1s
+
+#6 [2/4] WORKDIR /app
+#6 CACHED
+
+#7 [3/4] COPY repo/ /app/
+#7 DONE 0.1s
+
+#8 [4/4] RUN pip install -e . &&     python -c "import pytest" 2>/dev/null || pip install pytest==8.3.5
+#8 2.342 Obtaining file:///app
+#8 2.345   Installing build dependencies: started
+#8 6.840   Installing build dependencies: finished with status 'done'
+#8 6.842   Checking if build backend supports build_editable: started
+#8 7.708   Checking if build backend supports build_editable: finished with status 'done'
+#8 7.709   Getting requirements to build editable: started
+#8 8.739   Getting requirements to build editable: finished with status 'done'
+#8 8.740   Preparing editable metadata (pyproject.toml): started
+#8 9.837   Preparing editable metadata (pyproject.toml): finished with status 'done'
+#8 9.844 Building wheels for collected packages: cachetools
+#8 9.846   Building editable for cachetools (pyproject.toml): started
+#8 10.91   Building editable for cachetools (pyproject.toml): finished with status 'done'
+#8 10.91   Created wheel for cachetools: filename=cachetools-8.0.2-0.editable-py3-none-any.whl size=3854 sha256=a191ce04aa92dfb59f9a1ea6ad4dda94da1f2156a4db72e4410e608cfb6f404f
+#8 10.91   Stored in directory: /tmp/pip-ephem-wheel-cache-70jmn8v5/wheels/19/62/e5/caf0138816cbbc0c92b8fb19626cf9ac282f22194a65231821
+#8 10.92 Successfully built cachetools
+#8 10.99 Installing collected packages: cachetools
+#8 11.02 Successfully installed cachetools-8.0.2
+#8 11.02 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#8 12.83 Collecting pytest==8.3.5
+#8 13.48   Downloading pytest-8.3.5-py3-none-any.whl.metadata (7.6 kB)
+#8 13.53 Collecting iniconfig (from pytest==8.3.5)
+#8 13.59   Downloading iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+#8 13.65 Collecting packaging (from pytest==8.3.5)
+#8 13.70   Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+#8 13.76 Collecting pluggy<2,>=1.5 (from pytest==8.3.5)
+#8 13.80   Downloading pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+#8 14.21 Downloading pytest-8.3.5-py3-none-any.whl (343 kB)
+#8 14.44 Downloading pluggy-1.7.0-py3-none-any.whl (27 kB)
+#8 14.50 Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+#8 14.54 Downloading packaging-26.3-py3-none-any.whl (129 kB)
+#8 14.72 Installing collected packages: pluggy, packaging, iniconfig, pytest
+#8 15.20 
+#8 15.21 Successfully installed iniconfig-2.3.1 packaging-26.3 pluggy-1.7.0 pytest-8.3.5
+#8 15.21 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#8 DONE 15.4s
+
+#9 exporting to image
+#9 exporting layers
+#9 exporting layers 0.4s done
+#9 exporting manifest sha256:383e887676af0b2752c1e6a0e9f134d86c14fbb300d45933f74f0e51d970d673 0.0s done
+#9 exporting config sha256:e2f1b0e1552eff7431b8c67f73b2a1730fe4399c824e386b57850759d7c81a8d 0.0s done
+#9 exporting attestation manifest sha256:08c34f40dc1fd7707a1bcc96a23e9c02b5e5164f659a8355df88c66c6e01b4be 0.0s done
+#9 exporting manifest list sha256:b5c1f799ae9a132d2bf0ba69b19c92797bf59738a5f2259b297375b9a561315e
+#9 exporting manifest list sha256:b5c1f799ae9a132d2bf0ba69b19c92797bf59738a5f2259b297375b9a561315e 0.0s done
+#9 naming to docker.io/codeforge-env/cachetools:c5de5137153b done
+#9 unpacking to docker.io/codeforge-env/cachetools:c5de5137153b
+#9 unpacking to docker.io/codeforge-env/cachetools:c5de5137153b 0.2s done
+#9 DONE 0.8s

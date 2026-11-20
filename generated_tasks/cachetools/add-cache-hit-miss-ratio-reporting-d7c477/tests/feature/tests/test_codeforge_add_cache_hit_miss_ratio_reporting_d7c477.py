@@ -1,0 +1,128 @@
+import pytest
+from cachetools import cached, Cache, CacheInfo
+
+def test_cache_info_initial_hit_ratio():
+    """AC1: A newly initialized cache returns a hit_ratio of 0.0."""
+    cache = Cache(maxsize=10)
+    
+    @cached(cache, info=True)
+    def func(x):
+        return x
+    
+    info = func.cache_info()
+    assert info.hits == 0
+    assert info.misses == 0
+    assert info.hit_ratio == 0.0
+    assert isinstance(info.hit_ratio, float)
+
+def test_cache_info_half_ratio():
+    """AC2: After 2 hits and 2 misses, hit_ratio returns 0.5."""
+    cache = Cache(maxsize=10)
+    
+    @cached(cache, info=True)
+    def func(x):
+        return x
+    
+    # 2 misses
+    func(1)
+    func(2)
+    # 2 hits
+    func(1)
+    func(2)
+    
+    info = func.cache_info()
+    assert info.hits == 2
+    assert info.misses == 2
+    # 2 / (2 + 2) = 0.5
+    assert info.hit_ratio == 0.5
+
+def test_cache_info_rounding_ratio():
+    """AC3: After 1 hit and 2 misses, hit_ratio returns 0.3333."""
+    cache = Cache(maxsize=10)
+    
+    @cached(cache, info=True)
+    def func(x):
+        return x
+    
+    # 2 misses
+    func(1)
+    func(2)
+    # 1 hit
+    func(1)
+    
+    info = func.cache_info()
+    assert info.hits == 1
+    assert info.misses == 2
+    # 1 / 3 = 0.333333... -> rounded to 4 decimals = 0.3333
+    assert info.hit_ratio == 0.3333
+
+def test_cache_info_unpacking():
+    """AC4: CacheInfo remains a 4-tuple for index-based access compatibility."""
+    cache = Cache(maxsize=128)
+    
+    @cached(cache, info=True)
+    def func(x):
+        return x
+
+    func(1) # miss
+    func(1) # hit
+    
+    info = func.cache_info()
+    # Unpack as 4-tuple
+    hits, misses, maxsize, currsize = info
+    
+    assert hits == 1
+    assert misses == 1
+    assert maxsize == 128
+    assert currsize == 1
+    
+    # Verify hit_ratio is still available as a property attribute but not in the tuple expansion
+    assert info.hit_ratio == 0.5
+    assert len(info) == 4
+
+def test_cache_info_rounding_boundaries():
+    """Test rounding logic with specific floating point values."""
+    # 1 hit, 5 misses -> 1/6 = 0.166666... -> 0.1667
+    cache = Cache(maxsize=10)
+    @cached(cache, info=True)
+    def func(x):
+        return x
+    
+    for i in range(5): func(i) # 5 misses
+    func(0) # 1 hit
+    
+    assert func.cache_info().hit_ratio == 0.1667
+
+def test_cache_info_zero_division_edge_case():
+    """Ensure hit_ratio is 0.0 when hits and misses are 0 manually via CacheInfo constructor."""
+    # Testing the class directly to ensure logic is robust regardless of decorator
+    info = CacheInfo(0, 0, 10, 0)
+    assert info.hit_ratio == 0.0
+
+def test_cache_info_all_hits():
+    """Test scenario with 100% hits after initial population."""
+    cache = Cache(maxsize=10)
+    @cached(cache, info=True)
+    def func(x):
+        return x
+    
+    func(1) # 1 miss
+    func(1) # 1 hit
+    func(1) # 2 hits
+    
+    # 2 hits, 1 miss -> 2/3 = 0.66666... -> 0.6667
+    assert func.cache_info().hit_ratio == 0.6667
+
+def test_cache_info_all_misses():
+    """Test scenario with 0% hits."""
+    cache = Cache(maxsize=10)
+    @cached(cache, info=True)
+    def func(x):
+        return x
+    
+    func(1)
+    func(2)
+    func(3)
+    
+    # 0 hits, 3 misses -> 0/3 = 0.0
+    assert func.cache_info().hit_ratio == 0.0

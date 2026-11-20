@@ -1,0 +1,72 @@
+{
+  "tasks": [
+    {
+      "title": "Add cache hit/miss ratio reporting",
+      "archetype": "query_aggregation",
+      "text_tokens": [
+        "accesse",
+        "accessible",
+        "add",
+        "attribute",
+        "beyond",
+        "cache",
+        "cached",
+        "cacheinfo",
+        "calculated",
+        "calculating",
+        "calling",
+        "count",
+        "decimal",
+        "decorator",
+        "defined",
+        "developer",
+        "directly",
+        "efficiency",
+        "extend",
+        "float",
+        "fresh",
+        "function",
+        "help",
+        "helper",
+        "hit",
+        "hits",
+        "info",
+        "internal",
+        "maxsize",
+        "miss",
+        "misse",
+        "monitor",
+        "namedtuple",
+        "need",
+        "object",
+        "place",
+        "property",
+        "providing",
+        "ratio",
+        "raw",
+        "reporting",
+        "result",
+        "returned",
+        "rounded",
+        "support",
+        "their",
+        "time",
+        "total",
+        "tracking",
+        "ttl",
+        "tuning",
+        "via",
+        "zero"
+      ],
+      "contract_names": [
+        "hit_ratio"
+      ],
+      "modules": [
+        "src/cachetools/__init__.py",
+        "src/cachetools/_decorator.py"
+      ],
+      "task_id": "add-cache-hit-miss-ratio-reporting-d7c477",
+      "commit": "c5de5137153b301933922e47bc70b598970e0627"
+    }
+  ]
+}
