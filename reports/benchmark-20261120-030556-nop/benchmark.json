@@ -1,0 +1,42 @@
+{
+  "generated_at": "2026-11-20T03:06:39.802689+00:00",
+  "agent": "nop",
+  "tasks": 1,
+  "trials": 1,
+  "solved": 0,
+  "unsolved": 1,
+  "quota_errors": 0,
+  "errors": 0,
+  "pass_rate": 0.0,
+  "note": "pass_rate counts only trials the verifier graded; quota and infrastructure errors are listed separately. Oracle validation is in each task_manifest.json.",
+  "results": [
+    {
+      "task_id": "add-inventory-valuation-and-stock-report-aggrega-d74cd0",
+      "title": "Add inventory valuation and stock report aggregation",
+      "archetype": "query_aggregation",
+      "starting_commit_sha": "e4eee2fdf7755a6ffef7253e9b11621f85fd92f2",
+      "agent": "nop",
+      "model": null,
+      "attempts": 1,
+      "solved": 0,
+      "valid_trials": 1,
+      "pass_rate": 0.0,
+      "trials": [
+        {
+          "attempt": 1,
+          "model": null,
+          "outcome": "unsolved",
+          "reward": 0.0,
+          "rewards": {
+            "reward": 0.0,
+            "feature_pass_rate": 0.0,
+            "regression_pass_rate": 1.0
+          },
+          "exception": null,
+          "duration_sec": 43.2,
+          "job_dir": "C:\\Users\\Project\\Innodata AI Hackathon\\workspace\\hj\\nop-febf36d1"
+        }
+      ]
+    }
+  ]
+}
